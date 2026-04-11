@@ -1,7 +1,7 @@
 ---
 name: pr-war-stories
 description: Build a self-improving AI code review system from PR history. Mines merged PRs for human review comments and bug-fix lessons, creates hierarchical Cursor Bugbot rules (.cursor/BUGBOT.md), universal engineering lessons (LESSONS.md), inline code comments, and a GitHub Action that auto-harvests review comments on merge. Activate on 'war stories', 'bugbot rules', 'review rules', 'pr lessons', 'teach bugbot', 'ai review setup', 'harvest lessons', 'mine PRs', 'code review rules'. Use when setting up or maintaining AI-assisted PR review for any repository.
-allowed-tools: Read,Write,Edit,Glob,Grep,Bash,Agent
+allowed-tools: Read,Write,Edit,Glob,Grep,Bash,Agent,WebFetch,WebSearch
 ---
 
 # PR War Stories: AI Code Review Knowledge System
@@ -93,6 +93,8 @@ Explore the repository:
 ```
 
 ### Step 2: Mine PR History for War Stories
+
+**If the repo has fewer than 10 merged PRs with review comments**, skip mining and bootstrap from code reading instead: look for TODO/FIXME/HACK comments, complex functions with no tests, and recent git blame hotspots. Create rules from what you observe in the code.
 
 Use GitHub CLI to extract institutional knowledge:
 
@@ -231,7 +233,7 @@ jobs:
             // Filter to substantive comments (skip "LGTM", short approvals)
             const isSubstantive = (body) => {
               if (!body || body.trim().length < 40) return false;
-              if (/^(lgtm|looks good|nice|thanks|ty|approved|shipit)/i.test(body.trim())) return false;
+              if (/^(lgtm|looks good|nice|thanks|ty|approved|shipit)[.!]?\s*$/i.test(body.trim())) return false;
               const lines = body.trim().split('\n');
               if (lines.every(l => !l.trim() || /^\s*-\s*\[[ x]\]/.test(l.trim()))) return false;
               return true;
@@ -247,7 +249,7 @@ jobs:
             }
 
             // Count Bugbot comments for comparison
-            const bugbotComments = reviewComments.filter(c => c.user && c.user.login === 'cursor');
+            const bugbotComments = reviewComments.filter(c => c.user && (c.user.login === 'cursor' || c.user.login === 'cursor[bot]'));
 
             // Map changed files to BUGBOT.md scopes
             const files = await github.paginate(
@@ -255,12 +257,17 @@ jobs:
               { owner, repo, pull_number: prNumber }
             );
 
-            // CUSTOMIZE: adjust these path prefixes to match your repo structure
+            // CUSTOMIZE: generate these from the repo's actual directory structure
+            // during setup. Match each path prefix to its .cursor/BUGBOT.md scope.
+            // Example for a monorepo:
+            //   { prefix: 'apps/frontend/', scope: 'frontend' },
+            //   { prefix: 'apps/backend/', scope: 'backend' },
+            //   { prefix: 'packages/', scope: 'packages' },
+            // Example for a single-app repo:
+            //   { prefix: 'src/components/editor/', scope: 'editor' },
+            //   { prefix: 'src/', scope: 'app' },
             const scopeRules = [
-              { prefix: 'apps/octostar/src/components/linkchart-nt/', scope: 'linkchart-nt' },
-              { prefix: 'apps/octostar/', scope: 'octostar' },
-              { prefix: 'apps/search-app/', scope: 'search-app' },
-              { prefix: 'packages/', scope: 'packages' },
+              // REPLACE with actual paths from Step 3
             ];
 
             const affectedScopes = new Set(['global']);
