@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Octostar — AI Code Review Knowledge System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --bg-dark: #1a1a2e;
+    --bg-card: #222240;
+    --octostar-red: #e74c3c;
+    --octostar-red-light: #ff6b5b;
+    --text-white: #ffffff;
+    --text-gray: #d0d0e0;
+    --text-dim: #9999bb;
+    --accent-blue: #4a9eff;
+    --accent-green: #2ecc71;
+    --accent-orange: #f39c12;
+    --accent-purple: #9b59b6;
+    --gradient-warm: linear-gradient(135deg, #e74c3c22 0%, #1a1a2e 40%, #1a1a2e 60%, #4a9eff11 100%);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    overflow: hidden;
+  }
+
+  .slide {
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide.active { display: flex; }
+
+  /* Shared elements */
+  .slide-number {
+    position: absolute;
+    bottom: 2vh;
+    right: 3vw;
+    font-size: 0.9vw;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .logo-bar {
+    position: absolute;
+    top: 2vh;
+    right: 3vw;
+  }
+
+  .logo-img {
+    height: 3.2vw;
+    width: auto;
+    cursor: pointer;
+  }
+
+  .red-accent-line {
+    width: 60px;
+    height: 4px;
+    background: var(--octostar-red);
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  /* ========== SLIDE 1: TITLE ========== */
+  .slide-title {
+    background: var(--bg-dark);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: var(--gradient-warm);
+  }
+
+  .slide-title .logo-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 6vh;
+  }
+
+  .slide-title .logo-main img {
+    height: 5.5vw;
+    width: auto;
+  }
+
+  .slide-title h1 {
+    font-size: 5.5vw;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    max-width: 80vw;
+  }
+
+  .slide-title .subtitle {
+    font-size: 1.8vw;
+    color: var(--octostar-red-light);
+    font-weight: 400;
+    margin-bottom: 6vh;
+    max-width: 60vw;
+  }
+
+  .slide-title .meta {
+    font-size: 1vw;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  /* ========== SLIDE 2: THE PROBLEM ========== */
+  .slide-problem {
+    padding: 5vh 6vw;
+    background: var(--gradient-warm);
+    justify-content: center;
+  }
+
+  .slide-problem h2 {
+    font-size: 3.2vw;
+    font-weight: 800;
+    margin-bottom: 4vh;
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+    flex: 1;
+  }
+
+  .problem-card {
+    background: var(--bg-card);
+    border-radius: 1vw;
+    padding: 2.5vw;
+    border: 1px solid #333355;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+  }
+
+  .problem-card:hover {
+    border-color: #e74c3c55;
+    box-shadow: 0 0 30px #e74c3c15;
+  }
+
+  .problem-card .icon {
+    font-size: 2.8vw;
+    margin-bottom: 1.5vh;
+  }
+
+  .problem-card h3 {
+    font-size: 1.5vw;
+    font-weight: 700;
+    margin-bottom: 1vh;
+    color: var(--octostar-red-light);
+  }
+
+  .problem-card p {
+    font-size: 1.05vw;
+    line-height: 1.7;
+    color: var(--text-gray);
+  }
+
+  .problem-card .quote {
+    margin-top: auto;
+    padding-top: 1.5vh;
+    border-top: 1px solid #333355;
+    font-style: italic;
+    font-size: 0.95vw;
+    color: var(--text-dim);
+    margin-top: 1.5vh;
+  }
+
+  /* ========== SLIDE 3: THREE LAYERS ========== */
+  .slide-layers {
+    padding: 80px 120px;
+    background: var(--gradient-warm);
+  }
+
+  .slide-layers h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 60px;
+  }
+
+  .layers-container {
+    display: flex;
+    gap: 36px;
+    flex: 1;
+  }
+
+  .layer-card {
+    flex: 1;
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 40px;
+    border: 1px solid #333355;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .layer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+
+  .layer-card.bot::before { background: var(--octostar-red); }
+  .layer-card.dev::before { background: var(--accent-blue); }
+  .layer-card.file::before { background: var(--accent-green); }
+
+  .layer-label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  .layer-card.bot .layer-label { color: var(--octostar-red-light); }
+  .layer-card.dev .layer-label { color: var(--accent-blue); }
+  .layer-card.file .layer-label { color: var(--accent-green); }
+
+  .layer-card h3 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .layer-card .when {
+    font-size: 15px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333355;
+  }
+
+  .layer-card .desc {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-gray);
+    margin-bottom: 24px;
+  }
+
+  .layer-card .file-path {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    color: var(--accent-green);
+    background: #1a1a2e;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: auto;
+  }
+
+  .layer-card .example {
+    font-size: 14px;
+    color: var(--text-dim);
+    background: #1a1a2e;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: auto;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  /* ========== SLIDE 4: HIERARCHY ========== */
+  .slide-hierarchy {
+    padding: 80px 120px;
+    background: var(--gradient-warm);
+  }
+
+  .slide-hierarchy h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+
+  .slide-hierarchy .subtitle {
+    font-size: 20px;
+    color: var(--text-gray);
+    margin-bottom: 60px;
+  }
+
+  .hierarchy-content {
+    display: flex;
+    gap: 60px;
+    flex: 1;
+  }
+
+  .tree {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .tree-node {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    background: var(--bg-card);
+    border: 1px solid #333355;
+    border-radius: 12px;
+    margin-left: 0;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .tree-node.l1 { margin-left: 0; }
+  .tree-node.l2 { margin-left: 60px; }
+  .tree-node.l3 { margin-left: 120px; }
+
+  .tree-node .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .tree-node .dot.red { background: var(--octostar-red); }
+  .tree-node .dot.blue { background: var(--accent-blue); }
+  .tree-node .dot.green { background: var(--accent-green); }
+  .tree-node .dot.purple { background: var(--accent-purple); }
+
+  .tree-node .path {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 15px;
+    color: var(--text-white);
+  }
+
+  .tree-node .scope {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .token-table {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .token-table h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .token-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg-card);
+    border: 1px solid #333355;
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .token-row .label {
+    font-size: 16px;
+    color: var(--text-gray);
+    min-width: 200px;
+  }
+
+  .token-bar-bg {
+    flex: 1;
+    height: 24px;
+    background: #1a1a2e;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .token-bar {
+    height: 100%;
+    border-radius: 12px;
+    transition: width 0.3s;
+  }
+
+  .token-bar.red { background: linear-gradient(90deg, var(--octostar-red), var(--octostar-red-light)); }
+  .token-bar.blue { background: linear-gradient(90deg, #2980b9, var(--accent-blue)); }
+  .token-bar.green { background: linear-gradient(90deg, #27ae60, var(--accent-green)); }
+
+  .token-row .value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-white);
+    min-width: 80px;
+    text-align: right;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  /* ========== SLIDE 5: FEEDBACK LOOP ========== */
+  .slide-loop {
+    padding: 80px 120px;
+    background: var(--gradient-warm);
+  }
+
+  .slide-loop h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 60px;
+  }
+
+  .loop-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    justify-content: center;
+    padding: 0 40px;
+  }
+
+  .loop-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 200px;
+  }
+
+  .loop-step .circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin-bottom: 16px;
+    border: 2px solid;
+  }
+
+  .loop-step .circle.red { border-color: var(--octostar-red); background: var(--octostar-red)22; }
+  .loop-step .circle.blue { border-color: var(--accent-blue); background: var(--accent-blue)22; }
+  .loop-step .circle.green { border-color: var(--accent-green); background: var(--accent-green)22; }
+  .loop-step .circle.orange { border-color: var(--accent-orange); background: var(--accent-orange)22; }
+  .loop-step .circle.purple { border-color: var(--accent-purple); background: var(--accent-purple)22; }
+
+  .loop-step h4 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .loop-step p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .loop-arrow {
+    font-size: 28px;
+    color: var(--text-dim);
+    margin: 0 8px;
+    padding-bottom: 60px;
+  }
+
+  .loop-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .loop-return-curved {
+    width: 85%;
+    margin-top: 1vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .loop-return-curved svg {
+    width: 100%;
+    height: 5vh;
+  }
+
+  .loop-return-label {
+    font-size: 1.2vw;
+    margin-top: 1vh;
+  }
+
+  /* ========== SLIDE 6: CLASSIFICATION ========== */
+  .slide-classify {
+    padding: 80px 120px;
+    background: var(--gradient-warm);
+  }
+
+  .slide-classify h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 60px;
+  }
+
+  .classify-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    flex: 1;
+    align-content: start;
+  }
+
+  .classify-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 32px 24px;
+    border: 1px solid #333355;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .classify-card .badge {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .classify-card.reviewable .badge { background: var(--octostar-red)33; color: var(--octostar-red-light); }
+  .classify-card.educational .badge { background: var(--accent-blue)33; color: var(--accent-blue); }
+  .classify-card.singlefile .badge { background: var(--accent-green)33; color: var(--accent-green); }
+  .classify-card.overlapping .badge { background: var(--accent-orange)33; color: var(--accent-orange); }
+  .classify-card.stale .badge { background: #66666633; color: #999; }
+
+  .classify-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .classify-card .dest {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .classify-card .example-text {
+    font-size: 14px;
+    color: var(--text-gray);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ========== SLIDE 7: REAL EXAMPLES ========== */
+  .slide-examples {
+    padding: 80px 120px;
+    background: var(--gradient-warm);
+  }
+
+  .slide-examples h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 60px;
+  }
+
+  .examples-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    flex: 1;
+  }
+
+  .example-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid #333355;
+    border-left: 4px solid;
+  }
+
+  .example-card.war1 { border-left-color: var(--octostar-red); }
+  .example-card.war2 { border-left-color: var(--accent-blue); }
+  .example-card.war3 { border-left-color: var(--accent-green); }
+  .example-card.war4 { border-left-color: var(--accent-orange); }
+
+  .example-card .source {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .example-card .rule {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .example-card .context {
+    font-size: 15px;
+    color: var(--text-gray);
+    line-height: 1.6;
+  }
+
+  .example-card .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .tag.bugbot { background: var(--octostar-red)33; color: var(--octostar-red-light); }
+  .tag.lessons { background: var(--accent-blue)33; color: var(--accent-blue); }
+  .tag.inline { background: var(--accent-green)33; color: var(--accent-green); }
+
+  /* ========== SLIDE 8: RESULTS ========== */
+  .slide-results {
+    padding: 80px 120px;
+    background: var(--gradient-warm);
+  }
+
+  .slide-results h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 60px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    margin-bottom: 60px;
+  }
+
+  .stat-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 36px 32px;
+    border: 1px solid #333355;
+    text-align: center;
+  }
+
+  .stat-card .number {
+    font-size: 56px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .stat-card .number.red { color: var(--octostar-red-light); }
+  .stat-card .number.blue { color: var(--accent-blue); }
+  .stat-card .number.green { color: var(--accent-green); }
+  .stat-card .number.orange { color: var(--accent-orange); }
+
+  .stat-card .label {
+    font-size: 16px;
+    color: var(--text-gray);
+    line-height: 1.4;
+  }
+
+  .proof-box {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 36px 40px;
+    border: 1px solid #333355;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .proof-box .icon { font-size: 48px; }
+
+  .proof-box .text h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .proof-box .text p {
+    font-size: 17px;
+    color: var(--text-gray);
+    line-height: 1.6;
+  }
+
+  /* ========== SLIDE 9: HOW TO USE ========== */
+  .slide-usage {
+    padding: 80px 120px;
+    background: var(--gradient-warm);
+  }
+
+  .slide-usage h2 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 60px;
+  }
+
+  .usage-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    flex: 1;
+  }
+
+  .usage-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 36px 28px;
+    border: 1px solid #333355;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .usage-card .step-num {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--octostar-red);
+    margin-bottom: 16px;
+    opacity: 0.6;
+  }
+
+  .usage-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .usage-card p {
+    font-size: 16px;
+    color: var(--text-gray);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .usage-card .cmd {
+    margin-top: auto;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    color: var(--accent-green);
+    background: #1a1a2e;
+    padding: 12px 16px;
+    border-radius: 8px;
+  }
+
+  /* ========== NAVIGATION ========== */
+  .nav {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .nav-dot.active {
+    background: var(--octostar-red);
+    width: 2vw;
+    border-radius: 5px;
+  }
+
+  .nav-dot { width: 0.7vw; height: 0.7vw; }
+
+  /* ========== RESPONSIVE OVERRIDES ========== */
+
+  /* All content slides: viewport padding + vertical centering */
+  .slide-problem, .slide-layers, .slide-hierarchy, .slide-loop,
+  .slide-classify, .slide-examples, .slide-results, .slide-usage {
+    padding: 5vh 6vw;
+  }
+  .slide-problem, .slide-layers, .slide-hierarchy,
+  .slide-classify, .slide-examples, .slide-results {
+    justify-content: center;
+  }
+
+  /* Section headings */
+  .slide-layers h2, .slide-hierarchy h2, .slide-loop h2,
+  .slide-classify h2, .slide-examples h2, .slide-results h2, .slide-usage h2 {
+    font-size: 3.2vw; margin-bottom: 4vh;
+  }
+
+  /* Layer cards */
+  .layers-container { gap: 2vw; }
+  .layer-card { padding: 2.5vw; border-radius: 1vw; justify-content: space-between; transition: all 0.3s ease; }
+  .layer-card:hover { border-color: #e74c3c55; box-shadow: 0 0 30px #e74c3c15; }
+  .layer-label { font-size: 0.85vw; }
+  .layer-card h3 { font-size: 1.8vw; margin-bottom: 1vh; }
+  .layer-card .when { font-size: 1vw; }
+  .layer-card .desc { font-size: 1.05vw; }
+  .layer-card .example { font-size: 0.9vw; padding: 1.2vw; }
+  .layer-card.bot::before { box-shadow: 0 0 20px #e74c3c88; }
+  .layer-card.dev::before { box-shadow: 0 0 20px #4a9eff88; }
+  .layer-card.file::before { box-shadow: 0 0 20px #2ecc7188; }
+
+  /* Hierarchy */
+  .slide-hierarchy .subtitle { font-size: 1.3vw; margin-bottom: 4vh; }
+  .hierarchy-content { gap: 4vw; }
+  .tree-node { padding: 1.2vw 1.5vw; margin-bottom: 0.6vh; border-radius: 0.7vw; }
+  .tree-node .path { font-size: 0.95vw; }
+  .tree-node .scope { font-size: 0.8vw; }
+  .tree-node.l2 { margin-left: 3.5vw; }
+  .tree-node.l3 { margin-left: 7vw; }
+  .tree-node .dot { width: 0.7vw; height: 0.7vw; }
+  .token-table h3 { font-size: 1.5vw; }
+  .token-row { padding: 1.2vw 1.5vw; border-radius: 0.7vw; }
+  .token-row .label { font-size: 1vw; min-width: 12vw; }
+  .token-row .value { font-size: 0.9vw; min-width: 5vw; }
+  .token-bar-bg { height: 1.6vw; border-radius: 0.8vw; }
+  .token-bar { border-radius: 0.8vw; }
+
+  /* Loop slide */
+  .slide-loop { justify-content: center; align-items: center; }
+  .slide-loop h2 { align-self: flex-start; width: 100%; margin-bottom: 2vh; }
+  .loop-flow { padding: 0 2vw; flex: none; }
+  .loop-step { width: 14vw; }
+  .loop-step .circle { width: 7vw; height: 7vw; font-size: 2.8vw; font-weight: 800; margin-bottom: 1.2vh; box-shadow: 0 0 20px currentColor; }
+  .loop-step h4 { font-size: 1.2vw; margin-bottom: 0.5vh; }
+  .loop-step p { font-size: 0.9vw; }
+  .loop-arrow { font-size: 2.5vw; padding-bottom: 4vh; }
+
+  /* Classification */
+  .classify-grid { gap: 1.2vw; }
+  .classify-card { padding: 2vw 1.5vw; border-radius: 1vw; }
+  .classify-card .badge { font-size: 0.7vw; padding: 0.4vw 1vw; }
+  .classify-card h3 { font-size: 1.2vw; }
+  .classify-card .dest { font-size: 0.85vw; }
+  .classify-card .example-text { font-size: 0.85vw; }
+
+  /* Examples */
+  .examples-grid { gap: 1.5vw; align-content: center; }
+  .example-card { padding: 2vw; border-radius: 1vw; border-left-width: 5px; transition: all 0.3s ease; }
+  .example-card:hover { border-color: #e74c3c55; box-shadow: 0 0 30px #e74c3c15; }
+  .example-card .source { font-size: 0.8vw; }
+  .example-card .rule { font-size: 1.2vw; }
+  .example-card .context { font-size: 1vw; }
+  .example-card .tag { font-size: 0.7vw; }
+
+  /* Results */
+  .results-grid { gap: 1.5vw; margin-bottom: 3vh; }
+  .stat-card { padding: 3vw 2vw; border-radius: 1vw; transition: all 0.3s ease; }
+  .stat-card:hover { border-color: #e74c3c55; box-shadow: 0 0 30px #e74c3c15; }
+  .stat-card .number { font-size: 5vw; text-shadow: 0 0 40px currentColor; }
+  .stat-card .label { font-size: 1.1vw; }
+  .proof-box { padding: 2.5vw 3vw; border-radius: 1vw; gap: 2.5vw; margin-top: 2vh; }
+  .proof-box .icon { font-size: 3vw; }
+  .proof-box .text h3 { font-size: 1.4vw; }
+  .proof-box .text p { font-size: 1.05vw; }
+
+  /* HIGH CONTRAST: minimum font sizes for projectors */
+  .problem-card p, .layer-card .desc, .layer-card .when,
+  .example-card .context, .proof-box .text p,
+  .oss-tagline, .oss-cta, .oss-feature { font-size: 1.25vw; }
+
+  .problem-card .quote, .loop-step p, .classify-card .example-text,
+  .example-card .source, .slide-title .meta, .loop-return-label,
+  .oss-repo-url, .stat-card .label { font-size: 1.15vw; }
+
+  .layer-card .example, .oss-cmd, .file-path, .token-row .value,
+  .tree-node .path, .classify-card .dest { font-size: 1.1vw; }
+
+  .example-card .tag, .classify-card .badge, .oss-cmd-label { font-size: 0.9vw; }
+  .loop-step h4 { font-size: 1.4vw; }
+  .loop-step p { font-size: 1.1vw; }
+  .loop-return-label { font-size: 1.2vw; }
+  .tree-node .scope { font-size: 1vw; }
+  .token-row .label { font-size: 1.15vw; }
+  .classify-card h3 { font-size: 1.4vw; }
+  .slide-hierarchy .subtitle { font-size: 1.5vw; }
+  .layer-label { font-size: 1vw; }
+  .oss-feature-icon { font-size: 1.5vw; }
+  .slide-number { font-size: 1.1vw; }
+  .nav-dot { width: 0.9vw; height: 0.9vw; }
+  .nav-dot.active { width: 2.5vw; }
+
+  /* OSS slide */
+  .slide-oss {
+    background: var(--gradient-warm);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 5vh 6vw;
+  }
+
+  .oss-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5vh;
+    max-width: 70vw;
+  }
+
+  .oss-badge {
+    font-size: 1vw;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: var(--accent-green);
+    padding: 0.6vw 2vw;
+    border: 2px solid var(--accent-green);
+    border-radius: 50px;
+    text-shadow: 0 0 20px var(--accent-green);
+  }
+
+  .slide-oss h2 {
+    font-size: 4.5vw;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .oss-tagline {
+    font-size: 1.4vw;
+    color: var(--text-gray);
+    line-height: 1.6;
+  }
+
+  .oss-tagline em {
+    color: var(--octostar-red-light);
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .oss-card {
+    background: var(--bg-card);
+    border: 1px solid #333355;
+    border-radius: 1.2vw;
+    padding: 2.5vw 3vw;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+  }
+
+  .oss-repo-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2vw;
+    text-align: left;
+  }
+
+  .oss-repo-name {
+    font-size: 1.8vw;
+    font-weight: 700;
+  }
+
+  .oss-repo-url {
+    font-size: 0.95vw;
+    color: var(--text-dim);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .oss-commands {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8vw;
+    width: 100%;
+  }
+
+  .oss-cmd-row {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    background: #1a1a2e;
+    padding: 1vw 1.5vw;
+    border-radius: 0.6vw;
+    text-align: left;
+  }
+
+  .oss-cmd-label {
+    font-size: 0.75vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    min-width: 5.5vw;
+  }
+
+  .oss-cmd {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.95vw;
+    color: var(--accent-green);
+  }
+
+  .oss-features {
+    display: flex;
+    gap: 2.5vw;
+    margin-top: 1vh;
+  }
+
+  .oss-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.6vw;
+    font-size: 1vw;
+    color: var(--text-gray);
+  }
+
+  .oss-feature-icon {
+    font-size: 1.3vw;
+  }
+
+  .oss-cta {
+    font-size: 1.1vw;
+    color: var(--text-dim);
+    margin-top: 1vh;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide slide-title active" id="s1">
+  <div class="logo-main">
+    <img src="logo-dark.svg" alt="Octostar">
+  </div>
+  <h1>AI Code Review<br>Knowledge System</h1>
+  <p class="subtitle">Teaching Cursor Bugbot your team's war stories<br>so the same bugs never happen twice</p>
+  <p class="meta">Engineering Team | April 2026</p>
+  <span class="slide-number">1 / 9</span>
+</div>
+
+<!-- SLIDE 2: THE PROBLEM -->
+<div class="slide slide-problem" id="s2">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>The Problem</h2>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">🧠</div>
+      <h3>AI Reviewers Are Amnesiac</h3>
+      <p>Cursor Bugbot, CodeRabbit, and Copilot review every PR from scratch. They don't know your team spent a week debugging a race condition last month, or that a certain <code>===</code> check is intentional.</p>
+      <p class="quote">"The syntax is correct" != "The approach is safe"</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">📝</div>
+      <h3>Knowledge Dies on Merged PRs</h3>
+      <p>A senior engineer writes: "Be careful, MemoryStorageAdapter preserves object references intentionally." That comment lives on a PR nobody reads again. Three months later, someone "fixes" the <code>===</code> check.</p>
+      <p class="quote">Same bug. Same review cycle. Same wasted time.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🔇</div>
+      <h3>Context Overload Kills Quality</h3>
+      <p>Dumping 50 rules into a single config file means every rule competes for the bot's attention. Important rules get drowned out by generic advice. The bot starts ignoring everything.</p>
+      <p class="quote">More rules != better reviews</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🔓</div>
+      <h3>Open Feedback Loop</h3>
+      <p>Even when lessons are captured, there's no systematic way to feed them back into the review process. Knowledge stays in people's heads or in Slack threads nobody searches.</p>
+      <p class="quote">Institutional knowledge is the most perishable asset</p>
+    </div>
+  </div>
+  <span class="slide-number">2 / 9</span>
+</div>
+
+<!-- SLIDE 3: THREE LAYERS -->
+<div class="slide slide-layers" id="s3">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>The Solution: Three Memory Layers</h2>
+  <div class="layers-container">
+    <div class="layer-card bot">
+      <span class="layer-label">Layer 1</span>
+      <h3>.cursor/BUGBOT.md</h3>
+      <div class="when">Read by Bugbot at review time</div>
+      <p class="desc">Project-specific rules the bot enforces on every diff. Hierarchical: the bot traverses upward from each changed file, collecting all BUGBOT.md files it finds.</p>
+      <div class="example">"Never use Promise.all on
+unbounded arrays. Use a
+concurrency limiter."</div>
+    </div>
+    <div class="layer-card dev">
+      <span class="layer-label">Layer 2</span>
+      <h3>LESSONS.md</h3>
+      <div class="when">Read by IDE assistants at write time</div>
+      <p class="desc">Universal engineering lessons read by Claude Code and Cursor before developers write code. The "why" behind patterns that can't be checked on a diff.</p>
+      <div class="example">"In-memory state is a cache,
+not a source of truth. Query
+the database for authoritative
+conflict detection."</div>
+    </div>
+    <div class="layer-card file">
+      <span class="layer-label">Layer 3</span>
+      <h3>Inline Comments</h3>
+      <div class="when">Visible in diff when file is changed</div>
+      <p class="desc">Rules that apply to exactly one file or function, placed in the source code. The bot sees them whenever that specific file appears in a PR.</p>
+      <div class="example">// WARNING: Runtime-evaluated
+// JS string. Cannot use
+// imports. Do not DRY.
+// (See PR #760)</div>
+    </div>
+  </div>
+  <span class="slide-number">3 / 9</span>
+</div>
+
+<!-- SLIDE 4: HIERARCHY -->
+<div class="slide slide-hierarchy" id="s4">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>Hierarchical Scoping</h2>
+  <p class="subtitle">Deeper modules get more context. Simple changes get only relevant rules.</p>
+  <div class="hierarchy-content">
+    <div class="tree">
+      <div class="tree-node l1">
+        <div class="dot red"></div>
+        <span class="path">.cursor/BUGBOT.md</span>
+        <span class="scope">Every PR</span>
+      </div>
+      <div class="tree-node l2">
+        <div class="dot blue"></div>
+        <span class="path">apps/octostar/.cursor/BUGBOT.md</span>
+        <span class="scope">Octostar PRs</span>
+      </div>
+      <div class="tree-node l3">
+        <div class="dot green"></div>
+        <span class="path">apps/octostar/.../linkchart-nt/.cursor/BUGBOT.md</span>
+        <span class="scope">LinkChart PRs</span>
+      </div>
+      <div class="tree-node l2">
+        <div class="dot blue"></div>
+        <span class="path">apps/search-app/.cursor/BUGBOT.md</span>
+        <span class="scope">Search PRs</span>
+      </div>
+      <div class="tree-node l2">
+        <div class="dot purple"></div>
+        <span class="path">packages/.cursor/BUGBOT.md</span>
+        <span class="scope">Package PRs</span>
+      </div>
+    </div>
+    <div class="token-table">
+      <h3>Token Budget per Scenario</h3>
+      <div class="token-row">
+        <span class="label">LinkChart change</span>
+        <div class="token-bar-bg"><div class="token-bar red" style="width: 84%"></div></div>
+        <span class="value">~1,684</span>
+      </div>
+      <div class="token-row">
+        <span class="label">Octostar change</span>
+        <div class="token-bar-bg"><div class="token-bar blue" style="width: 63%"></div></div>
+        <span class="value">~1,250</span>
+      </div>
+      <div class="token-row">
+        <span class="label">Package change</span>
+        <div class="token-bar-bg"><div class="token-bar green" style="width: 43%"></div></div>
+        <span class="value">~859</span>
+      </div>
+      <div class="token-row">
+        <span class="label">Search App change</span>
+        <div class="token-bar-bg"><div class="token-bar green" style="width: 36%"></div></div>
+        <span class="value">~728</span>
+      </div>
+      <div style="margin-top: 24px; padding: 20px 24px; background: var(--bg-card); border-radius: 12px; border: 1px solid #333355;">
+        <p style="font-size: 15px; color: var(--text-gray); line-height: 1.7;">Target: <strong style="color: white;">&lt;400 words</strong> per file, <strong style="color: white;">&lt;2,000 tokens</strong> worst case. Fewer rules = more attention per rule.</p>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">4 / 9</span>
+</div>
+
+<!-- SLIDE 5: FEEDBACK LOOP -->
+<div class="slide slide-loop" id="s5">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>The Automated Feedback Loop</h2>
+  <div class="loop-wrapper">
+    <div class="loop-flow">
+      <div class="loop-step">
+        <div class="circle red">1</div>
+        <h4>PR Merged</h4>
+        <p>Developer's code lands on main</p>
+      </div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step">
+        <div class="circle blue">2</div>
+        <h4>Action Fires</h4>
+        <p>harvest-lessons.yml extracts human review comments</p>
+      </div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step">
+        <div class="circle green">3</div>
+        <h4>Summary Posted</h4>
+        <p>Structured harvest proposal on the merged PR</p>
+      </div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step">
+        <div class="circle orange">4</div>
+        <h4>Classify & Commit</h4>
+        <p>Developer runs /pr-war-stories harvest</p>
+      </div>
+      <div class="loop-arrow">&rarr;</div>
+      <div class="loop-step">
+        <div class="circle purple">5</div>
+        <h4>Bot Gets Smarter</h4>
+        <p>New rules active on the next PR review</p>
+      </div>
+    </div>
+    <div class="loop-return-curved">
+      <svg viewBox="0 0 1000 80" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="loopGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#9b59b6" />
+            <stop offset="50%" stop-color="#e74c3c" />
+            <stop offset="100%" stop-color="#e74c3c" />
+          </linearGradient>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c" />
+          </marker>
+        </defs>
+        <path d="M 900 5 Q 950 5 950 40 Q 950 70 900 70 L 100 70 Q 50 70 50 40 Q 50 5 100 5"
+              stroke="url(#loopGrad)" stroke-width="3" fill="none" marker-end="url(#arrowhead)" />
+      </svg>
+      <div class="loop-return-label">
+        <span style="color: var(--accent-green);">&#10003; Next PR catches more</span>
+        <span style="color: var(--octostar-red-light);">&nbsp;&mdash;&nbsp;loop continues</span>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">5 / 9</span>
+</div>
+
+<!-- SLIDE 6: CLASSIFICATION -->
+<div class="slide slide-classify" id="s6">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>Rule Classification System</h2>
+  <div class="classify-grid">
+    <div class="classify-card reviewable">
+      <span class="badge">Reviewable</span>
+      <h3>Bot can check it</h3>
+      <div class="dest">&rarr; BUGBOT.md</div>
+      <p class="example-text">"Don't use Promise.all on unbounded arrays"</p>
+    </div>
+    <div class="classify-card educational">
+      <span class="badge">Educational</span>
+      <h3>Informs devs</h3>
+      <div class="dest">&rarr; LESSONS.md</div>
+      <p class="example-text">"Build order requires packages before apps"</p>
+    </div>
+    <div class="classify-card singlefile">
+      <span class="badge">Single-File</span>
+      <h3>One function</h3>
+      <div class="dest">&rarr; inline comment</div>
+      <p class="example-text">"This adapter uses reference equality intentionally"</p>
+    </div>
+    <div class="classify-card overlapping">
+      <span class="badge">Overlapping</span>
+      <h3>Duplicate rule</h3>
+      <div class="dest">&rarr; merge</div>
+      <p class="example-text">Three stale-state rules merged into one</p>
+    </div>
+    <div class="classify-card stale">
+      <span class="badge">Stale</span>
+      <h3>Pattern fixed</h3>
+      <div class="dest">&rarr; remove</div>
+      <p class="example-text">API migrated, old workaround no longer needed</p>
+    </div>
+  </div>
+  <div style="margin-top: 48px; padding: 28px 36px; background: var(--bg-card); border-radius: 16px; border: 1px solid #333355; display: flex; align-items: center; gap: 24px;">
+    <span style="font-size: 32px;">&#9888;&#65039;</span>
+    <p style="font-size: 17px; color: var(--text-gray); line-height: 1.6;"><strong style="color: white;">The #1 failure mode:</strong> dumping everything into BUGBOT.md. This classification prevents context bloat and ensures each rule is placed where it's most effective.</p>
+  </div>
+  <span class="slide-number">6 / 9</span>
+</div>
+
+<!-- SLIDE 7: REAL EXAMPLES -->
+<div class="slide slide-examples" id="s7">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>Real War Stories from Our PRs</h2>
+  <div class="examples-grid">
+    <div class="example-card war1">
+      <div class="source">From PR #781 &mdash; production OOM</div>
+      <div class="rule">Unbounded Promise.all on file uploads causes OOM crashes</div>
+      <p class="context">Hundreds of simultaneous mkdir + upload requests for deep folder trees exhausted memory. Fixed with concurrency limiter (max 3 parallel ops).</p>
+      <span class="tag bugbot">BUGBOT.md</span>
+    </div>
+    <div class="example-card war2">
+      <div class="source">From PR #775 &mdash; reviewer warning</div>
+      <div class="rule">LLM-generated CSS changes broke unrelated components</div>
+      <p class="context">"An example of how a large scale change by an LLM can cause unintended changes to other components." A sidebar CSS change collapsed the schema editor.</p>
+      <span class="tag bugbot">BUGBOT.md</span>
+    </div>
+    <div class="example-card war3">
+      <div class="source">From PR #748 &mdash; false "fix"</div>
+      <div class="rule">MemoryStorageAdapter reference equality is intentional</div>
+      <p class="context">Bot flagged === as a bug. Maintainer explained: the adapter preserves object references for unchanged items. Deep equality would trigger unnecessary Redux dispatches.</p>
+      <span class="tag inline">Inline Comment</span>
+    </div>
+    <div class="example-card war4">
+      <div class="source">From PR #741 &mdash; timing bug</div>
+      <div class="rule">useState captures values one frame late</div>
+      <p class="context">priorPodUid was in useState. The effect to capture it ran one frame late. Replaced with useRef for synchronous capture during state transitions.</p>
+      <span class="tag lessons">LESSONS.md</span>
+    </div>
+  </div>
+  <span class="slide-number">7 / 9</span>
+</div>
+
+<!-- SLIDE 8: RESULTS -->
+<div class="slide slide-results" id="s8">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>What We Shipped</h2>
+  <div class="results-grid">
+    <div class="stat-card">
+      <div class="number red">22</div>
+      <div class="label">War stories extracted<br>from 50 merged PRs</div>
+    </div>
+    <div class="stat-card">
+      <div class="number blue">5</div>
+      <div class="label">BUGBOT.md files<br>across the monorepo</div>
+    </div>
+    <div class="stat-card">
+      <div class="number green">6</div>
+      <div class="label">Inline comments placed<br>in source files</div>
+    </div>
+    <div class="stat-card">
+      <div class="number orange">1</div>
+      <div class="label">GitHub Action for<br>automated harvesting</div>
+    </div>
+  </div>
+  <div class="proof-box">
+    <div class="icon">&#127919;</div>
+    <div class="text">
+      <h3>Already paying for itself</h3>
+      <p>On its first review, Bugbot caught a real bug in the harvest workflow itself &mdash; the scope detection used <code>else if</code> instead of <code>if</code>, causing linkchart files to miss parent scope rules. The system's own rules made the system better.</p>
+    </div>
+  </div>
+  <div style="margin-top: 28px; text-align: center; color: var(--text-dim); font-size: 16px;">
+    <code style="color: var(--accent-green);">/pr-war-stories setup</code> &nbsp;&mdash;&nbsp; available as a Claude Code skill for any repository
+  </div>
+  <span class="slide-number">8 / 9</span>
+</div>
+
+<!-- SLIDE 9: OSS RELEASE -->
+<div class="slide slide-oss" id="s9">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+
+  <div class="oss-content">
+    <div class="oss-badge">OPEN SOURCE</div>
+    <h2>We open-sourced it.</h2>
+    <p class="oss-tagline">Everything we built is now a reusable Claude Code skill<br>that works on <em>any</em> repository with PR history.</p>
+
+    <div class="oss-card">
+      <div class="oss-repo-header">
+        <svg width="2.5vw" height="2.5vw" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <div>
+        <div class="oss-repo-name">sscarduzio/pr-war-stories</div>
+        <div class="oss-repo-url">github.com/sscarduzio/pr-war-stories</div>
+      </div>
+    </div>
+
+    <div class="oss-commands">
+      <div class="oss-cmd-row">
+        <span class="oss-cmd-label">Install</span>
+        <code class="oss-cmd">claude install-skill sscarduzio/pr-war-stories</code>
+      </div>
+      <div class="oss-cmd-row">
+        <span class="oss-cmd-label">Bootstrap</span>
+        <code class="oss-cmd">/pr-war-stories setup</code>
+      </div>
+      <div class="oss-cmd-row">
+        <span class="oss-cmd-label">Harvest</span>
+        <code class="oss-cmd">/pr-war-stories harvest</code>
+      </div>
+      <div class="oss-cmd-row">
+        <span class="oss-cmd-label">Audit</span>
+        <code class="oss-cmd">/pr-war-stories audit</code>
+      </div>
+    </div>
+  </div>
+
+    <div class="oss-features">
+      <div class="oss-feature">
+        <span class="oss-feature-icon" style="color: var(--octostar-red-light);">&#9733;</span>
+        <span>Mines 50+ merged PRs for war stories</span>
+      </div>
+      <div class="oss-feature">
+        <span class="oss-feature-icon" style="color: var(--accent-blue);">&#9733;</span>
+        <span>Creates hierarchical BUGBOT.md rules</span>
+      </div>
+      <div class="oss-feature">
+        <span class="oss-feature-icon" style="color: var(--accent-green);">&#9733;</span>
+        <span>Installs automated harvest GitHub Action</span>
+      </div>
+      <div class="oss-feature">
+        <span class="oss-feature-icon" style="color: var(--accent-orange);">&#9733;</span>
+        <span>Token-budgeted, classification-driven</span>
+      </div>
+    </div>
+
+    <p class="oss-cta">Works with Cursor Bugbot, any GitHub repo, any language.</p>
+  </div>
+
+  <span class="slide-number">9 / 9</span>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav" id="nav"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const nav = document.getElementById('nav');
+  let current = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    nav.appendChild(dot);
+  });
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    nav.children[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    nav.children[current].classList.add('active');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') goTo(Math.min(current + 1, slides.length - 1));
+    if (e.key === 'ArrowLeft') goTo(Math.max(current - 1, 0));
+  });
+</script>
+</body>
+</html>
