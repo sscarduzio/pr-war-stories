@@ -13,18 +13,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a1a;
-  --bg-card: #12122a;
-  --border: #1e1e3a;
+  --bg: #0f1117;
+  --bg-mid: #161822;
+  --bg-card: #1c1f2e;
+  --bg-card-hover: #222538;
+  --border: #2a2d42;
   --red: #e74c3c;
   --red-light: #ff6b5b;
   --blue: #4a9eff;
   --green: #2ecc71;
   --orange: #f39c12;
   --purple: #9b59b6;
-  --text: #eeeef5;
-  --text-secondary: #b0b0cc;
-  --text-dim: #7777aa;
+  --text: #f0f0f8;
+  --text-secondary: #bbbbd0;
+  --text-dim: #8888aa;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+  --glow-red: 0 0 60px rgba(231,76,60,0.08);
+  --glow-blue: 0 0 60px rgba(74,158,255,0.06);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,6 +47,36 @@ a { color: var(--blue); text-decoration: none; }
 a:hover { text-decoration: underline; }
 code, .mono { font-family: 'JetBrains Mono', monospace; }
 
+/* ===== GITHUB RIBBON ===== */
+.gh-ribbon {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  padding: 10px 48px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-radius: 0 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+}
+
+.gh-ribbon a {
+  color: var(--text-secondary);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gh-ribbon .separator { color: var(--border); }
+
 /* ===== HERO ===== */
 .hero {
   min-height: 100vh;
@@ -51,22 +87,11 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   text-align: center;
   padding: 80px 24px;
   position: relative;
-  background: radial-gradient(ellipse at 30% 20%, #e74c3c08 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 80%, #4a9eff06 0%, transparent 50%);
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--green);
-  border: 1px solid #2ecc7144;
-  padding: 6px 18px;
-  border-radius: 100px;
-  margin-bottom: 32px;
-  letter-spacing: 1px;
+  background:
+    radial-gradient(ellipse at 25% 0%, #e74c3c12 0%, transparent 45%),
+    radial-gradient(ellipse at 75% 0%, #4a9eff0a 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 100%, #9b59b608 0%, transparent 40%),
+    linear-gradient(180deg, #181b28 0%, var(--bg) 100%);
 }
 
 .hero h1 {
@@ -120,11 +145,12 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 .btn-primary:hover { background: var(--red-light); text-decoration: none; }
 
 .btn-secondary {
-  background: transparent;
+  background: var(--bg-card);
   color: var(--text);
   border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
-.btn-secondary:hover { border-color: var(--text-dim); text-decoration: none; }
+.btn-secondary:hover { border-color: var(--text-dim); text-decoration: none; background: var(--bg-card-hover); }
 
 .hero-install {
   background: var(--bg-card);
@@ -134,6 +160,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  box-shadow: var(--shadow-lg);
 }
 
 .hero-install code {
@@ -184,7 +211,7 @@ section { padding: 100px 24px; }
 
 /* ===== PROBLEM ===== */
 .problem-section {
-  background: linear-gradient(180deg, var(--bg) 0%, #0d0d22 100%);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-mid) 100%);
 }
 
 .problem-quote {
@@ -195,6 +222,7 @@ section { padding: 100px 24px; }
   padding: 32px 36px;
   margin-bottom: 48px;
   max-width: 800px;
+  box-shadow: var(--shadow), var(--glow-red);
 }
 
 .problem-quote p {
@@ -222,6 +250,13 @@ section { padding: 100px 24px; }
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 28px;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+}
+.problem-card:hover {
+  border-color: #e74c3c33;
+  box-shadow: var(--shadow-lg), var(--glow-red);
+  transform: translateY(-2px);
 }
 
 .problem-card .emoji { font-size: 28px; margin-bottom: 12px; }
@@ -230,7 +265,7 @@ section { padding: 100px 24px; }
 
 /* ===== HOW IT WORKS ===== */
 .how-section {
-  background: #0d0d22;
+  background: linear-gradient(180deg, var(--bg-mid) 0%, var(--bg) 100%);
 }
 
 .layers-grid {
@@ -251,6 +286,13 @@ section { padding: 100px 24px; }
   padding: 32px 28px;
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+}
+.layer-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: #4a9eff33;
 }
 
 .layer-card::before {
@@ -297,7 +339,11 @@ section { padding: 100px 24px; }
 }
 
 /* ===== LOOP ===== */
-.loop-section { background: var(--bg); }
+.loop-section {
+  background:
+    radial-gradient(ellipse at 50% 50%, #4a9eff06 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-mid) 100%);
+}
 
 .loop-visual {
   display: flex;
@@ -359,7 +405,7 @@ section { padding: 100px 24px; }
 }
 
 /* ===== WAR STORIES ===== */
-.stories-section { background: #0d0d22; }
+.stories-section { background: linear-gradient(180deg, var(--bg-mid) 0%, var(--bg) 100%); }
 
 .stories-grid {
   display: grid;
@@ -373,6 +419,12 @@ section { padding: 100px 24px; }
   border-radius: 12px;
   padding: 28px;
   border-left: 4px solid;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+}
+.story-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .story-card:nth-child(1) { border-left-color: var(--red); }
@@ -409,7 +461,9 @@ section { padding: 100px 24px; }
 
 /* ===== INSTALL ===== */
 .install-section {
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse at 50% 80%, #e74c3c08 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg) 0%, #181b28 100%);
   text-align: center;
 }
 
@@ -420,6 +474,7 @@ section { padding: 100px 24px; }
   padding: 48px;
   max-width: 700px;
   margin: 0 auto 48px;
+  box-shadow: var(--shadow-lg), var(--glow-red);
 }
 
 .install-box h3 {
@@ -497,11 +552,20 @@ footer a { color: var(--text-secondary); }
 </head>
 <body>
 
+<!-- GITHUB RIBBON -->
+<div class="gh-ribbon">
+  <a href="https://github.com/sscarduzio/pr-war-stories">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    GitHub
+  </a>
+  <span class="separator">|</span>
+  MIT License
+</div>
+
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">OPEN SOURCE &middot; CLAUDE CODE SKILL</div>
-  <h1>Stop reviewing the<br>same <span class="highlight">bug</span> twice</h1>
-  <p class="hero-sub">Your team already caught it in a PR comment three months ago. The AI reviewer approved it anyway because it has no memory. This fixes that -- permanently.</p>
+  <h1>Stop reviewing the<br>same <span class="highlight">bugs</span></h1>
+  <p class="hero-sub">An engineer caught it in a PR comment three months ago, and now the Bugbot approved it anyway. Let's fix it -- permanently.</p>
   <div class="hero-cta">
     <a href="https://github.com/sscarduzio/pr-war-stories" class="btn btn-primary">View on GitHub</a>
     <a href="#install" class="btn btn-secondary">Install in 10 seconds</a>
