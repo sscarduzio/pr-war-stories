@@ -845,17 +845,26 @@ section { padding: 56px 24px; }
 .story-card:nth-child(3) { border-left-color: var(--green); }
 .story-card:nth-child(4) { border-left-color: var(--orange); }
 
-.story-card .pr {
+.story-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.story-icon { font-size: 28px; flex-shrink: 0; }
+
+.story-header .pr {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin-bottom: 6px;
 }
 
-.story-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
-.story-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.story-header h3 { font-size: 15px; font-weight: 700; line-height: 1.3; }
+
+.story-header .placed { margin-left: auto; white-space: nowrap; }
 
 .story-card .placed {
   display: inline-block;
@@ -863,10 +872,22 @@ section { padding: 56px 24px; }
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 12px;
-  margin-top: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
+
+.story-diff {
+  background: #0a0a16;
+  border: 1px solid #1a1d30;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.diff-bad { color: #f87171; }
+.diff-good { color: #4ade80; }
 
 .placed.bugbot { background: #e74c3c22; color: var(--red-light); }
 .placed.lessons { background: #4a9eff22; color: var(--blue); }
@@ -1187,28 +1208,48 @@ detection."</div>
     <p class="section-desc">Actual lessons extracted from merged PRs. Each one prevented the same bug from recurring.</p>
     <div class="stories-grid">
       <div class="story-card">
-        <div class="pr">From a production OOM</div>
-        <h3>Unbounded Promise.all on file uploads causes OOM crashes</h3>
-        <p>Hundreds of simultaneous requests exhausted memory. Fixed with concurrency limiter (max 3 parallel ops).</p>
-        <span class="placed bugbot">BUGBOT.md</span>
+        <div class="story-header">
+          <span class="story-icon">&#128165;</span>
+          <div><div class="pr">PR #781</div><h3>Promise.all on 200 files = OOM</h3></div>
+          <span class="placed bugbot">BUGBOT.md</span>
+        </div>
+        <div class="story-diff">
+          <div class="diff-bad">- await Promise.all(files.map(upload))</div>
+          <div class="diff-good">+ await asyncPool(3, files, upload)</div>
+        </div>
       </div>
       <div class="story-card">
-        <div class="pr">From a reviewer warning</div>
-        <h3>LLM-generated CSS changes broke unrelated components</h3>
-        <p>"A large scale change by an LLM can cause unintended changes to other components." Sidebar CSS collapsed the schema editor.</p>
-        <span class="placed bugbot">BUGBOT.md</span>
+        <div class="story-header">
+          <span class="story-icon">&#127912;</span>
+          <div><div class="pr">PR #775</div><h3>LLM CSS change broke schema editor</h3></div>
+          <span class="placed bugbot">BUGBOT.md</span>
+        </div>
+        <div class="story-diff">
+          <div class="diff-bad">- .custom-antlayout { height: 100% }</div>
+          <div class="diff-good">+ .schema-editor-layout { height: 100% }</div>
+        </div>
       </div>
       <div class="story-card">
-        <div class="pr">From a false "fix"</div>
-        <h3>MemoryStorageAdapter reference equality is intentional</h3>
-        <p>Bot flagged === as a bug. The adapter preserves object references. Deep equality would trigger unnecessary re-renders.</p>
-        <span class="placed inline">Inline comment</span>
+        <div class="story-header">
+          <span class="story-icon">&#9989;</span>
+          <div><div class="pr">PR #748</div><h3>=== is correct. Don't "fix" it.</h3></div>
+          <span class="placed inline">Inline</span>
+        </div>
+        <div class="story-diff">
+          <div class="diff-bad">- if (deepEqual(prev, next))</div>
+          <div class="diff-good">+ if (prev === next) // intentional ref check</div>
+        </div>
       </div>
       <div class="story-card">
-        <div class="pr">From a timing bug</div>
-        <h3>useState captures values one frame late</h3>
-        <p>priorPodUid in useState ran one frame late. Replaced with useRef for synchronous capture at state transitions.</p>
-        <span class="placed lessons">LESSONS.md</span>
+        <div class="story-header">
+          <span class="story-icon">&#9201;</span>
+          <div><div class="pr">PR #741</div><h3>useState is 1 frame late</h3></div>
+          <span class="placed lessons">LESSONS.md</span>
+        </div>
+        <div class="story-diff">
+          <div class="diff-bad">- const [val, setVal] = useState(x)</div>
+          <div class="diff-good">+ const valRef = useRef(x) // sync capture</div>
+        </div>
       </div>
     </div>
   </div>
