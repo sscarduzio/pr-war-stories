@@ -675,6 +675,15 @@ footer {
 
 footer p { font-size: 13px; color: var(--text-dim); }
 footer a { color: var(--text-secondary); }
+
+/* ===== MOBILE NAV ===== */
+@media (max-width: 640px) {
+  .topnav { padding: 0 16px; }
+  .topnav-logo .name { font-size: 15px; }
+  .topnav-logo .sub { display: none; }
+  .topnav-right .badge { display: none; }
+  .topnav-right a[href*="github"] { display: none; }
+}
 </style>
 </head>
 <body>
