@@ -1,82 +1,17 @@
 # pr-war-stories
 
-**Your team's best reviewer is about to quit. Their knowledge doesn't have to.**
+**Stop reviewing the same bugs.**
 
-AI code reviewers are stateless. They don't know your team spent a week debugging a race condition last month. They don't know that `===` check is intentional. They don't know the last three people who touched that module all introduced the same bug.
+An engineer left a PR comment three months ago. Nobody read it again. A junior dev "fixed" the code. The bot approved it. This skill makes sure that never happens again.
 
-This skill fixes that. It mines your PR history for hard-won lessons and injects them where AI reviewers will actually use them.
+## What it does
 
-## The Problem
-
-A senior engineer reviews a PR and writes:
-
-> *"Be careful here -- `MemoryStorageAdapter` preserves object references intentionally. The `===` check is correct. Don't change it to deep equality or you'll trigger unnecessary Redux dispatches."*
-
-That comment lives on a merged PR that nobody will ever read again. Three months later, a new contributor "fixes" the `===` check. The same bug. The same review cycle. The same wasted time.
-
-**AI reviewers make this worse.** Cursor Bugbot, CodeRabbit, and Copilot will confidently approve the "fix" because the code is syntactically correct. They have no memory of the war story.
-
-## The Solution
-
-`pr-war-stories` creates a knowledge system that feeds your team's institutional memory directly into the AI reviewer's context window:
+`pr-war-stories` is a Claude Code skill that mines your PR history for lessons learned, then injects them where your AI code reviewer will actually use them.
 
 ```
-Your PR history                          What the AI reviewer sees
------------------                        --------------------------
-
-"Don't use Promise.all on        --->    .cursor/BUGBOT.md (global)
- unbounded arrays, we OOM'd"            "Never use Promise.all on unbounded
-                                         arrays. Use a concurrency limiter."
-
-"This is runtime-eval JS,        --->    Inline code comment
- you can't import here"                  // WARNING: Runtime-evaluated JS string.
-                                         // Cannot use imports. (See PR #760)
-
-"useState captures values         --->   LESSONS.md
- one frame late, use useRef"            "When you need synchronous capture
-                                         at a state transition, use useRef."
+- await Promise.all(files.map(upload))          // PR #781: OOM'd in prod
++ await asyncPool(3, files, upload)             // Now a BUGBOT.md rule
 ```
-
-Three layers, each optimized for a different reader:
-
-| Layer | File | Reader | Purpose |
-|-------|------|--------|---------|
-| **Bot rules** | `.cursor/BUGBOT.md` | Cursor Bugbot during PR review | Rules the bot can enforce on a diff |
-| **Lessons** | `LESSONS.md` | Claude Code / Cursor IDE | Universal principles that inform how you write code |
-| **Inline** | Source code comments | Bot when that file is in the diff | Single-file warnings exactly where they matter |
-
-## How It Works
-
-```
-/pr-war-stories setup           (one-time: bootstrap from your PR history)
-         |
-         v
-    Mines 50 merged PRs
-    Extracts human review comments
-    Creates hierarchical BUGBOT.md files
-    Creates LESSONS.md
-    Installs GitHub Action
-         |
-         v
-    Every future PR merge  ---->  harvest-lessons.yml fires automatically
-                                  Surfaces new review comments
-                                  Posts harvest summary on the merged PR
-                                       |
-                                       v
-                                  /pr-war-stories harvest
-                                  (you process them periodically)
-                                       |
-                                       v
-                                  Rules updated, bot gets smarter
-                                       |
-                               --------+--------
-                               |               |
-                               v               v
-                          Next PR review   Next PR review
-                          catches more     catches more
-```
-
-The feedback loop is semi-automated: a GitHub Action extracts the signal (human review comments) on every merge. You run one command to classify and commit the new rules.
 
 ## Install
 
@@ -84,141 +19,138 @@ The feedback loop is semi-automated: a GitHub Action extracts the signal (human 
 claude install-skill sscarduzio/pr-war-stories
 ```
 
-Or manually:
-
-```bash
-mkdir -p ~/.claude/skills/pr-war-stories
-curl -o ~/.claude/skills/pr-war-stories/SKILL.md \
-  https://raw.githubusercontent.com/sscarduzio/pr-war-stories/main/SKILL.md
-```
-
-## Quick Start
-
-Open Claude Code in any repo with PR history:
+Then open Claude Code in any repo:
 
 ```
 /pr-war-stories setup
 ```
 
-That's it. The skill will:
+The skill will explore your repo, mine your last 50 merged PRs, extract war stories from human review comments, and create everything automatically.
 
-1. Explore your repo structure and tech stack
-2. Mine the last 50 merged PRs for human review comments
-3. Extract war stories (race conditions, gotchas, "this broke before when...")
-4. Create `.cursor/BUGBOT.md` files scoped to your directory structure
-5. Distill universal lessons into `LESSONS.md`
-6. Install the `harvest-lessons.yml` GitHub Action for the feedback loop
-7. Wire up `CLAUDE.md` / `AGENTS.md` so IDE assistants read the lessons
+## The three-layer architecture
+
+Not all knowledge belongs in the same place:
+
+| Layer | File | When it's read | What goes here |
+|-------|------|---------------|----------------|
+| **Bot rules** | `.cursor/BUGBOT.md` | Bugbot reviews a PR | Rules the bot can enforce on a diff |
+| **Lessons** | `LESSONS.md` | Developer starts coding | Universal principles (the "why") |
+| **Inline** | Source code comments | That file appears in a diff | Single-file warnings |
+
+### Why three layers?
+
+The bot has a context window. Every rule competes for attention. When you dump 50 rules into BUGBOT.md, the bot ignores the important ones.
+
+The fix: **classify every lesson before placing it.**
+
+- Bot can check it on a diff? &rarr; `.cursor/BUGBOT.md`
+- Applies to one file only? &rarr; Inline code comment
+- Educational, not enforceable? &rarr; `LESSONS.md`
+- Duplicate of another rule? &rarr; Merge
+- Pattern was fixed? &rarr; Remove
+
+## Hierarchical scoping
+
+BUGBOT.md files are hierarchical. The bot traverses **upward** from each changed file, collecting rules at every level:
+
+```
+.cursor/BUGBOT.md                              <-- every PR
+  apps/frontend/.cursor/BUGBOT.md              <-- frontend PRs
+    apps/frontend/src/editor/.cursor/BUGBOT.md <-- editor PRs get all three
+  packages/.cursor/BUGBOT.md                   <-- package PRs
+```
+
+Deeper modules get more context. Simple changes get only relevant rules. Token budget stays under control:
+
+- **< 400 words** per file (ideal)
+- **< 2000 tokens** worst-case combined load
+
+## The automated feedback loop
+
+A GitHub Action (`harvest-lessons.yml`) fires on every merged PR:
+
+```
+PR merged to main
+      |
+      v
+harvest-lessons.yml extracts human review comments
+(filters bots, skips "LGTM", maps to BUGBOT.md scopes)
+      |
+      v
+Posts harvest summary on the merged PR
+      |
+      v
+Developer runs /pr-war-stories harvest
+      |
+      v
+New rules committed, bot uses them on next review
+      |
+      (loop continues)
+```
+
+No knowledge falls through the cracks.
 
 ## Commands
 
-| Command | When | What it does |
-|---------|------|-------------|
+| Command | When | What |
+|---------|------|------|
 | `/pr-war-stories setup` | Once per repo | Full bootstrap from PR history |
-| `/pr-war-stories harvest` | Monthly, or when you see harvest summaries | Process new lessons into rule files |
-| `/pr-war-stories audit` | Quarterly | Measure hit rate, remove stale rules, optimize |
-| `/pr-war-stories add-module <path>` | When adding complex new code | Bootstrap rules for a new module |
+| `/pr-war-stories harvest` | When you see harvest summaries | Process new lessons into rules |
+| `/pr-war-stories audit` | Quarterly | Measure hit rate, prune stale rules |
+| `/pr-war-stories add-module <path>` | New complex module added | Bootstrap rules for it |
 
-## Why Three Layers?
+## Real war stories
 
-We tried putting everything in BUGBOT.md. It didn't work.
+These are actual rules extracted from production PRs:
 
-**The bot has a context window.** Every rule competes for attention. When you dump 50 rules into one file, the bot's review quality drops -- it starts ignoring the important ones.
+```diff
+# PR #781 — Production OOM → BUGBOT.md
+- await Promise.all(files.map(upload))
++ await asyncPool(3, files, upload)
 
-The fix: **only put rules in BUGBOT.md that the bot can actually check against a diff.** Everything else goes somewhere more appropriate:
+# PR #775 — LLM CSS broke schema editor → BUGBOT.md
+- .custom-antlayout { height: 100% }
++ .schema-editor-layout { height: 100% }
 
-- *"Build order requires packages before apps"* -- the bot can't check this. CI does. Goes in **LESSONS.md**.
-- *"This adapter preserves object references intentionally"* -- applies to one file. Goes as an **inline comment**.
-- *"Don't use Promise.all on unbounded arrays"* -- the bot can see this in the diff. Goes in **BUGBOT.md**.
+# PR #748 — Bot flagged === as bug → Inline comment
+- if (deepEqual(prev, next))
++ if (prev === next) // intentional ref check
 
-The skill enforces this classification automatically during setup and harvest.
-
-## Token Budget
-
-More rules does not mean better reviews. The skill enforces:
-
-- **< 400 words** per BUGBOT.md file (ideal)
-- **< 600 words** (acceptable)
-- **> 800 words** (too fat -- audit triggered)
-- **< 2000 tokens** worst-case combined load
-
-During audit, every rule gets re-classified:
-
-| Classification | Action |
-|----------------|--------|
-| **REVIEWABLE** | Keep in BUGBOT.md |
-| **EDUCATIONAL** | Move to LESSONS.md |
-| **SINGLE-FILE** | Move to inline code comment |
-| **OVERLAPPING** | Merge with similar rule |
-| **STALE** | Remove |
-
-## The Hierarchy
-
-BUGBOT.md files are hierarchical. Cursor Bugbot traverses **upward** from each changed file, collecting all `.cursor/BUGBOT.md` files it encounters:
-
-```
-.cursor/BUGBOT.md                              <-- every PR gets this
-apps/frontend/.cursor/BUGBOT.md                <-- frontend PRs get this + global
-apps/frontend/src/editor/.cursor/BUGBOT.md     <-- editor PRs get all three
-packages/.cursor/BUGBOT.md                     <-- package PRs get this + global
+# PR #741 — useState 1 frame late → LESSONS.md
+- const [val, setVal] = useState(x)
++ const valRef = useRef(x) // sync capture
 ```
 
-The deepest module gets the most context. A simple package change gets only the relevant rules. No wasted tokens.
-
-## Real Example
-
-We built this on a React/TypeScript monorepo with 800+ merged PRs. Here are actual rules the skill extracted:
-
-> **From a reviewer catching a production OOM:**
-> "Unbounded `Promise.all` on file uploads causes OOM. Use a concurrency limiter with max 3 parallel ops."
-
-> **From a bug that took 3 days to debug:**
-> "`JSON.stringify` silently drops `undefined`. If you need to clear a server-side field, use `null`."
-
-> **From a reviewer explaining a non-obvious pattern:**
-> "`MemoryStorageAdapter.appendItems` preserves object references intentionally. `===` is correct. Don't change to deep equality."
-
-> **From an incident where an AI tool broke unrelated code:**
-> "Large-scale CSS changes can break unrelated components via shared class names. A sidebar change collapsed the schema editor to zero height."
-
-After setup, Bugbot caught a real bug in the harvest workflow itself -- the scope detection used `else if` instead of `if`, causing linkchart files to miss parent scope rules. The system was already paying for itself.
-
-## What Makes a Good Rule
-
-A good BUGBOT.md rule is:
-
-- **Actionable** -- the bot can check it against a diff
-- **Specific** -- references real file paths, function names, or patterns
-- **Surprising** -- not obvious to a competent developer seeing the code for the first time
-- **Concise** -- rule + explanation in under 50 words
-
-A bad rule is:
-
-- Generic advice ("write tests", "use TypeScript")
-- Already enforced by CI (build order, lint thresholds)
-- So specific it only applies to one file (use inline comment)
-- Educational without being actionable (move to LESSONS.md)
+After setup, Bugbot caught a real bug in the harvest workflow itself — the scope detection used `else if` instead of `if`, causing files to miss parent scope rules. The system was already paying for itself.
 
 ## Requirements
 
-- A GitHub repo with merged PRs (the more history, the better)
+- GitHub repo with merged PRs (or any codebase — the skill bootstraps from code reading if PR history is thin)
 - [`gh` CLI](https://cli.github.com/) authenticated
 - [Cursor Bugbot](https://www.cursor.com/dashboard/bugbot) enabled (free)
 - [Claude Code](https://claude.ai/code)
 
 ## FAQ
 
-**Does this work with CodeRabbit / Copilot / other reviewers?**
-The BUGBOT.md files are Cursor Bugbot-specific. LESSONS.md and inline comments work with any AI assistant. Adapting the skill for other reviewers' config formats is straightforward.
+**Does this work without Cursor Bugbot?**
+Yes. LESSONS.md works with any IDE assistant. Inline comments work with any reviewer. The harvest Action works regardless. BUGBOT.md files just need a compatible consumer.
+
+**Does this work with CodeRabbit / Copilot?**
+LESSONS.md and inline comments work with anything. BUGBOT.md is Cursor-specific but the format could be adapted.
 
 **How long does setup take?**
-5-15 minutes depending on how many PRs have human review comments. The skill parallelizes PR mining.
+5-15 minutes. The skill parallelizes PR mining.
 
-**Will this slow down my CI?**
-The harvest Action runs only on merged PRs, takes ~10 seconds, uses no external services, and only posts a comment if there are substantive human review comments to surface.
+**Will this slow down CI?**
+The harvest Action runs only on merged PRs, takes ~10 seconds, uses no external services, and only posts a comment when there are substantive human review comments.
 
-**What if we don't use Cursor Bugbot?**
-You still get LESSONS.md (read by Claude Code and Cursor IDE), inline code comments (visible to any reviewer), and the harvest Action (surfaces review comments regardless of review tool). The BUGBOT.md files just won't have a consumer until you enable a compatible reviewer.
+**What if we have very few PRs?**
+The skill falls back to bootstrapping from code reading — it looks for TODO/FIXME/HACK comments, complex untested functions, and git blame hotspots.
+
+## Links
+
+- [Landing page](https://sscarduzio.github.io/pr-war-stories/)
+- [Presentation slides](https://sscarduzio.github.io/pr-war-stories/presentation.html)
 
 ## License
 
