@@ -923,6 +923,60 @@
   .nav-dot { width: 0.9vw; height: 0.9vw; }
   .nav-dot.active { width: 2.5vw; }
 
+  /* Slide arrow buttons */
+  .slide-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background: rgba(30, 30, 50, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid #333355;
+    color: white;
+    font-size: 2.5vw;
+    width: 3.2vw;
+    height: 6vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 0.5vw;
+    padding: 0;
+    line-height: 1;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .slide-arrow:hover {
+    background: rgba(50, 50, 80, 0.8);
+    border-color: #555577;
+  }
+
+  .slide-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .arrow-left { left: 1vw; }
+  .arrow-right { right: 1vw; }
+
+  /* On mobile, make arrows bigger touch targets */
+  @media (max-width: 900px) {
+    .slide-arrow {
+      font-size: 28px;
+      width: 44px;
+      height: 72px;
+      border-radius: 8px;
+    }
+    .arrow-left { left: 4px; }
+    .arrow-right { right: 4px; }
+  }
+
+  /* On very small screens, hide arrows (use swipe instead) */
+  @media (max-width: 480px) {
+    .slide-arrow { display: none; }
+  }
+
   /* OSS slide */
   .slide-oss {
     background: var(--gradient-warm);
@@ -1487,10 +1541,14 @@ conflict detection."</div>
 
 <!-- NAVIGATION -->
 <div class="nav" id="nav"></div>
+<button class="slide-arrow arrow-left" id="arrowLeft" aria-label="Previous slide">&#8249;</button>
+<button class="slide-arrow arrow-right" id="arrowRight" aria-label="Next slide">&#8250;</button>
 
 <script>
   const slides = document.querySelectorAll('.slide');
   const nav = document.getElementById('nav');
+  const arrowLeft = document.getElementById('arrowLeft');
+  const arrowRight = document.getElementById('arrowRight');
   let current = 0;
 
   slides.forEach((_, i) => {
@@ -1506,12 +1564,52 @@ conflict detection."</div>
     current = n;
     slides[current].classList.add('active');
     nav.children[current].classList.add('active');
+    arrowLeft.style.opacity = current === 0 ? '0.2' : '1';
+    arrowRight.style.opacity = current === slides.length - 1 ? '0.2' : '1';
   }
 
+  function next() { goTo(Math.min(current + 1, slides.length - 1)); }
+  function prev() { goTo(Math.max(current - 1, 0)); }
+
+  // Keyboard
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight' || e.key === ' ') goTo(Math.min(current + 1, slides.length - 1));
-    if (e.key === 'ArrowLeft') goTo(Math.max(current - 1, 0));
+    if (e.key === 'ArrowRight' || e.key === ' ') next();
+    if (e.key === 'ArrowLeft') prev();
   });
+
+  // Arrow buttons
+  arrowLeft.onclick = prev;
+  arrowRight.onclick = next;
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    // Only register horizontal swipes (ignore vertical scroll)
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) next();
+      else prev();
+    }
+  }, { passive: true });
+
+  // Tap left/right halves (mobile only, ignore if tapping buttons/links/nav)
+  document.addEventListener('click', e => {
+    if (window.innerWidth > 900) return;
+    if (e.target.closest('a, button, .nav, .slide-arrow')) return;
+    const x = e.clientX / window.innerWidth;
+    if (x > 0.65) next();
+    else if (x < 0.35) prev();
+  });
+
+  // Init arrow states
+  arrowLeft.style.opacity = '0.2';
 </script>
 </body>
 </html>
