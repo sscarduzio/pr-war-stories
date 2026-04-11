@@ -36,7 +36,9 @@
 
 body {
   font-family: 'Inter', -apple-system, sans-serif;
-  background: var(--bg);
+  background: var(--bg) url('elephantskin.jpg') repeat;
+  background-size: 400px;
+  background-blend-mode: soft-light;
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
@@ -121,6 +123,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   padding: 120px 24px 56px;
   position: relative;
   background:
+    radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(15,17,23,0.95) 80%),
     radial-gradient(ellipse at 25% 0%, #e74c3c10 0%, transparent 50%),
     radial-gradient(ellipse at 75% 0%, #4a9eff08 0%, transparent 50%),
     radial-gradient(ellipse at 50% 100%, #9b59b606 0%, transparent 40%),
