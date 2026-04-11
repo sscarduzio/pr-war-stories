@@ -36,9 +36,7 @@
 
 body {
   font-family: 'Inter', -apple-system, sans-serif;
-  background: var(--bg) url('elephantskin.jpg') repeat;
-  background-size: 400px;
-  background-blend-mode: soft-light;
+  background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
@@ -123,11 +121,11 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   padding: 120px 24px 56px;
   position: relative;
   background:
-    radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(15,17,23,0.95) 80%),
+    radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(15,17,23,0.92) 70%),
     radial-gradient(ellipse at 25% 0%, #e74c3c10 0%, transparent 50%),
     radial-gradient(ellipse at 75% 0%, #4a9eff08 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, #9b59b606 0%, transparent 40%),
-    linear-gradient(180deg, #181b28 0%, var(--bg) 100%);
+    linear-gradient(180deg, rgba(24,27,40,0.85) 0%, rgba(15,17,23,0.95) 100%),
+    url('elephantskin.jpg') center/cover no-repeat;
 }
 
 .hero-mascotte {
