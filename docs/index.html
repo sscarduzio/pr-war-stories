@@ -181,12 +181,15 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 
 /* ===== HERO MASCOTTE ===== */
 .hero-mascotte {
-  max-width: 320px;
+  max-width: 280px;
   margin-bottom: -10px;
-  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  box-shadow: var(--shadow-lg), 0 0 80px rgba(231,76,60,0.12);
   animation: float 6s ease-in-out infinite;
   z-index: 2;
   position: relative;
+  background: white;
 }
 
 @keyframes float {
