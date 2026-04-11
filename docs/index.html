@@ -688,11 +688,77 @@ section { padding: 56px 24px; }
   background: var(--border);
 }
 
+/* Scope tree inside the "Yes" branch */
+.flow-scope-tree {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow);
+  min-width: 320px;
+}
+
+.flow-scope-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+}
+
+.flow-scope-row:hover {
+  border-color: var(--border);
+  background: rgba(255,255,255,0.06);
+}
+
+.flow-scope-row.indent { margin-left: 24px; }
+.flow-scope-row.indent-2 { margin-left: 48px; }
+
+.flow-scope-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.flow-scope-file {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.flow-scope-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.flow-scope-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
-  .flow-branches, .flow-sub-branches { gap: 32px; }
-  .flow-branches::before { width: 180px; }
-  .flow-sub-branches::before { width: 100px; }
+  .flow-branches, .flow-sub-branches { flex-direction: column; gap: 24px; align-items: center; }
+  .flow-branches::before, .flow-sub-branches::before { display: none; }
   .flow-diamond { width: 150px; height: 120px; font-size: 12px; }
+  .flow-scope-tree { min-width: unset; }
+  .flow-scope-file { font-size: 10px; }
 }
 
 /* ===== LOOP ===== */
@@ -1028,13 +1094,37 @@ detection."</div>
       </div>
       <div class="flow-branches">
         <div class="flow-branch flow-yes">
-          <div class="flow-label-yes">Yes</div>
+          <div class="flow-label-yes">Yes &mdash; reviewable</div>
           <div class="flow-arrow-down small"></div>
-          <div class="flow-node flow-dest red">.cursor/BUGBOT.md</div>
-          <div class="flow-example">Bot enforces it on every PR</div>
+          <div class="flow-decision-2">
+            <div class="flow-diamond small">Which code<br>does it<br>affect?</div>
+          </div>
+          <div class="flow-scope-tree">
+            <div class="flow-scope-row">
+              <div class="flow-scope-dot" style="background:var(--red)"></div>
+              <div class="flow-scope-file">.cursor/BUGBOT.md</div>
+              <div class="flow-scope-label">Cross-cutting &mdash; every PR</div>
+            </div>
+            <div class="flow-scope-row indent">
+              <div class="flow-scope-dot" style="background:var(--blue)"></div>
+              <div class="flow-scope-file">apps/frontend/.cursor/BUGBOT.md</div>
+              <div class="flow-scope-label">App-specific</div>
+            </div>
+            <div class="flow-scope-row indent-2">
+              <div class="flow-scope-dot" style="background:var(--green)"></div>
+              <div class="flow-scope-file">apps/.../editor/.cursor/BUGBOT.md</div>
+              <div class="flow-scope-label">Module-specific</div>
+            </div>
+            <div class="flow-scope-row indent">
+              <div class="flow-scope-dot" style="background:var(--purple)"></div>
+              <div class="flow-scope-file">packages/.cursor/BUGBOT.md</div>
+              <div class="flow-scope-label">Shared packages</div>
+            </div>
+            <div class="flow-scope-note">Bot traverses upward &mdash; deeper modules get more context</div>
+          </div>
         </div>
         <div class="flow-branch flow-no">
-          <div class="flow-label-no">No</div>
+          <div class="flow-label-no">No &mdash; not enforceable</div>
           <div class="flow-arrow-down small"></div>
           <div class="flow-decision-2">
             <div class="flow-diamond small">Applies to<br>one file?</div>
