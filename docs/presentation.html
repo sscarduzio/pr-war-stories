@@ -853,14 +853,38 @@
   .classify-card .dest { font-size: 0.85vw; }
   .classify-card .example-text { font-size: 0.85vw; }
 
-  /* Examples */
+  /* Examples - war story cards */
   .examples-grid { gap: 1.5vw; align-content: center; }
-  .example-card { padding: 2vw; border-radius: 1vw; border-left-width: 5px; transition: all 0.3s ease; }
+  .example-card { padding: 1.8vw; border-radius: 1vw; border-left-width: 5px; transition: all 0.3s ease; }
   .example-card:hover { border-color: #e74c3c55; box-shadow: 0 0 30px #e74c3c15; }
-  .example-card .source { font-size: 0.8vw; }
-  .example-card .rule { font-size: 1.2vw; }
-  .example-card .context { font-size: 1vw; }
-  .example-card .tag { font-size: 0.7vw; }
+
+  .war-header {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    margin-bottom: 1.2vw;
+  }
+
+  .war-icon { font-size: 2.2vw; }
+
+  .war-header .source { font-size: 0.8vw; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  .war-header .rule { font-size: 1.15vw; font-weight: 700; line-height: 1.3; }
+  .war-header .tag { margin-left: auto; font-size: 0.7vw; white-space: nowrap; }
+
+  .war-diff {
+    background: #0a0a18;
+    border: 1px solid #1e1e3a;
+    border-radius: 0.5vw;
+    padding: 0.8vw 1vw;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85vw;
+    line-height: 1.8;
+  }
+
+  .diff-bad { color: #f87171; }
+  .diff-bad::before { content: ''; }
+  .diff-good { color: #4ade80; }
+  .diff-good::before { content: ''; }
 
   /* Results */
   .results-grid { gap: 1.5vw; margin-bottom: 3vh; }
@@ -1300,28 +1324,60 @@ conflict detection."</div>
   <h2>Real War Stories from Our PRs</h2>
   <div class="examples-grid">
     <div class="example-card war1">
-      <div class="source">From PR #781 &mdash; production OOM</div>
-      <div class="rule">Unbounded Promise.all on file uploads causes OOM crashes</div>
-      <p class="context">Hundreds of simultaneous mkdir + upload requests for deep folder trees exhausted memory. Fixed with concurrency limiter (max 3 parallel ops).</p>
-      <span class="tag bugbot">BUGBOT.md</span>
+      <div class="war-header">
+        <span class="war-icon">&#128165;</span>
+        <div>
+          <div class="source">PR #781</div>
+          <div class="rule">Promise.all on 200 files = OOM</div>
+        </div>
+        <span class="tag bugbot">BUGBOT.md</span>
+      </div>
+      <div class="war-diff">
+        <div class="diff-bad">- await Promise.all(files.map(upload))</div>
+        <div class="diff-good">+ await asyncPool(3, files, upload)</div>
+      </div>
     </div>
     <div class="example-card war2">
-      <div class="source">From PR #775 &mdash; reviewer warning</div>
-      <div class="rule">LLM-generated CSS changes broke unrelated components</div>
-      <p class="context">"An example of how a large scale change by an LLM can cause unintended changes to other components." A sidebar CSS change collapsed the schema editor.</p>
-      <span class="tag bugbot">BUGBOT.md</span>
+      <div class="war-header">
+        <span class="war-icon">&#127912;</span>
+        <div>
+          <div class="source">PR #775</div>
+          <div class="rule">LLM CSS change broke schema editor</div>
+        </div>
+        <span class="tag bugbot">BUGBOT.md</span>
+      </div>
+      <div class="war-diff">
+        <div class="diff-bad">- .custom-antlayout { height: 100% }</div>
+        <div class="diff-good">+ .schema-editor-layout { height: 100% }</div>
+      </div>
     </div>
     <div class="example-card war3">
-      <div class="source">From PR #748 &mdash; false "fix"</div>
-      <div class="rule">MemoryStorageAdapter reference equality is intentional</div>
-      <p class="context">Bot flagged === as a bug. Maintainer explained: the adapter preserves object references for unchanged items. Deep equality would trigger unnecessary Redux dispatches.</p>
-      <span class="tag inline">Inline Comment</span>
+      <div class="war-header">
+        <span class="war-icon">&#9989;</span>
+        <div>
+          <div class="source">PR #748</div>
+          <div class="rule">=== is correct. Don't "fix" it.</div>
+        </div>
+        <span class="tag inline">Inline</span>
+      </div>
+      <div class="war-diff">
+        <div class="diff-bad">- if (deepEqual(prev, next))</div>
+        <div class="diff-good">+ if (prev === next) // intentional ref check</div>
+      </div>
     </div>
     <div class="example-card war4">
-      <div class="source">From PR #741 &mdash; timing bug</div>
-      <div class="rule">useState captures values one frame late</div>
-      <p class="context">priorPodUid was in useState. The effect to capture it ran one frame late. Replaced with useRef for synchronous capture during state transitions.</p>
-      <span class="tag lessons">LESSONS.md</span>
+      <div class="war-header">
+        <span class="war-icon">&#9201;</span>
+        <div>
+          <div class="source">PR #741</div>
+          <div class="rule">useState is 1 frame late</div>
+        </div>
+        <span class="tag lessons">LESSONS.md</span>
+      </div>
+      <div class="war-diff">
+        <div class="diff-bad">- const [val, setVal] = useState(x)</div>
+        <div class="diff-good">+ const valRef = useRef(x) // sync capture</div>
+      </div>
     </div>
   </div>
   <span class="slide-number">7 / 9</span>
