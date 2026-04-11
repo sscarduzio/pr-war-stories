@@ -181,21 +181,34 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 
 /* ===== HERO MASCOTTE ===== */
 .hero-mascotte {
-  max-width: 280px;
-  margin-bottom: -10px;
-  border-radius: 50%;
-  border: 3px solid var(--border);
-  box-shadow: var(--shadow-lg), 0 0 80px rgba(231,76,60,0.12);
+  max-width: 320px;
+  margin-bottom: -20px;
+  /* Instead of a solid background, we cast a shadow and a soft glow */
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 60px rgba(74, 158, 255, 0.15));
   animation: float 6s ease-in-out infinite;
   z-index: 2;
   position: relative;
-  background: white;
 }
 
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-12px); }
   100% { transform: translateY(0px); }
+}
+
+/* ===== PRODUCT NAME ===== */
+.product-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  text-transform: lowercase;
+  margin-bottom: 12px;
+  padding: 6px 20px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: var(--bg-card);
 }
 
 /* ===== SECTIONS ===== */
@@ -583,6 +596,7 @@ footer a { color: var(--text-secondary); }
 <!-- HERO -->
 <section class="hero">
   <img src="mascotte.png" alt="Detective Elephant squashing a bug" class="hero-mascotte">
+  <div class="product-name">pr-war-stories</div>
   <h1>Stop reviewing the<br>same <span class="highlight">bugs</span></h1>
   <p class="hero-sub">An engineer caught it in a PR comment three months ago, and now the Bugbot approved it anyway. Let's fix it -- permanently.</p>
   <div class="hero-cta">
