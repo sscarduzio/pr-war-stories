@@ -114,11 +114,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 
 /* ===== HERO ===== */
 .hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 120px 24px 56px;
+  padding: 100px 24px 48px;
   position: relative;
   background:
     radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(15,17,23,0.92) 70%),
@@ -128,27 +124,55 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
     url('elephantskin.jpg') center/cover no-repeat;
 }
 
-.hero-mascotte {
-  max-width: 280px;
-  margin-bottom: -16px;
-  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 60px rgba(74,158,255,0.15));
-  animation: float 6s ease-in-out infinite;
-  z-index: 2;
-  position: relative;
+.hero-split {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
 }
 
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
-  100% { transform: translateY(0px); }
+.hero-left { display: flex; flex-direction: column; }
+.hero-right { display: flex; flex-direction: column; gap: 12px; }
+
+.hero-evidence-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--orange);
+}
+
+.hero-verdict { display: flex; flex-direction: column; gap: 6px; }
+
+.verdict-line {
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.verdict-line code {
+  background: #eff1f3;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 12px;
+  color: #1f2328;
+}
+
+.verdict-bad { background: #e74c3c18; color: var(--text-secondary); border: 1px solid #e74c3c33; }
+.verdict-worse { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); }
+.verdict-fix { background: #2ecc7112; color: var(--green); border: 1px solid #2ecc7133; }
+
+@media (max-width: 900px) {
+  .hero-split { grid-template-columns: 1fr; gap: 32px; }
+  .hero-left { align-items: center; text-align: center; }
 }
 
 .hero h1 {
-  font-size: clamp(36px, 5.5vw, 68px);
+  font-size: clamp(32px, 4.5vw, 56px);
   font-weight: 900;
   line-height: 1.08;
-  max-width: 780px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   letter-spacing: -1px;
 }
 
@@ -160,10 +184,18 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 }
 
 .hero-sub {
-  font-size: clamp(17px, 2vw, 22px);
+  font-size: clamp(16px, 1.6vw, 19px);
   color: var(--text-secondary);
-  max-width: 560px;
-  margin-bottom: 36px;
+  max-width: 480px;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.hero-sub-sm {
+  font-size: clamp(14px, 1.3vw, 16px);
+  color: var(--text-dim);
+  max-width: 440px;
+  margin-bottom: 28px;
   line-height: 1.55;
 }
 
@@ -171,8 +203,7 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .btn {
@@ -999,35 +1030,33 @@ footer a { color: var(--text-secondary); }
 
 <!-- HERO -->
 <section class="hero">
-  <h1>Stop reviewing the<br>same <span class="highlight">bugs</span></h1>
-  <p class="hero-sub">An engineer caught it in a PR comment three months ago, and now the Bugbot approved it anyway. Let's fix it -- permanently.</p>
-  <div class="hero-cta">
-    <a href="https://github.com/sscarduzio/pr-war-stories" class="btn btn-primary">View on GitHub</a>
-    <a href="#install" class="btn btn-secondary">Install in 10 seconds</a>
-  </div>
-  <div class="hero-install">
-    <code id="installCmd">claude install-skill sscarduzio/pr-war-stories</code>
-    <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('installCmd').textContent);this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
-  </div>
-</section>
-
-<!-- PROBLEM -->
-<section class="problem-section">
-  <div class="container">
-    <span class="section-label">The problem</span>
-    <h2 class="section-title">Your best reviewer is about to quit.<br>Their knowledge doesn't have to.</h2>
-    <div class="gh-comment-wrapper">
+  <div class="hero-split">
+    <div class="hero-left">
+      <h1>Stop reviewing the<br>same <span class="highlight">bugs</span></h1>
+      <p class="hero-sub">Your senior engineer left a review comment 3 months ago. Nobody read it again. A junior dev "fixed" the code. <strong style="color:var(--red-light)">The bot approved it.</strong></p>
+      <p class="hero-sub-sm">This skill mines your PR history, extracts the lessons, and teaches the AI reviewer to never make the same mistake twice.</p>
+      <div class="hero-cta">
+        <a href="https://github.com/sscarduzio/pr-war-stories" class="btn btn-primary">View on GitHub</a>
+        <a href="#install" class="btn btn-secondary">Install in 10 seconds</a>
+      </div>
+      <div class="hero-install">
+        <code id="installCmd">claude install-skill sscarduzio/pr-war-stories</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('installCmd').textContent);this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',2000)">Copy</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-evidence-label">&#9888;&#65039; This actually happened</div>
       <div class="gh-comment">
         <div class="gh-comment-header">
           <img class="gh-avatar" src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=gilfoyle&backgroundColor=f6f8fa" alt="avatar">
           <span class="gh-username">gilfoyle</span>
           <span class="gh-badge">Contributor</span>
-          <span class="gh-time">commented 3 months ago</span>
+          <span class="gh-time">3 months ago</span>
           <span class="gh-dots">&middot;&middot;&middot;</span>
         </div>
         <div class="gh-comment-body">
-          <p>Be careful &mdash; <code>MemoryStorageAdapter</code> preserves object references intentionally. The <code>===</code> check is correct. Don't change it to deep equality or you'll trigger unnecessary Redux dispatches across the entire app.</p>
-          <p class="gh-aside-text">This cost us two days last quarter when someone "fixed" it.</p>
+          <p>Be careful &mdash; <code>MemoryStorageAdapter</code> preserves object references intentionally. The <code>===</code> check is correct. Don't change it to deep equality.</p>
+          <p class="gh-aside-text">This cost us two days last quarter.</p>
         </div>
         <div class="gh-comment-footer">
           <span class="gh-reaction">&#128077; 4</span>
@@ -1035,11 +1064,20 @@ footer a { color: var(--text-secondary); }
           <span class="gh-reaction">&#128064; 7</span>
         </div>
       </div>
-      <div class="gh-comment-aside">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red-light)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <p>Nobody read this comment again.<br><br>Three months later, a junior dev "fixed" the <code>===</code> check.<br><br><strong style="color:var(--red-light)">The bot approved it.</strong></p>
+      <div class="hero-verdict">
+        <div class="verdict-line verdict-bad">&#10060; 3 months later: junior dev changed <code>===</code> to <code>deepEqual</code></div>
+        <div class="verdict-line verdict-worse">&#129302; Bugbot: <span style="color:var(--green)">Approved</span></div>
+        <div class="verdict-line verdict-fix">&#128161; With pr-war-stories: <span style="color:var(--red-light)">Blocked &mdash; rule from PR #748</span></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem-section">
+  <div class="container">
+    <span class="section-label">Why this keeps happening</span>
+    <h2 class="section-title">AI reviewers have no memory</h2>
     <div class="problem-grid">
       <div class="problem-card">
         <div class="emoji">&#129504;</div>
