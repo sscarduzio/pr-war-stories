@@ -79,13 +79,12 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 
 /* ===== HERO ===== */
 .hero {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 80px 24px;
+  padding: 100px 24px 48px;
   position: relative;
   background:
     radial-gradient(ellipse at 25% 0%, #e74c3c12 0%, transparent 45%),
@@ -180,8 +179,24 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 }
 .hero-install .copy-btn:hover { border-color: var(--text-secondary); color: var(--text); }
 
+/* ===== HERO MASCOTTE ===== */
+.hero-mascotte {
+  max-width: 320px;
+  margin-bottom: -10px;
+  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+  animation: float 6s ease-in-out infinite;
+  z-index: 2;
+  position: relative;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
 /* ===== SECTIONS ===== */
-section { padding: 100px 24px; }
+section { padding: 48px 24px; }
 
 .container { max-width: 1100px; margin: 0 auto; }
 
@@ -205,7 +220,7 @@ section { padding: 100px 24px; }
   font-size: 18px;
   color: var(--text-secondary);
   max-width: 650px;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
   line-height: 1.7;
 }
 
@@ -564,6 +579,7 @@ footer a { color: var(--text-secondary); }
 
 <!-- HERO -->
 <section class="hero">
+  <img src="mascotte.png" alt="Detective Elephant squashing a bug" class="hero-mascotte">
   <h1>Stop reviewing the<br>same <span class="highlight">bugs</span></h1>
   <p class="hero-sub">An engineer caught it in a PR comment three months ago, and now the Bugbot approved it anyway. Let's fix it -- permanently.</p>
   <div class="hero-cta">
