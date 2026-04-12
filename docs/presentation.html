@@ -807,16 +807,17 @@
   }
 
   /* Layer cards — horizontal rows */
-  .layers-container { flex-direction: column !important; gap: 1.5vh; }
+  .layers-container { flex-direction: column !important; gap: 2.5vh; }
   .layer-card {
     flex-direction: row !important;
     align-items: center;
-    padding: 1.8vw 2.2vw;
+    padding: 2.2vw 2.5vw;
     border-radius: 1vw;
     gap: 2.5vw;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04) inset;
   }
-  .layer-card:hover { border-color: #e74c3c55; box-shadow: 0 0 30px #e74c3c15; }
+  .layer-card:hover { border-color: #e74c3c55; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 30px #e74c3c15; transform: translateY(-2px); }
   .layer-card::before { width: 5px !important; height: 100% !important; right: auto !important; bottom: 0 !important; }
   .layer-card.bot::before { box-shadow: 0 0 20px #e74c3c88; }
   .layer-card.dev::before { box-shadow: 0 0 20px #4a9eff88; }
