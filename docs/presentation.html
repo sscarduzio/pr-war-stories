@@ -807,17 +807,48 @@
   }
 
   /* Layer cards */
-  .layers-container { gap: 2vw; }
-  .layer-card { padding: 2.5vw; border-radius: 1vw; justify-content: space-between; transition: all 0.3s ease; }
+  .layers-container { gap: 1.8vw; }
+  .layer-card { padding: 2vw; border-radius: 1vw; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 1.2vh; }
   .layer-card:hover { border-color: #e74c3c55; box-shadow: 0 0 30px #e74c3c15; }
-  .layer-label { font-size: 0.85vw; }
-  .layer-card h3 { font-size: 1.8vw; margin-bottom: 1vh; }
-  .layer-card .when { font-size: 1vw; }
-  .layer-card .desc { font-size: 1.05vw; }
-  .layer-card .example { font-size: 0.9vw; padding: 1.2vw; }
+  .layer-card::before { height: 4px !important; }
   .layer-card.bot::before { box-shadow: 0 0 20px #e74c3c88; }
   .layer-card.dev::before { box-shadow: 0 0 20px #4a9eff88; }
   .layer-card.file::before { box-shadow: 0 0 20px #2ecc7188; }
+
+  .layer-top { display: flex; align-items: center; gap: 0.8vw; }
+  .layer-icon { font-size: 2.8vw; }
+  .layer-label { font-size: 0.75vw; }
+  .layer-card h3 { font-size: 1.5vw; margin: 0; }
+
+  .layer-when {
+    display: flex; align-items: center; gap: 0.5vw;
+    font-size: 0.95vw; color: var(--text-gray);
+    padding: 0.5vh 0;
+    border-bottom: 1px solid #333355;
+  }
+  .when-dot { width: 0.5vw; height: 0.5vw; border-radius: 50%; flex-shrink: 0; }
+
+  .layer-rule {
+    background: #0d0d20;
+    border: 1px solid #252540;
+    border-radius: 0.6vw;
+    padding: 1vw 1.2vw;
+    flex: 1;
+  }
+  .layer-rule-header {
+    font-size: 0.8vw;
+    color: var(--text-dim);
+    margin-bottom: 0.5vh;
+    font-weight: 600;
+  }
+  .layer-card .example { font-size: 0.9vw; padding: 0; background: none; border: none; }
+
+  .layer-how {
+    font-size: 0.8vw;
+    color: var(--text-dim);
+    font-style: italic;
+    line-height: 1.4;
+  }
 
   /* Hierarchy */
   .slide-hierarchy .subtitle { font-size: 1.3vw; margin-bottom: 4vh; }
@@ -917,7 +948,10 @@
   .token-row .label { font-size: 1.15vw; }
   .classify-card h3 { font-size: 1.4vw; }
   .slide-hierarchy .subtitle { font-size: 1.5vw; }
-  .layer-label { font-size: 1vw; }
+  .layer-label { font-size: 0.85vw; }
+  .layer-when { font-size: 1.05vw; }
+  .layer-rule-header { font-size: 0.9vw; }
+  .layer-how { font-size: 0.9vw; }
   .oss-feature-icon { font-size: 1.5vw; }
   .slide-number { font-size: 1.1vw; }
   .nav-dot { width: 0.9vw; height: 0.9vw; }
@@ -1163,36 +1197,54 @@
   <div class="logo-bar">
     <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
   </div>
-  <h2>The Solution: Three Memory Layers</h2>
+  <h2>Three Memory Layers</h2>
   <div class="layers-container">
     <div class="layer-card bot">
-      <span class="layer-label">Layer 1</span>
-      <h3>.cursor/BUGBOT.md</h3>
-      <div class="when">Read by Bugbot at review time</div>
-      <p class="desc">Project-specific rules the bot enforces on every diff. Hierarchical: the bot traverses upward from each changed file, collecting all BUGBOT.md files it finds.</p>
-      <div class="example">"Never use Promise.all on
-unbounded arrays. Use a
-concurrency limiter."</div>
+      <div class="layer-top">
+        <span class="layer-icon">&#129302;</span>
+        <div>
+          <span class="layer-label">Layer 1 &mdash; Bot memory</span>
+          <h3>.cursor/BUGBOT.md</h3>
+        </div>
+      </div>
+      <div class="layer-when"><span class="when-dot" style="background:var(--octostar-red)"></span> Read at <strong>review time</strong> by Bugbot</div>
+      <div class="layer-rule">
+        <div class="layer-rule-header">&#9888;&#65039; Rule enforced on every diff:</div>
+        <div class="example">"Never use Promise.all on unbounded arrays. Use a concurrency limiter (max 3)."</div>
+      </div>
+      <div class="layer-how">Hierarchical &mdash; bot traverses upward, collecting rules at each directory level</div>
     </div>
     <div class="layer-card dev">
-      <span class="layer-label">Layer 2</span>
-      <h3>LESSONS.md</h3>
-      <div class="when">Read by IDE assistants at write time</div>
-      <p class="desc">Universal engineering lessons read by Claude Code and Cursor before developers write code. The "why" behind patterns that can't be checked on a diff.</p>
-      <div class="example">"In-memory state is a cache,
-not a source of truth. Query
-the database for authoritative
-conflict detection."</div>
+      <div class="layer-top">
+        <span class="layer-icon">&#128187;</span>
+        <div>
+          <span class="layer-label">Layer 2 &mdash; Developer memory</span>
+          <h3>LESSONS.md</h3>
+        </div>
+      </div>
+      <div class="layer-when"><span class="when-dot" style="background:var(--accent-blue)"></span> Read at <strong>write time</strong> by IDE assistant</div>
+      <div class="layer-rule">
+        <div class="layer-rule-header">&#128218; Universal lesson:</div>
+        <div class="example">"In-memory state is a cache, not a source of truth. Always query the DB for conflict detection."</div>
+      </div>
+      <div class="layer-how">The "why" behind patterns &mdash; things the bot can't enforce but devs should know</div>
     </div>
     <div class="layer-card file">
-      <span class="layer-label">Layer 3</span>
-      <h3>Inline Comments</h3>
-      <div class="when">Visible in diff when file is changed</div>
-      <p class="desc">Rules that apply to exactly one file or function, placed in the source code. The bot sees them whenever that specific file appears in a PR.</p>
-      <div class="example">// WARNING: Runtime-evaluated
-// JS string. Cannot use
-// imports. Do not DRY.
+      <div class="layer-top">
+        <span class="layer-icon">&#128196;</span>
+        <div>
+          <span class="layer-label">Layer 3 &mdash; File memory</span>
+          <h3>Inline Comments</h3>
+        </div>
+      </div>
+      <div class="layer-when"><span class="when-dot" style="background:var(--accent-green)"></span> Visible in <strong>diff</strong> when file is changed</div>
+      <div class="layer-rule">
+        <div class="layer-rule-header">&#128204; Pinned to one file:</div>
+        <div class="example">// WARNING: Runtime-evaluated JS.
+// Cannot use imports. Do not DRY.
 // (See PR #760)</div>
+      </div>
+      <div class="layer-how">Most targeted &mdash; zero token waste, bot sees it only when that file is in the PR</div>
     </div>
   </div>
   <span class="slide-number">3 / 9</span>
