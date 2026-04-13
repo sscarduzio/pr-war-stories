@@ -157,13 +157,14 @@
   .gap-bars {
     margin-top: auto;
     display: flex;
-    flex-direction: column;
-    gap: 0.6vh;
+    flex-direction: row;
+    gap: 0.8vw;
   }
   .gap-bar {
-    padding: 0.8vw 1.2vw;
-    border-radius: 0.4vw;
-    font-size: 1.1vw;
+    flex: 1;
+    padding: 1.2vw 1vw;
+    border-radius: 0.5vw;
+    font-size: 1.2vw;
     font-weight: 800;
     letter-spacing: 2px;
     text-align: center;
@@ -1222,8 +1223,8 @@
       <div class="gap-item gap-good">Knows the valid tradeoffs</div>
       <div class="gap-item gap-bad">Has no time</div>
       <div class="gap-bars">
-        <div class="gap-bar gap-bar-bad"><span class="gap-bar-label">TIME</span></div>
-        <div class="gap-bar gap-bar-good"><span class="gap-bar-label">MEMORY</span></div>
+        <div class="gap-bar gap-bar-bad">TIME</div>
+        <div class="gap-bar gap-bar-good">MEMORY</div>
       </div>
     </div>
     <div class="gap-vs">vs</div>
@@ -1235,8 +1236,8 @@
       <div class="gap-item gap-bad">Code is new to it</div>
       <div class="gap-item gap-bad">Zero memory of what went wrong</div>
       <div class="gap-bars">
-        <div class="gap-bar gap-bar-good"><span class="gap-bar-label">TIME</span></div>
-        <div class="gap-bar gap-bar-bad"><span class="gap-bar-label">MEMORY</span></div>
+        <div class="gap-bar gap-bar-good">TIME</div>
+        <div class="gap-bar gap-bar-bad">MEMORY</div>
       </div>
     </div>
   </div>
