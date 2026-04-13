@@ -164,7 +164,7 @@
 
 *(pause)*
 
-"Now -- the industry is waking up to the knowledge problem. There's a parallel effort happening right now to build what Karpathy calls a whole-product-scope knowledge base. An MCP server the reviewer can tap into. Documentation, architecture, API specs -- all indexable, all queryable. And that's important work."
+"Now -- the industry is waking up to the knowledge problem. There's a parallel effort happening right now around what Karpathy calls the 'LLM wiki' -- a whole-product-scope knowledge base that AI agents can tap into. Documentation, architecture, API specs -- all indexable, all queryable. And that's important work."
 
 "But here's what it misses."
 
