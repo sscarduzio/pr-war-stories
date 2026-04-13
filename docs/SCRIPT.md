@@ -164,13 +164,25 @@
 
 *(pause)*
 
-"ADRs document the skeleton. Shadow knowledge is the muscle memory."
+"Now -- the industry is waking up to the knowledge problem. There's a parallel effort happening right now to build what Karpathy calls a whole-product-scope knowledge base. An MCP server the reviewer can tap into. Documentation, architecture, API specs -- all indexable, all queryable. And that's important work."
+
+"But here's what it misses."
+
+*(pause)*
+
+"Human PR review comments. The most specific, most battle-tested, most reviewer-optimized guidance that exists in your codebase... doesn't live in your codebase. It lives on merged PRs. It's not indexed. It's not searchable. It doesn't belong to the repo. It's left behind."
+
+"And it's exactly the kind of knowledge a reviewer agent needs most. Not 'here's what the API does.' But 'here's what goes wrong when you use it this way.' Not documentation. Operational guidance. Written by the people who got burned."
+
+*(pause)*
+
+"ADRs document the skeleton. The knowledge base documents the organs. Shadow knowledge is the muscle memory."
 
 *(pause)*
 
 "And it walks out the door when someone leaves."
 
-"What we're building is a way to make shadow knowledge durable. To capture it where it's created -- in PR reviews -- and place it where it's consumed -- in the bot's context window and the developer's IDE."
+"What we're building captures it where it's created -- in PR reviews -- and places it where it's consumed -- in the bot's context window and the developer's IDE."
 
 ---
 
@@ -206,7 +218,9 @@
 
 "The reviewer doesn't go line by line any longer. The reviewer is an engineer with a toolbelt -- broad tools, narrow tools, recon tools, and memory."
 
-"We give the bot the memory. We scope it to where it belongs. We let it bleed into the coding tools. And we reserve human intelligence for the one thing it's irreplaceable for: deciding what matters."
+"The knowledge base gives the bot documentation. We give it the battle scars. The stuff that's not in any docs because nobody knew it was important until something broke."
+
+"We scope it to where it belongs. We let it bleed into the coding tools. And we reserve human intelligence for the one thing it's irreplaceable for: deciding what matters."
 
 *(pause)*
 
