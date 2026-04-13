@@ -128,54 +128,55 @@
     margin-bottom: 4vh;
   }
 
-  .problem-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  /* Gap layout (slide 2) */
+  .gap-layout {
+    display: flex;
     gap: 2vw;
+    align-items: stretch;
     flex: 1;
   }
-
-  .problem-card {
+  .gap-col {
+    flex: 1;
     background: var(--bg-card);
-    border-radius: 1vw;
-    padding: 2.5vw;
     border: 1px solid #333355;
+    border-radius: 1vw;
+    padding: 2vw 2.2vw;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
+    gap: 1vh;
   }
-
-  .problem-card:hover {
-    border-color: #e74c3c55;
-    box-shadow: 0 0 30px #e74c3c15;
-  }
-
-  .problem-card .icon {
-    font-size: 2.8vw;
-    margin-bottom: 1.5vh;
-  }
-
-  .problem-card h3 {
-    font-size: 1.5vw;
-    font-weight: 700;
-    margin-bottom: 1vh;
-    color: var(--octostar-red-light);
-  }
-
-  .problem-card p {
-    font-size: 1.05vw;
-    line-height: 1.7;
+  .gap-header { font-size: 1.6vw; font-weight: 700; margin-bottom: 0.5vh; }
+  .gap-item {
+    font-size: 1.15vw;
+    padding: 0.5vh 0 0.5vh 1.2vw;
+    border-left: 3px solid;
     color: var(--text-gray);
   }
-
-  .problem-card .quote {
+  .gap-good { border-color: var(--accent-green); }
+  .gap-bad { border-color: var(--octostar-red); }
+  .gap-verdict {
     margin-top: auto;
-    padding-top: 1.5vh;
-    border-top: 1px solid #333355;
-    font-style: italic;
-    font-size: 0.95vw;
+    padding: 1.2vw;
+    border: 2px solid;
+    border-radius: 0.6vw;
+    font-size: 1.2vw;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .gap-vs {
+    font-size: 2.5vw;
+    font-weight: 800;
     color: var(--text-dim);
-    margin-top: 1.5vh;
+    display: flex;
+    align-items: center;
+  }
+  .gap-punchline {
+    margin-top: 2vh;
+    font-size: 1.3vw;
+    color: var(--text-gray);
+    text-align: center;
+    line-height: 1.5;
   }
 
   /* ========== SLIDE 3: THREE LAYERS ========== */
@@ -1186,44 +1187,40 @@
   <div class="logo-main">
     <img src="logo-dark.svg" alt="Octostar">
   </div>
-  <h1>AI Code Review<br>Knowledge System</h1>
-  <p class="subtitle">Teaching Cursor Bugbot your team's war stories<br>so the same bugs never happen twice</p>
+  <h1>Review &amp; QA at the Times<br>of AI-Assisted Development</h1>
+  <p class="subtitle">How we gave our automated reviewer a memory<br>and turned PR comments into permanent infrastructure</p>
   <p class="meta">Engineering Team | April 2026</p>
   <span class="slide-number">1 / 11</span>
 </div>
 
-<!-- SLIDE 2: THE PROBLEM -->
+<!-- SLIDE 2: THE GAP -->
 <div class="slide slide-problem" id="s2">
   <div class="logo-bar">
     <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
   </div>
-  <h2>The Problem</h2>
-  <div class="problem-grid">
-    <div class="problem-card">
-      <div class="icon">🧠</div>
-      <h3>AI Reviewers Are Amnesiac</h3>
-      <p>Cursor Bugbot, CodeRabbit, and Copilot review every PR from scratch. They don't know your team spent a week debugging a race condition last month, or that a certain <code>===</code> check is intentional.</p>
-      <p class="quote">"The syntax is correct" != "The approach is safe"</p>
+  <h2>The New Manual</h2>
+  <div class="gap-layout">
+    <div class="gap-col">
+      <div class="gap-header">&#129489;&#8205;&#128187; The Human Reviewer</div>
+      <div class="gap-item gap-good">Checks out branch, reads diff</div>
+      <div class="gap-item gap-good">Asks LLM: "Race conditions?" "SQL injection?" "What if empty?"</div>
+      <div class="gap-item gap-good">Remembers the war stories</div>
+      <div class="gap-item gap-good">Knows the valid tradeoffs</div>
+      <div class="gap-item gap-bad">Has no time</div>
+      <div class="gap-verdict" style="border-color: var(--accent-blue);">Has the context.<br>Doesn't scale.</div>
     </div>
-    <div class="problem-card">
-      <div class="icon">📝</div>
-      <h3>Knowledge Dies on Merged PRs</h3>
-      <p>A senior engineer writes: "Be careful, MemoryStorageAdapter preserves object references intentionally." That comment lives on a PR nobody reads again. Three months later, someone "fixes" the <code>===</code> check.</p>
-      <p class="quote">Same bug. Same review cycle. Same wasted time.</p>
-    </div>
-    <div class="problem-card">
-      <div class="icon">🔇</div>
-      <h3>Context Overload Kills Quality</h3>
-      <p>Dumping 50 rules into a single config file means every rule competes for the bot's attention. Important rules get drowned out by generic advice. The bot starts ignoring everything.</p>
-      <p class="quote">More rules != better reviews</p>
-    </div>
-    <div class="problem-card">
-      <div class="icon">🔓</div>
-      <h3>Open Feedback Loop</h3>
-      <p>Even when lessons are captured, there's no systematic way to feed them back into the review process. Knowledge stays in people's heads or in Slack threads nobody searches.</p>
-      <p class="quote">Institutional knowledge is the most perishable asset</p>
+    <div class="gap-vs">vs</div>
+    <div class="gap-col">
+      <div class="gap-header">&#129302; The Automated Reviewer</div>
+      <div class="gap-item gap-good">Runs on every PR, no human needed</div>
+      <div class="gap-item gap-good">Reads every line, every time</div>
+      <div class="gap-item gap-bad">Starts from zero every run</div>
+      <div class="gap-item gap-bad">Code is new to it</div>
+      <div class="gap-item gap-bad">Zero memory of what went wrong</div>
+      <div class="gap-verdict" style="border-color: var(--octostar-red);">Has the time.<br>Doesn't know where to look.</div>
     </div>
   </div>
+  <div class="gap-punchline">The human has the context but not the time.<br>The bot has the time but not the context. <strong style="color: var(--octostar-red-light);">That's the gap.</strong></div>
   <span class="slide-number">2 / 11</span>
 </div>
 
