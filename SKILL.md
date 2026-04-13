@@ -355,25 +355,28 @@ If any single file exceeds 600 words, audit it using the classification system.
 
 ### Step 9: Print Summary Report
 
-After setup is complete, output a summary:
+After setup is complete, auto-generate the summary by running these counts (do NOT hand-count):
 
+```bash
+# Count files and rules
+echo "BUGBOT.md files:" && find . -name BUGBOT.md -path '*/.cursor/*' | wc -l
+echo "Total rules:" && grep -c '^## ' $(find . -name BUGBOT.md -path '*/.cursor/*') | awk -F: '{s+=$2} END {print s}'
+echo "LESSONS.md lessons:" && grep -c '^### ' LESSONS.md
+
+# Token budget per file
+for f in $(find . -name BUGBOT.md -path '*/.cursor/*' | sort); do
+  printf "%-60s %4d words\n" "$f" $(wc -w < "$f")
+done
+
+# Worst case
+echo "Worst case:"
+cat $(find . -name BUGBOT.md -path '*/.cursor/*' | sort | head -3) | wc -w
+
+# Bootstrapped count (from actual files, not memory)
+echo "Bootstrapped rules:" && grep -rc 'bootstrapped' $(find . -name BUGBOT.md -path '*/.cursor/*') | awk -F: '$2>0 {s+=$2} END {print s+0}'
 ```
-Setup complete. Created:
-- X BUGBOT.md files (Y total rules)
-- LESSONS.md with Z lessons
-- harvest-lessons.yml workflow
-- CLAUDE.md + AGENTS.md pointers
 
-Token budget:
-  [file path]                    NNN words
-  [file path]                    NNN words
-  Worst case (deepest nesting):  NNN words (~NNN tokens)
-
-Bootstrapped rules (not from war stories): N
-  → Tag: (bootstrapped -- verify after usage)
-
-Next: run /pr-war-stories audit in 2-4 weeks to measure effectiveness.
-```
+Then output the results as a formatted summary. End with: "Next: run /pr-war-stories audit in 2-4 weeks."
 
 ### Step 0: Preflight Checks
 
@@ -437,6 +440,22 @@ For each new lesson found:
 
 Commit as a single PR for team review.
 ```
+
+### Deduplication (critical for repeat runs)
+
+Before adding any rule, check if it's already covered:
+
+```bash
+# Search all BUGBOT.md files for the key concept
+grep -ri "Promise.all\|unbounded" $(find . -name BUGBOT.md -path '*/.cursor/*')
+```
+
+A rule is a duplicate if:
+- The same pattern is already named (even with different wording)
+- A broader rule already covers it (e.g., "stale closures" covers "useCallback with empty deps")
+- The same PR number is already referenced
+
+When in doubt, DON'T add it. Fewer focused rules beat more overlapping rules.
 
 ## Phase 3: Audit (`/pr-war-stories audit`)
 
