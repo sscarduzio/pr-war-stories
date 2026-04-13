@@ -142,9 +142,18 @@ packages/.cursor/BUGBOT.md                     <-- shared packages
 - Package files: API contract rules, export stability, dependency boundaries
 - Don't create a file for every directory -- only where there are real war stories
 
-### Step 4: Write the Rules
+### Step 4: Verify and Write the Rules
 
-For each war story, write a BUGBOT.md rule:
+**Before writing any rule**, verify the referenced code still exists:
+
+```bash
+# For each war story that references a file, function, or pattern:
+grep -r "functionName\|patternName" apps/ packages/ --include="*.ts" --include="*.tsx" -l
+```
+
+Skip rules for code that was since refactored, renamed, or deleted. A rule pointing at phantom code is worse than no rule -- it confuses the bot.
+
+For each verified war story, write a BUGBOT.md rule:
 
 ```markdown
 ## Short Imperative Heading
@@ -153,13 +162,24 @@ For each war story, write a BUGBOT.md rule:
 Reference specific file paths and function names when relevant.
 ```
 
+**If a rule was bootstrapped from code reading** (not from a PR war story), tag it:
+
+```markdown
+## Tiptap Editor Lifecycle (bootstrapped -- verify after usage)
+```
+
+This tells the auditor: "this rule is an educated guess, not a battle-tested lesson. Re-evaluate after a few months."
+
 **Quality bar:**
 - Actionable: bot can check it against a diff
 - Specific: references real patterns, not generic advice
 - Surprising: not obvious to a competent developer
 - Concise: under 50 words per rule
+- Verified: referenced code actually exists in the current codebase
 
 ### Step 5: Create LESSONS.md
+
+**Note on cross-layer duplication:** Some lessons may appear in both BUGBOT.md and LESSONS.md (e.g., "JSON.stringify drops undefined"). This is intentional -- they serve different consumers (bot vs IDE assistant). During audit, update both or remove from both.
 
 Distill war stories into universal engineering lessons:
 
@@ -332,6 +352,41 @@ cat $(find . -name BUGBOT.md -path '*/.cursor/*' | sort) | wc -w
 ```
 
 If any single file exceeds 600 words, audit it using the classification system.
+
+### Step 9: Print Summary Report
+
+After setup is complete, output a summary:
+
+```
+Setup complete. Created:
+- X BUGBOT.md files (Y total rules)
+- LESSONS.md with Z lessons
+- harvest-lessons.yml workflow
+- CLAUDE.md + AGENTS.md pointers
+
+Token budget:
+  [file path]                    NNN words
+  [file path]                    NNN words
+  Worst case (deepest nesting):  NNN words (~NNN tokens)
+
+Bootstrapped rules (not from war stories): N
+  → Tag: (bootstrapped -- verify after usage)
+
+Next: run /pr-war-stories audit in 2-4 weeks to measure effectiveness.
+```
+
+### Step 0: Preflight Checks
+
+Before starting, verify:
+
+```bash
+# Ensure .cursor/ is not gitignored
+grep -r '\.cursor' .gitignore .cursorignore 2>/dev/null
+# If found, the BUGBOT.md files won't be committed. Remove the ignore or use a different path.
+
+# Ensure gh CLI is authenticated
+gh auth status
+```
 
 ## Phase 2: Harvest (`/pr-war-stories harvest`)
 
