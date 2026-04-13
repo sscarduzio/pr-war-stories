@@ -1,142 +1,148 @@
-# AI Code Review Knowledge System — Presentation Script
+# Review and QA at the Times of AI-Assisted Development
 
-*Delivery: Start with why. Pause for effect. Speak to one person, not a room. Let the silence do the work.*
+*10 minutes. Delivery: conversational, building an argument. Each slide adds one idea.*
 
 ---
 
 ## Slide 1: Title
 
-"How many of you have reviewed the same type of bug... twice?"
-
-*(pause, let hands go up)*
-
-"Three times?"
+"Let me ask you something. When was the last time you reviewed a PR line by line?"
 
 *(pause)*
 
-"This talk is about making sure that never happens again."
+"Not skimmed. Not scrolled. Actually read every line, thought about every change."
+
+*(pause)*
+
+"If you're honest... it's been a while. And that's not because you're lazy. It's because the game changed."
 
 ---
 
 ## Slide 2: The Problem
 
-"Let me tell you what's actually happening in our code review process right now."
+"AI coding tools have changed what a PR looks like. A developer with Claude Code or Copilot produces five PRs where they used to produce one. The PRs are bigger. They touch more files. They move faster."
 
-"We have four problems, and they're all connected."
+"But the reviewer? The reviewer is still one human. With one pair of eyes. And a calendar full of meetings."
 
-*(point to each card)*
+"So what happens? We skim. We pattern-match. We rubber-stamp things we should be scrutinizing. We approve code that looks right but isn't safe."
 
-"First -- our AI reviewers have no memory. Cursor Bugbot, CodeRabbit, Copilot -- they review every single PR from a blank slate. They don't know what happened last month. They don't know what hurt us."
+*(pause)*
 
-"Second -- the knowledge dies. A senior engineer writes the most brilliant review comment of their career... and it lives on a merged PR that nobody will ever open again."
-
-"Third -- when we try to fix this by dumping rules into a config file, we make it worse. Fifty rules competing for attention means zero rules getting attention."
-
-"And fourth -- there's no loop. Even when we learn something, there's no systematic way to feed it back into the process. It stays in someone's head. Or in a Slack thread. Or nowhere."
+"We are producing code faster than we can safely review it. That's the actual crisis. Not AI writing bad code. AI writing plausible code that nobody has time to check."
 
 ---
 
 ## Slide 3: Three Memory Layers
 
-"So here's what we built. Three layers. Each one optimized for a different moment in the development cycle."
+"So the reviewer needs tools. And not just one kind of tool."
 
-*(gesture across the three rows)*
+"Think about it as a toolbelt. The modern AI-assisted reviewer has four categories of tools."
 
-"Layer one -- the bot's memory. BUGBOT.md files that Bugbot reads every time it reviews a PR. These are rules the bot can actually enforce. 'Don't use Promise.all on unbounded arrays.' The bot sees the diff, it checks the rule, it flags it."
+*(gesture across)*
 
-"Layer two -- the developer's memory. LESSONS.md. Claude Code and Cursor read this before you start writing code. It's the 'why' behind the patterns. Things the bot can't check, but you should know."
+"First -- broad tools. Clean code scans. Correctness checks. Linting on steroids. These cover surface area. They catch the obvious stuff so the human doesn't have to."
 
-"Layer three -- file memory. Inline comments. Placed directly in the source code, exactly where they matter. The bot only sees them when that specific file shows up in a PR. Most targeted. Zero waste."
+"Second -- narrow tools. Deep analysis. Memory management patterns. Computational complexity. The stuff that requires actually understanding what the code does, not just what it looks like."
+
+"Third -- recon tools. Module interaction mapping. Network call mapping. Dependency graphs. These answer the question: 'what does this change actually touch?'"
+
+"And fourth -- the one nobody's building..."
 
 *(pause)*
 
-"The key insight is: not everything belongs in the same place. Put the wrong knowledge in the wrong layer, and it either wastes the bot's attention or nobody sees it."
+"Memory."
+
+"Memory of what went wrong in the past. Memory of the review comment a senior engineer left three months ago on a merged PR that nobody will ever read again."
 
 ---
 
 ## Slide 4: Hierarchical Scoping
 
-"Now -- the BUGBOT.md files aren't flat. They're hierarchical."
+"So how do you give a bot memory?"
+
+"You can't just dump everything into one file. We tried that. Fifty rules in one config. The bot reads them all, pays attention to none of them."
+
+"Instead -- you scope the memory to where it matters."
 
 *(point to the tree)*
 
-"There's a global file at the root. Every PR sees it. Cross-cutting concerns. Then there's one per app. One per complex module. One for shared packages."
+"Global rules at the root. Every PR sees them. App-level rules one level down. Module-level rules for complex areas like the link chart. Package rules for shared code."
 
-"The bot traverses upward from the file being changed. So if you're touching the link chart module, you get three layers of rules -- the module's, the app's, and the global. If you're making a simple package change, you get two. No wasted tokens."
+"The bot traverses upward. A change to the link chart editor gets three layers of memory. A simple package version bump gets two. The right context for the right change."
 
 *(point to the token bars)*
 
-"We keep each file under 400 words. Worst case, the bot sees about 1,700 tokens of rules. That's the sweet spot -- enough context to be useful, not so much that it drowns."
+"Under 400 words per file. Under 2,000 tokens worst case. Because memory without focus is just noise."
 
 ---
 
 ## Slide 5: The Feedback Loop
 
-"Here's the part that makes this self-sustaining."
+"Now here's the question: where does the memory come from?"
 
-*(walk through the five steps)*
+"It comes from the humans. From the review comments that contain the real wisdom. 'Be careful here, this caused a production incident last quarter.' 'Don't change this -- it's intentional.' 'We tried that approach in Q3 and reverted it.'"
 
-"A PR gets merged. That's step one. Step two -- a GitHub Action fires automatically. It looks at the human review comments on that PR. Not the bot comments. The human ones. It filters out the 'LGTM's and the checkboxes. It finds the substantive feedback."
+"The problem is: those comments live on merged PRs. They're write-once, read-never."
 
-"Step three -- it posts a structured summary right on the merged PR. 'Here are three comments worth capturing. Here are the files they affected. Here are the BUGBOT.md scopes.'"
+*(walk through the steps)*
 
-"Step four -- someone on the team runs one command. `/pr-war-stories harvest`. It classifies each comment and places it in the right layer."
+"So we built a feedback loop. A GitHub Action fires on every merge. It extracts the substantive human review comments -- filters out the bots, the 'LGTM's, the checkbox checklists. It posts a structured harvest summary."
 
-"Step five -- the bot is smarter. The next PR that touches that code gets reviewed against the new rule."
+"Then someone runs one command. The comments get classified and placed where they belong."
 
-*(point to the curved return arrow)*
+"The bot uses them on the next review. And the loop continues."
 
-"And the loop continues. Every merged PR with substantive review comments automatically produces a harvest candidate. Nothing falls through the cracks."
+"The reviewer teaches the bot once. The bot enforces it forever."
 
 ---
 
 ## Slide 6: Rule Classification
 
-"Not every lesson is a BUGBOT.md rule. This is the most important thing we learned."
+"But here's the part that requires human intelligence. Not every comment belongs in the same place."
 
-"Every piece of knowledge gets triaged. Can the bot check it against a diff? Yes -- it goes in BUGBOT.md. No? Does it apply to one file? Then it's an inline comment. Is it educational, about why something works the way it does? LESSONS.md."
+"Some lessons are things the bot can enforce on a diff. 'Don't use Promise.all on unbounded arrays.' That's a BUGBOT.md rule. The bot sees the pattern, it flags it."
 
-"Overlapping with another rule? Merge them. The pattern was fixed? Remove it."
+"Some lessons apply to one file. 'This adapter uses reference equality intentionally. Don't fix it.' That's an inline comment. Pinned to the source code. The bot sees it only when that file is in the diff."
+
+"Some lessons are universal principles. 'In-memory state is a cache, not a source of truth.' That's for LESSONS.md. The coding assistant reads it before the developer writes code."
 
 *(pause)*
 
-"The number one failure mode is dumping everything into BUGBOT.md. We tried it. The bot started ignoring the important rules because they were buried in noise. This classification prevents that."
+"This classification -- this is the human job. This is what can't be automated. Deciding what matters, where it belongs, and what to throw away. Keeping the memory focused. Curating the tribal wisdom."
+
+"We reserve human intelligence for regulation. For engineering the context. For calling the decision to drop the less important things so the bot stays sharp."
 
 ---
 
 ## Slide 7: Real War Stories
 
-"These aren't hypothetical. These are from our actual PRs."
+"Let me show you what this looks like in practice."
 
 *(point to each card)*
 
-"PR 781. We had `Promise.all` on 200 file uploads. Production OOM. The fix was a three-line change to use a concurrency limiter. Now it's a BUGBOT.md rule. The bot will never let that pattern through again."
+"PR 781. `Promise.all` on 200 file uploads. Production OOM. Three-line fix. Now a bot rule. It will never approve that pattern again."
 
-"PR 775. An LLM-generated CSS change in the sidebar collapsed the schema editor to zero height. A shared class name. Nobody caught it in review. Now there's a rule: flag CSS changes to class names used in multiple components."
+"PR 775. An LLM changed a CSS class name in the sidebar. It collapsed a completely unrelated component. Nobody caught it in review. Now there's a rule: flag shared CSS class changes."
 
-"PR 748. The bot itself flagged a triple-equals check as a bug. A senior engineer explained: 'That's intentional. The adapter preserves object references. Don't change it.' That comment is now an inline code comment, right above the line."
+"PR 748. The bot itself flagged a triple-equals as a bug. A senior engineer said: 'That's intentional.' That comment is now an inline code comment. The bot won't flag it again -- and neither will the next junior dev who thinks it's wrong."
 
-"PR 741. A timing bug. `useState` captures values one frame late. We needed `useRef` for synchronous capture. That's a universal lesson -- it went into LESSONS.md."
+"PR 741. `useState` captures values one frame late. You need `useRef` for synchronous capture. That's a lesson that went into the coding assistant's context. The next developer who asks for help with state transitions gets the right pattern from the start."
+
+"That last one -- that's the byproduct. The memory we build for the reviewer bleeds into the coding tools. The developer's assistant reads the lessons before writing code. The wisdom flows upstream."
 
 ---
 
 ## Slide 8: What We Shipped
 
-"Let me give you the numbers."
+"We mined 50 merged PRs. Found 22 war stories worth keeping. Created hierarchical rule files across the monorepo. Installed the automated harvest loop."
 
-"We mined 50 merged PRs. Extracted 22 war stories. Created 5 BUGBOT.md files across the monorepo. Placed 6 inline comments in source files. Installed one GitHub Action for the automated harvest."
+*(pause)*
 
-*(pause, point to the proof box)*
-
-"And here's my favorite part. On its very first review of our code, Bugbot caught a real bug -- in the harvest workflow we built to teach it. The scope detection used `else if` instead of `if`, so linkchart files were missing parent scope rules."
-
-*(pause for effect)*
-
-"The system's own rules made the system better. That's when we knew this works."
+"On its first review, Bugbot caught a real bug in the harvest workflow itself. The system's own rules made the system better."
 
 *(beat)*
 
-"There's just one problem. The PR that introduces this entire system..."
+"There's just one problem. The PR that introduces all of this..."
 
 *(pause)*
 
@@ -148,17 +154,13 @@
 
 ## Slide 9: Two Kinds of Knowledge
 
-"I want to step back and talk about something bigger."
+"I want to name something that I think our industry doesn't talk about enough."
 
-"There are two kinds of knowledge in every codebase."
+"We have ADRs. Architecture Decision Records. They capture what was decided and why. They're written at decision time. They're forward-looking."
 
-*(point left)*
+"But the most dangerous knowledge in a codebase isn't what was decided. It's what went wrong afterward. The edge case nobody predicted. The interaction between two modules that wasn't in any design doc. The workaround for an external API quirk that you only discover after three days of debugging."
 
-"Architectural knowledge. The stuff we document intentionally. ADRs, design docs. 'We chose this approach because of these tradeoffs.' It's written at decision time. It's forward-looking. It captures what we predicted would happen."
-
-*(point right)*
-
-"And then there's what I call shadow knowledge. The stuff that emerges after the fact. The things we couldn't have predicted. 'If you bypass the epoch check, pending counts go negative and the UI shows stale loading forever.' Nobody wrote that in an ADR. Someone discovered it the hard way."
+"I call this shadow knowledge. It emerges after the fact. It's unknowable at decision time. It lives in PR comments, in Slack threads, in people's heads."
 
 *(pause)*
 
@@ -166,68 +168,50 @@
 
 *(pause)*
 
-"It only exists in the heads of people who've been burned."
+"And it walks out the door when someone leaves."
 
-*(longer pause)*
-
-"And it walks out the door when they leave."
+"What we're building is a way to make shadow knowledge durable. To capture it where it's created -- in PR reviews -- and place it where it's consumed -- in the bot's context window and the developer's IDE."
 
 ---
 
 ## Slide 10: The Dual Flywheel
 
-"So what does this actually change?"
+"So the picture is this."
 
-"Two things compound at the same time. The coding assistant gets smarter -- it reads LESSONS.md before suggesting code, so it stops recommending patterns your team already learned are dangerous. And the reviewer gets smarter -- it reads BUGBOT.md rules scoped to the exact directory being changed."
+"The reviewer gets sharper. Broad tools for surface coverage. Narrow tools for deep analysis. Recon tools for mapping impact. And memory -- curated, scoped, focused memory of what went wrong before."
+
+"The coding assistant gets smarter. It reads the lessons before suggesting code. It stops recommending patterns the team already learned are dangerous."
+
+"Both compound over time. Every review cycle produces new memory. Every mistake becomes a permanent rule. Every senior engineer's comment becomes organizational infrastructure."
 
 *(point to the crisis box)*
 
-"Here's why this matters right now. AI tools have 10x'd our code production. But review throughput hasn't scaled. Our senior engineers are the bottleneck. They're drowning in PRs. They're rubber-stamping things they should be scrutinizing."
-
-"We are producing code faster than we can safely review it."
+"The PR that introduces this system -- PR 788 -- has been waiting for a human reviewer for days. The system designed to fix the review bottleneck is stuck in the review bottleneck."
 
 *(pause)*
 
-"I'll give you a real example. The PR that introduces this entire system -- the BUGBOT.md files, the LESSONS.md, the harvest workflow, all the war stories we just talked about -- PR 788. It's been open for days."
+"That's not irony. That's the problem statement in one sentence."
 
-*(pause)*
+*(point to the attitude shifts)*
 
-"It's waiting for a human reviewer."
-
-*(pause)*
-
-"The system designed to fix the review bottleneck... is stuck in the review bottleneck."
-
-*(let it sink in)*
-
-"That's not a joke. That's the problem statement in one sentence."
-
-*(continue with the attitude shifts)*
-
-"But it requires three changes from us. One -- our PR comments become rules, not conversation. Write for the bot, not a colleague. Two -- a detailed rejection is more valuable than a quick approval. Every 'be careful because...' becomes permanent memory. Three -- junior mistakes are data, not failures. They're the raw material for new rules."
+"What has to change? Three things. Comments become rules, not conversation -- write for the bot, not a colleague. Detailed rejections are more valuable than quick approvals -- every 'be careful because' becomes permanent. And junior mistakes are data, not failures -- they're the raw material for new rules."
 
 ---
 
 ## Slide 11: Open Source
 
-"We open-sourced all of this."
-
-"It's a Claude Code skill called `pr-war-stories`. One command to install. One command to bootstrap any repository."
-
-"It works with Cursor Bugbot, any GitHub repo, any language."
+"We open-sourced all of this. It's a Claude Code skill. One command to install. Works with any GitHub repo."
 
 *(pause)*
 
-"Because institutional knowledge should be infrastructure, not folklore."
+"The reviewer doesn't go line by line any longer. The reviewer is an engineer with a toolbelt -- broad tools, narrow tools, recon tools, and memory."
 
-*(beat)*
+"We give the bot the memory. We scope it to where it belongs. We let it bleed into the coding tools. And we reserve human intelligence for the one thing it's irreplaceable for: deciding what matters."
 
-"And if you're a reviewer on PR 788..."
+*(pause)*
+
+"And if you're a reviewer on PR 788... now you know what it does."
 
 *(smile)*
-
-"...now you know what it does."
-
-*(pause)*
 
 "Thank you."
