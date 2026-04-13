@@ -1009,6 +1009,42 @@
     .slide-arrow { display: none; }
   }
 
+  /* Knowledge slide */
+  .slide-knowledge, .slide-shift { padding: 5vh 6vw; background: var(--gradient-warm); justify-content: center; }
+  .slide-knowledge h2, .slide-shift h2 { font-size: 3.2vw; margin-bottom: 3vh; }
+  .knowledge-split { display: flex; gap: 2vw; align-items: stretch; flex: 1; max-height: 55vh; }
+  .knowledge-col { flex: 1; background: var(--bg-card); border: 1px solid #333355; border-radius: 1vw; padding: 2vw; display: flex; flex-direction: column; gap: 1.2vh; }
+  .knowledge-adr { border-top: 4px solid var(--accent-blue); }
+  .knowledge-shadow { border-top: 4px solid var(--octostar-red); }
+  .knowledge-header { display: flex; align-items: center; gap: 0.8vw; }
+  .knowledge-icon { font-size: 2.5vw; }
+  .knowledge-col h3 { font-size: 1.6vw; margin: 0; }
+  .knowledge-subhead { font-size: 1.1vw; color: var(--text-gray); font-style: italic; }
+  .knowledge-traits { display: flex; flex-direction: column; gap: 0.4vh; }
+  .knowledge-trait { font-size: 1vw; color: var(--text-gray); padding-left: 1vw; border-left: 2px solid #333355; }
+  .knowledge-example { margin-top: auto; background: #0d0d20; border: 1px solid #252540; border-radius: 0.5vw; padding: 1vw; font-size: 0.95vw; color: var(--text-gray); font-style: italic; line-height: 1.5; }
+  .knowledge-example-label { font-size: 0.75vw; color: var(--text-dim); font-style: normal; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5vh; }
+  .knowledge-vs { font-size: 2vw; font-weight: 800; color: var(--text-dim); display: flex; align-items: center; }
+  .knowledge-punchline { margin-top: 2.5vh; font-size: 1.15vw; color: var(--text-gray); text-align: center; line-height: 1.6; }
+
+  /* Flywheel slide */
+  .shift-content { display: flex; flex-direction: column; gap: 2.5vh; flex: 1; justify-content: center; }
+  .flywheel-row { display: flex; align-items: center; gap: 1.5vw; justify-content: center; }
+  .flywheel-card { background: var(--bg-card); border: 1px solid #333355; border-radius: 1vw; padding: 1.8vw 2vw; flex: 1; max-width: 22vw; text-align: center; }
+  .flywheel-result { border-color: var(--octostar-red); box-shadow: 0 0 30px rgba(231,76,60,0.1); }
+  .flywheel-icon { font-size: 2.5vw; margin-bottom: 0.8vh; }
+  .flywheel-card h3 { font-size: 1.3vw; margin-bottom: 0.5vh; }
+  .flywheel-card p { font-size: 0.95vw; color: var(--text-gray); line-height: 1.5; }
+  .flywheel-plus { font-size: 2vw; font-weight: 800; color: var(--text-dim); }
+  .shift-crisis { background: #1a0a0a; border: 1px solid #3a1515; border-radius: 0.8vw; padding: 1.5vw 2vw; text-align: center; }
+  .shift-crisis-label { font-size: 0.8vw; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--octostar-red-light); margin-bottom: 0.5vh; }
+  .shift-crisis-text { font-size: 1.05vw; color: var(--text-gray); line-height: 1.6; }
+  .shift-attitude { text-align: center; }
+  .shift-attitude-label { font-size: 0.8vw; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-green); margin-bottom: 1vh; }
+  .shift-items { display: flex; gap: 2vw; justify-content: center; }
+  .shift-item { font-size: 1vw; color: var(--text-gray); line-height: 1.5; max-width: 20vw; text-align: left; display: flex; gap: 0.6vw; align-items: flex-start; }
+  .shift-num { font-size: 1.3vw; font-weight: 800; color: var(--octostar-red-light); flex-shrink: 0; line-height: 1.2; }
+
   /* OSS slide */
   .slide-oss {
     background: var(--gradient-warm);
@@ -1152,7 +1188,7 @@
   <h1>AI Code Review<br>Knowledge System</h1>
   <p class="subtitle">Teaching Cursor Bugbot your team's war stories<br>so the same bugs never happen twice</p>
   <p class="meta">Engineering Team | April 2026</p>
-  <span class="slide-number">1 / 9</span>
+  <span class="slide-number">1 / 11</span>
 </div>
 
 <!-- SLIDE 2: THE PROBLEM -->
@@ -1187,7 +1223,7 @@
       <p class="quote">Institutional knowledge is the most perishable asset</p>
     </div>
   </div>
-  <span class="slide-number">2 / 9</span>
+  <span class="slide-number">2 / 11</span>
 </div>
 
 <!-- SLIDE 3: THREE LAYERS -->
@@ -1245,7 +1281,7 @@
       <div class="layer-how">Most targeted &mdash; zero token waste, bot sees it only when that file is in the PR</div>
     </div>
   </div>
-  <span class="slide-number">3 / 9</span>
+  <span class="slide-number">3 / 11</span>
 </div>
 
 <!-- SLIDE 4: HIERARCHY -->
@@ -1310,7 +1346,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">4 / 9</span>
+  <span class="slide-number">4 / 11</span>
 </div>
 
 <!-- SLIDE 5: FEEDBACK LOOP -->
@@ -1372,7 +1408,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">5 / 9</span>
+  <span class="slide-number">5 / 11</span>
 </div>
 
 <!-- SLIDE 6: CLASSIFICATION -->
@@ -1417,7 +1453,7 @@
     <span style="font-size: 32px;">&#9888;&#65039;</span>
     <p style="font-size: 17px; color: var(--text-gray); line-height: 1.6;"><strong style="color: white;">The #1 failure mode:</strong> dumping everything into BUGBOT.md. This classification prevents context bloat and ensures each rule is placed where it's most effective.</p>
   </div>
-  <span class="slide-number">6 / 9</span>
+  <span class="slide-number">6 / 11</span>
 </div>
 
 <!-- SLIDE 7: REAL EXAMPLES -->
@@ -1484,7 +1520,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">7 / 9</span>
+  <span class="slide-number">7 / 11</span>
 </div>
 
 <!-- SLIDE 8: RESULTS -->
@@ -1521,10 +1557,101 @@
   <div style="margin-top: 28px; text-align: center; color: var(--text-dim); font-size: 16px;">
     <code style="color: var(--accent-green);">/pr-war-stories setup</code> &nbsp;&mdash;&nbsp; available as a Claude Code skill for any repository
   </div>
-  <span class="slide-number">8 / 9</span>
+  <span class="slide-number">8 / 11</span>
 </div>
 
-<!-- SLIDE 9: OSS RELEASE -->
+<!-- SLIDE 9: TWO KINDS OF KNOWLEDGE -->
+<div class="slide slide-knowledge" id="s9">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>Two Kinds of Knowledge</h2>
+  <div class="knowledge-split">
+    <div class="knowledge-col knowledge-adr">
+      <div class="knowledge-header">
+        <span class="knowledge-icon">&#128208;</span>
+        <h3>Architectural Knowledge</h3>
+      </div>
+      <div class="knowledge-subhead">What was decided and why</div>
+      <div class="knowledge-traits">
+        <div class="knowledge-trait">Written <strong>at decision time</strong></div>
+        <div class="knowledge-trait">Forward-looking</div>
+        <div class="knowledge-trait">Predictable consequences</div>
+        <div class="knowledge-trait">Captured in ADRs, design docs</div>
+        <div class="knowledge-trait">Audience: future architects</div>
+      </div>
+      <div class="knowledge-example">
+        <div class="knowledge-example-label">Example ADR</div>
+        "We chose an epoch-based concurrency guard in expandQueue to prevent race conditions during graph mutations."
+      </div>
+    </div>
+    <div class="knowledge-vs">vs</div>
+    <div class="knowledge-col knowledge-shadow">
+      <div class="knowledge-header">
+        <span class="knowledge-icon">&#128123;</span>
+        <h3>Shadow Knowledge</h3>
+      </div>
+      <div class="knowledge-subhead">What went wrong and what we learned</div>
+      <div class="knowledge-traits">
+        <div class="knowledge-trait">Emerges <strong>after the fact</strong></div>
+        <div class="knowledge-trait">Backward-looking</div>
+        <div class="knowledge-trait">Unknowable at decision time</div>
+        <div class="knowledge-trait">Lives in PR comments, people's heads</div>
+        <div class="knowledge-trait">Audience: future developers</div>
+      </div>
+      <div class="knowledge-example">
+        <div class="knowledge-example-label">Example war story</div>
+        "If you bypass the epoch check or call markDone() directly, pending counts go negative and the UI shows stale loading forever."
+      </div>
+    </div>
+  </div>
+  <div class="knowledge-punchline">ADRs document the skeleton. Shadow knowledge is the muscle memory.<br>It only exists in the heads of people who've been burned. <strong style="color:var(--octostar-red-light)">And it walks out the door when they leave.</strong></div>
+  <span class="slide-number">9 / 11</span>
+</div>
+
+<!-- SLIDE 10: THE SHIFT -->
+<div class="slide slide-shift" id="s10">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+  <h2>The Dual Flywheel</h2>
+  <div class="shift-content">
+    <div class="flywheel-row">
+      <div class="flywheel-card">
+        <div class="flywheel-icon">&#128187;</div>
+        <h3>Coding gets smarter</h3>
+        <p>IDE assistants read LESSONS.md before writing code. They stop suggesting patterns your team already learned are dangerous.</p>
+      </div>
+      <div class="flywheel-plus">+</div>
+      <div class="flywheel-card">
+        <div class="flywheel-icon">&#129302;</div>
+        <h3>Reviewing gets smarter</h3>
+        <p>Bugbot reads BUGBOT.md rules scoped to each directory. It catches what no human has time to check on every PR.</p>
+      </div>
+      <div class="flywheel-plus">=</div>
+      <div class="flywheel-card flywheel-result">
+        <div class="flywheel-icon">&#128640;</div>
+        <h3>Compounding intelligence</h3>
+        <p>Every mistake becomes a permanent rule. Every review comment becomes organizational memory. Knowledge survives turnover.</p>
+      </div>
+    </div>
+    <div class="shift-crisis">
+      <div class="shift-crisis-label">The crisis we're solving</div>
+      <div class="shift-crisis-text">AI tools have <strong>10x'd code production</strong> but review throughput hasn't scaled.<br>Senior engineers are the bottleneck &mdash; drowning in PRs, rubber-stamping what they should scrutinize.<br><strong style="color:var(--octostar-red-light)">We're producing code faster than we can safely review it.</strong></div>
+    </div>
+    <div class="shift-attitude">
+      <div class="shift-attitude-label">What must change</div>
+      <div class="shift-items">
+        <div class="shift-item"><span class="shift-num">1</span> Comments become <strong>rules</strong>, not conversation. Write for the bot, not a colleague.</div>
+        <div class="shift-item"><span class="shift-num">2</span> A detailed rejection is <strong>more valuable</strong> than a quick approval.</div>
+        <div class="shift-item"><span class="shift-num">3</span> Junior mistakes are <strong>data</strong>, not failures. They're the raw material for new rules.</div>
+      </div>
+    </div>
+  </div>
+  <span class="slide-number">10 / 11</span>
+</div>
+
+<!-- SLIDE 11: OSS RELEASE -->
 <div class="slide slide-oss" id="s9">
   <div class="logo-bar">
     <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
@@ -1586,7 +1713,7 @@
     <p class="oss-cta">Works with Cursor Bugbot, any GitHub repo, any language.</p>
   </div>
 
-  <span class="slide-number">9 / 9</span>
+  <span class="slide-number">11 / 11</span>
 </div>
 
 <!-- NAVIGATION -->
