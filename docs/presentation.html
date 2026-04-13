@@ -154,15 +154,29 @@
   }
   .gap-good { border-color: var(--accent-green); }
   .gap-bad { border-color: var(--octostar-red); }
-  .gap-verdict {
+  .gap-bars {
     margin-top: auto;
-    padding: 1.2vw;
-    border: 2px solid;
-    border-radius: 0.6vw;
-    font-size: 1.2vw;
-    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vh;
+  }
+  .gap-bar {
+    padding: 0.8vw 1.2vw;
+    border-radius: 0.4vw;
+    font-size: 1.1vw;
+    font-weight: 800;
+    letter-spacing: 2px;
     text-align: center;
-    line-height: 1.4;
+  }
+  .gap-bar-good {
+    background: rgba(46,204,113,0.18);
+    border: 2px solid var(--accent-green);
+    color: var(--accent-green);
+  }
+  .gap-bar-bad {
+    background: rgba(231,76,60,0.18);
+    border: 2px solid var(--octostar-red);
+    color: var(--octostar-red-light);
   }
   .gap-vs {
     font-size: 2.5vw;
@@ -1207,7 +1221,10 @@
       <div class="gap-item gap-good">Remembers the war stories</div>
       <div class="gap-item gap-good">Knows the valid tradeoffs</div>
       <div class="gap-item gap-bad">Has no time</div>
-      <div class="gap-verdict" style="border-color: var(--accent-blue);">Has the context.<br>Doesn't scale.</div>
+      <div class="gap-bars">
+        <div class="gap-bar gap-bar-bad"><span class="gap-bar-label">TIME</span></div>
+        <div class="gap-bar gap-bar-good"><span class="gap-bar-label">MEMORY</span></div>
+      </div>
     </div>
     <div class="gap-vs">vs</div>
     <div class="gap-col">
@@ -1217,7 +1234,10 @@
       <div class="gap-item gap-bad">Starts from zero every run</div>
       <div class="gap-item gap-bad">Code is new to it</div>
       <div class="gap-item gap-bad">Zero memory of what went wrong</div>
-      <div class="gap-verdict" style="border-color: var(--octostar-red);">Has the time.<br>Doesn't know where to look.</div>
+      <div class="gap-bars">
+        <div class="gap-bar gap-bar-good"><span class="gap-bar-label">TIME</span></div>
+        <div class="gap-bar gap-bar-bad"><span class="gap-bar-label">MEMORY</span></div>
+      </div>
     </div>
   </div>
   <div class="gap-punchline">The human has the context but not the time.<br>The bot has the time but not the context. <strong style="color: var(--octostar-red-light);">That's the gap.</strong></div>
