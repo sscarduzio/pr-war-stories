@@ -14,6 +14,7 @@ Builds a self-improving AI code review pipeline by extracting institutional know
 - `/pr-war-stories harvest` -- Process harvest summaries or mine PRs manually
 - `/pr-war-stories audit` -- Measure rule effectiveness and optimize (run quarterly)
 - `/pr-war-stories add-module <path>` -- Add rules for a new codebase module
+- `/pr-war-stories recheck` -- Verify all rules still reference existing code (run after big refactors)
 
 ## Core Concepts
 
@@ -544,6 +545,40 @@ Write a .cursor/BUGBOT.md in the module directory.
 Keep under 400 words. Only REVIEWABLE rules.
 ```
 
+## Phase 5: Recheck (`/pr-war-stories recheck`)
+
+Run after big refactors, directory renames, or major code reorganizations. Verifies that existing rules still reference code that exists.
+
+```
+For each BUGBOT.md file found under .cursor/:
+  Read the file and extract every path, function name, class name,
+  and file reference mentioned in rule text.
+
+  For each reference:
+    1. Search the codebase (grep/glob) to verify it still exists
+    2. If NOT found: flag as STALE with the specific broken reference
+
+For each inline comment placed by pr-war-stories (grep for "PR #"
+or "See PR" in source comments):
+  1. Verify the comment still makes sense in its current location
+  2. If the surrounding code was rewritten, flag for human review
+
+Check harvest-lessons.yml:
+  1. Read the scopeRules array
+  2. For each prefix, verify the directory exists
+  3. Flag any prefix pointing at a nonexistent path
+
+Report:
+  - Total rules checked
+  - Rules with broken references (list each with the broken ref)
+  - scopeRules with stale prefixes
+  - Suggested fixes (update path, remove rule, or promote to parent scope)
+
+Do NOT auto-fix. Present findings and let the human decide — a "missing"
+reference might be intentionally removed code where the rule should be
+promoted to a broader scope rather than deleted.
+```
+
 ## When to Graduate a Rule to Lint/Test/CI
 
 BUGBOT.md is for **fuzzy, contextual, project-specific** review logic that deterministic tools can't catch. If a rule CAN be enforced reliably by a linter, type checker, or test, it SHOULD be — and then removed from BUGBOT.md.
@@ -572,8 +607,10 @@ Some rules (e.g., "ClickHouse mutations need ON CLUSTER") apply everywhere, not 
 
 If a directory containing a `.cursor/BUGBOT.md` is moved or renamed:
 1. Move the BUGBOT.md with it (git will track this as a rename)
-2. Update the `scopeRules` array in `harvest-lessons.yml` to match the new path
-3. Check if any inline comments reference the old path and update them
+2. Run `/pr-war-stories recheck` — it will flag rules with broken path references and stale `scopeRules` prefixes
+3. Update or remove flagged rules in the same refactor PR — don't wait for the quarterly audit
+
+The `recheck` command does NOT auto-fix. A "missing" reference might mean the rule should be promoted to a broader scope rather than deleted.
 
 ### When to promote a rule upward
 
