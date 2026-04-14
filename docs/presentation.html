@@ -145,10 +145,10 @@
     flex-direction: column;
     gap: 0.8vh;
   }
-  .gap-header { font-size: 1.35vw; font-weight: 700; margin-bottom: 0.5vh; }
+  .gap-header { font-size: 1.6vw; font-weight: 700; margin-bottom: 0.5vh; }
   .gap-item {
-    font-size: 1vw;
-    padding: 0.4vh 0 0.4vh 1vw;
+    font-size: 1.2vw;
+    padding: 0.5vh 0 0.5vh 1vw;
     border-left: 3px solid;
     color: var(--text-gray);
   }
@@ -164,7 +164,7 @@
     flex: 1;
     padding: 0.8vw 0.6vw;
     border-radius: 0.5vw;
-    font-size: 1vw;
+    font-size: 1.1vw;
     font-weight: 800;
     letter-spacing: 2px;
     text-align: center;
@@ -1094,11 +1094,11 @@
   .slide-commands .commands-subtitle { font-size: 1.15vw; color: var(--text-dim); margin-bottom: 3vh; }
   .commands-table { width: 100%; max-width: 72vw; margin: 0 auto; display: flex; flex-direction: column; gap: 1.2vw; }
   .cmd-row { display: flex; align-items: stretch; gap: 1.2vw; background: var(--bg-card); border: 1px solid #333355; border-radius: 0.8vw; overflow: hidden; }
-  .cmd-left { flex: 0 0 28vw; padding: 1.4vw 1.6vw; display: flex; flex-direction: column; gap: 0.3vh; border-right: 1px solid #333355; }
-  .cmd-name { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 1.05vw; font-weight: 700; color: var(--accent-green); }
-  .cmd-when { font-size: 0.85vw; color: var(--text-dim); font-style: italic; }
-  .cmd-right { flex: 1; padding: 1.4vw 1.6vw; display: flex; align-items: center; }
-  .cmd-desc { font-size: 1vw; color: var(--text-gray); line-height: 1.5; }
+  .cmd-left { flex: 0 0 28vw; padding: 1.6vw 1.8vw; display: flex; flex-direction: column; gap: 0.5vh; border-right: 1px solid #333355; }
+  .cmd-name { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 1.3vw; font-weight: 700; color: var(--accent-green); }
+  .cmd-when { font-size: 1vw; color: var(--text-dim); font-style: italic; }
+  .cmd-right { flex: 1; padding: 1.6vw 1.8vw; display: flex; align-items: center; }
+  .cmd-desc { font-size: 1.15vw; color: var(--text-gray); line-height: 1.6; }
   .cmd-row--auto { border-left: 3px solid var(--accent-orange); }
   .cmd-row--manual { border-left: 3px solid var(--accent-blue); }
   .commands-legend { display: flex; gap: 2vw; justify-content: center; margin-top: 2vh; font-size: 0.9vw; color: var(--text-dim); }
@@ -1124,7 +1124,7 @@
     padding: 0.4vw 1.5vw;
     margin-bottom: 1vh;
   }
-  .bonus-subtitle { font-size: 1.4vw; color: var(--text-dim); margin-bottom: 2.5vh; line-height: 1.6; }
+  .bonus-subtitle { font-size: 1.6vw; color: var(--text-dim); margin-bottom: 3vh; line-height: 1.6; }
   .bonus-cards { display: flex; gap: 2.5vw; margin-bottom: 2.5vh; }
   .bonus-card {
     flex: 1;
@@ -1136,8 +1136,8 @@
     flex-direction: column;
     gap: 1.5vh;
   }
-  .bonus-card h3 { font-size: 2vw; margin: 0; }
-  .bonus-card p { font-size: 1.2vw; color: var(--text-gray); line-height: 1.6; margin: 0; }
+  .bonus-card h3 { font-size: 2.5vw; margin: 0; }
+  .bonus-card p { font-size: 1.4vw; color: var(--text-gray); line-height: 1.6; margin: 0; }
   .bonus-card--midscene { border-top: 4px solid var(--accent-green); }
   .bonus-card--uitars { border-top: 4px solid var(--accent-orange); }
   .bonus-card-tag { font-size: 1vw; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
@@ -1147,8 +1147,8 @@
     background: #0d0d20;
     border: 1px solid #252540;
     border-radius: 0.6vw;
-    padding: 1.2vw 1.8vw;
-    font-size: 1.3vw;
+    padding: 1.5vw 2vw;
+    font-size: 1.6vw;
     color: var(--text-gray);
     text-align: center;
     line-height: 1.5;
@@ -1162,13 +1162,13 @@
     border-radius: 1vw;
     padding: 2.5vw;
   }
-  .bonus-col h3 { font-size: 1.8vw; margin: 0 0 1.5vh 0; }
+  .bonus-col h3 { font-size: 2.2vw; margin: 0 0 2vh 0; }
   .bonus-col--good { border-top: 4px solid var(--accent-green); }
   .bonus-col--good h3 { color: var(--accent-green); }
   .bonus-col--test { border-top: 4px solid var(--accent-orange); }
   .bonus-col--test h3 { color: var(--accent-orange); }
   .bonus-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2vh; }
-  .bonus-list li { font-size: 1.2vw; color: var(--text-gray); line-height: 1.6; padding-left: 1.2vw; border-left: 3px solid #333355; }
+  .bonus-list li { font-size: 1.5vw; color: var(--text-gray); line-height: 1.7; padding-left: 1.2vw; border-left: 3px solid #333355; }
   .bonus-col--good .bonus-list li { border-left-color: var(--accent-green); }
   .bonus-col--test .bonus-list li { border-left-color: var(--accent-orange); }
 
@@ -1221,7 +1221,7 @@
   }
 
   .oss-tagline {
-    font-size: 1.4vw;
+    font-size: 1.6vw;
     color: var(--text-gray);
     line-height: 1.6;
   }
@@ -1279,7 +1279,7 @@
   }
 
   .oss-cmd-label {
-    font-size: 0.75vw;
+    font-size: 0.9vw;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -1289,7 +1289,7 @@
 
   .oss-cmd {
     font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 0.95vw;
+    font-size: 1.15vw;
     color: var(--accent-green);
   }
 
@@ -1303,16 +1303,16 @@
     display: flex;
     align-items: center;
     gap: 0.6vw;
-    font-size: 1vw;
+    font-size: 1.2vw;
     color: var(--text-gray);
   }
 
   .oss-feature-icon {
-    font-size: 1.3vw;
+    font-size: 1.5vw;
   }
 
   .oss-cta {
-    font-size: 1.1vw;
+    font-size: 1.3vw;
     color: var(--text-dim);
     margin-top: 1vh;
   }
@@ -1342,46 +1342,40 @@
     <div class="gap-col">
       <div class="gap-header">&#129302; The Generic Bot</div>
       <div class="gap-item gap-good">Runs on every PR, fully automatic</div>
-      <div class="gap-item gap-good">Reads every line, every time</div>
       <div class="gap-item gap-neutral">Generic advice: &ldquo;add error handling&rdquo;</div>
       <div class="gap-item gap-bad">Starts from zero every run</div>
       <div class="gap-item gap-bad">Zero memory of what went wrong</div>
       <div class="gap-bars">
         <div class="gap-bar gap-bar-good">TIME</div>
         <div class="gap-bar gap-bar-bad">MEMORY</div>
-        <div class="gap-bar gap-bar-bad">CONTEXT</div>
       </div>
     </div>
     <div class="gap-vs">+</div>
     <div class="gap-col">
       <div class="gap-header">&#129489;&#8205;&#128187; The New Manual</div>
-      <div class="gap-item gap-good">Reads diff, asks LLM the right questions</div>
+      <div class="gap-item gap-good">Asks LLM the right questions</div>
       <div class="gap-item gap-good">Remembers the war stories</div>
-      <div class="gap-item gap-good">Knows the valid tradeoffs</div>
-      <div class="gap-item gap-bad">Still manual &mdash; every PR, every time</div>
+      <div class="gap-item gap-bad">Still manual &mdash; every PR</div>
       <div class="gap-item gap-bad">Has no time</div>
       <div class="gap-bars">
         <div class="gap-bar gap-bar-bad">TIME</div>
         <div class="gap-bar gap-bar-good">MEMORY</div>
-        <div class="gap-bar gap-bar-good">CONTEXT</div>
-      </div>
-    </div>
-    <div class="gap-vs">&rarr;</div>
-    <div class="gap-col" style="border: 1px solid var(--octostar-red); box-shadow: 0 0 30px rgba(231,76,60,0.15);">
-      <div class="gap-header" style="color: var(--octostar-red-light);">&#127942; The Bot With Memory</div>
-      <div class="gap-item gap-good">Runs on every PR, fully automatic</div>
-      <div class="gap-item gap-good">Remembers your team's war stories</div>
-      <div class="gap-item gap-good">Knows the valid tradeoffs</div>
-      <div class="gap-item gap-good">Context scoped to each module</div>
-      <div class="gap-item gap-good">Learns from every merged PR</div>
-      <div class="gap-bars">
-        <div class="gap-bar gap-bar-good">TIME</div>
-        <div class="gap-bar gap-bar-good">MEMORY</div>
-        <div class="gap-bar gap-bar-good">CONTEXT</div>
       </div>
     </div>
   </div>
-  <div class="gap-punchline" style="font-size: 1.8vw; line-height: 1.8;">We can't create time for people.<br><strong style="color: var(--octostar-red-light); font-size: 2vw;">We can create memory for the bot.</strong></div>
+  <div style="text-align: center; font-size: 2vw; color: var(--text-dim); margin: 1.5vh 0;">&#8595;</div>
+  <div class="gap-col" style="border: 2px solid var(--octostar-red); box-shadow: 0 0 40px rgba(231,76,60,0.2); max-width: 60vw; margin: 0 auto; flex-direction: row; gap: 3vw; align-items: center; padding: 2vw 3vw;">
+    <div style="flex: 1;">
+      <div class="gap-header" style="color: var(--octostar-red-light); font-size: 2vw;">&#127942; The Bot With Memory</div>
+      <div class="gap-item gap-good" style="font-size: 1.3vw;">Automatic + remembers your war stories + scoped to each module</div>
+    </div>
+    <div class="gap-bars" style="flex: 0 0 auto; gap: 0.6vw;">
+      <div class="gap-bar gap-bar-good">TIME</div>
+      <div class="gap-bar gap-bar-good">MEMORY</div>
+      <div class="gap-bar gap-bar-good">CONTEXT</div>
+    </div>
+  </div>
+  <div class="gap-punchline" style="font-size: 2vw; line-height: 1.8; margin-top: 2vh;">We can't create time for people.<br><strong style="color: var(--octostar-red-light); font-size: 2.4vw;">We can create memory for the bot.</strong></div>
   <span class="slide-number">2 / 15</span>
 </div>
 
@@ -1992,23 +1986,23 @@
 
   <div class="bonus-badge">Post Scriptum &mdash; Future Research</div>
   <h2>LLM Vision-Based Automated Testing</h2>
-  <p class="bonus-subtitle">Instead of writing brittle test scripts that break every time the UI changes, new open-source tools let us describe what we want in plain English &mdash; <em>&ldquo;click the submit button&rdquo;, &ldquo;fill in the form&rdquo;, &ldquo;drag this item to the list&rdquo;</em> &mdash; and an AI model looks at the screen and does it.</p>
+  <p class="bonus-subtitle">Describe tests in plain English. An AI model looks at the screen and does it.</p>
 
   <div class="bonus-cards">
     <div class="bonus-card bonus-card--midscene">
       <span class="bonus-card-tag">Automation SDK</span>
       <h3>Midscene.js</h3>
-      <p>Open-source automation SDK that plugs into our existing <strong>Playwright</strong> setup. Understands UI elements visually &mdash; no selectors, no XPath, no data-testid.</p>
+      <p>Plugs into <strong>Playwright</strong>. No selectors, no XPath, no data-testid.</p>
     </div>
     <div class="bonus-card bonus-card--uitars">
       <span class="bonus-card-tag">Vision Model</span>
       <h3>UI-TARS</h3>
-      <p>Open-source AI model trained specifically to interact with user interfaces. Sees screenshots, plans actions, executes multi-step workflows autonomously.</p>
+      <p>Open-source model that sees screenshots and executes UI workflows.</p>
     </div>
   </div>
 
   <div class="bonus-callout">
-    <strong>Both run entirely on our hardware.</strong> No cloud. No licensing costs. No data leaves our network.
+    <strong>Both run on our hardware.</strong> No cloud. No licensing. No data leaves the network.
   </div>
 
   <span class="slide-number">14 / 15</span>
@@ -2022,27 +2016,23 @@
 
   <div class="bonus-badge">Post Scriptum &mdash; Future Research</div>
   <h2>Promising, But Needs Validation</h2>
-  <p class="bonus-subtitle">Early signals are strong. The gap is between demo-grade and production-grade.</p>
+  <p class="bonus-subtitle">Demo-grade works. Production-grade is the question.</p>
 
   <div class="bonus-split">
     <div class="bonus-col bonus-col--good">
       <h3>What looks good</h3>
       <ul class="bonus-list">
-        <li>Works on our existing GPU <strong>(RTX 6000 PRO)</strong> with zero new infrastructure</li>
-        <li>Handles complex UIs including <strong>drag &amp; drop</strong>, nested menus, dynamic content</li>
-        <li>Active open-source ecosystem, evolving fast &mdash; Midscene reached 1.0 in 2026</li>
-        <li>Natural-language test specs are <strong>readable by non-engineers</strong> &mdash; QA, product, design can write them</li>
-        <li>Tests survive UI refactors that break traditional selectors &mdash; the model re-finds elements visually</li>
+        <li>Runs on our <strong>RTX 6000 PRO</strong> &mdash; no new infra</li>
+        <li>Handles <strong>drag &amp; drop</strong> and complex UIs</li>
+        <li>Tests survive UI refactors &mdash; no selectors to break</li>
       </ul>
     </div>
     <div class="bonus-col bonus-col--test">
       <h3>What we need to test</h3>
       <ul class="bonus-list">
-        <li><strong>Speed</strong> &mdash; can it run a full regression suite in CI time budgets?</li>
-        <li><strong>Determinism</strong> &mdash; do tests produce consistent results across runs?</li>
-        <li><strong>Octostar-specific UIs</strong> &mdash; link charts, record viewers, complex tables</li>
-        <li><strong>Failure diagnostics</strong> &mdash; when a test fails, can you understand why?</li>
-        <li><strong>GPU contention</strong> &mdash; model inference alongside dev workloads on the same RTX 6000</li>
+        <li><strong>Speed</strong> &mdash; full regression in CI time?</li>
+        <li><strong>Determinism</strong> &mdash; same result every run?</li>
+        <li><strong>Our UIs</strong> &mdash; link charts, record viewers</li>
       </ul>
     </div>
   </div>
