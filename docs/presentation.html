@@ -1107,9 +1107,9 @@
   .slide-bonus {
     background: var(--gradient-warm);
     padding: 4vh 6vw;
-    justify-content: flex-start;
+    justify-content: center;
   }
-  .slide-bonus h2 { font-size: 3vw; margin-bottom: 0.5vh; }
+  .slide-bonus h2 { font-size: 3.2vw; margin-bottom: 0.5vh; }
   .bonus-badge {
     display: inline-block;
     font-size: 0.75vw;
@@ -1122,7 +1122,7 @@
     padding: 0.3vw 1.2vw;
     margin-bottom: 1.5vh;
   }
-  .bonus-subtitle { font-size: 1.15vw; color: var(--text-dim); margin-bottom: 3vh; line-height: 1.5; }
+  .bonus-subtitle { font-size: 1.3vw; color: var(--text-dim); margin-bottom: 3vh; line-height: 1.5; }
   .bonus-cards { display: flex; gap: 2vw; margin-bottom: 2.5vh; }
   .bonus-card {
     flex: 1;
@@ -1134,11 +1134,11 @@
     flex-direction: column;
     gap: 1vh;
   }
-  .bonus-card h3 { font-size: 1.5vw; margin: 0; }
-  .bonus-card p { font-size: 1.05vw; color: var(--text-gray); line-height: 1.6; margin: 0; }
+  .bonus-card h3 { font-size: 2vw; margin: 0; }
+  .bonus-card p { font-size: 1.2vw; color: var(--text-gray); line-height: 1.6; margin: 0; }
   .bonus-card--midscene { border-top: 4px solid var(--accent-green); }
   .bonus-card--uitars { border-top: 4px solid var(--accent-orange); }
-  .bonus-card-tag { font-size: 0.8vw; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .bonus-card-tag { font-size: 1vw; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
   .bonus-card--midscene .bonus-card-tag { color: var(--accent-green); }
   .bonus-card--uitars .bonus-card-tag { color: var(--accent-orange); }
   .bonus-callout {
@@ -1146,7 +1146,7 @@
     border: 1px solid #252540;
     border-radius: 0.6vw;
     padding: 1.2vw 1.8vw;
-    font-size: 1.1vw;
+    font-size: 1.3vw;
     color: var(--text-gray);
     text-align: center;
     line-height: 1.5;
@@ -1176,12 +1176,12 @@
     padding: 4vh 6vw;
     justify-content: flex-start;
   }
-  .slide-faq h2 { font-size: 3vw; margin-bottom: 0.5vh; }
-  .slide-faq .faq-subtitle { font-size: 1.1vw; color: var(--text-dim); margin-bottom: 2.5vh; }
-  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vw 2vw; flex: 1; align-content: start; }
-  .faq-item { background: var(--bg-card); border: 1px solid #333355; border-radius: 0.8vw; padding: 1.4vw 1.6vw; }
-  .faq-q { font-size: 1.1vw; font-weight: 700; color: var(--octostar-red-light); margin-bottom: 0.6vh; line-height: 1.3; }
-  .faq-a { font-size: 0.95vw; color: var(--text-gray); line-height: 1.55; }
+  .slide-faq h2 { font-size: 3.2vw; margin-bottom: 0.5vh; }
+  .slide-faq .faq-subtitle { font-size: 1.2vw; color: var(--text-dim); margin-bottom: 2.5vh; }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2vw 2.5vw; align-content: center; }
+  .faq-item { background: var(--bg-card); border: 1px solid #333355; border-radius: 0.8vw; padding: 2vw 2.2vw; }
+  .faq-q { font-size: 1.4vw; font-weight: 700; color: var(--octostar-red-light); margin-bottom: 1vh; line-height: 1.3; }
+  .faq-a { font-size: 1.15vw; color: var(--text-gray); line-height: 1.6; }
   .faq-a strong { color: var(--text-white); }
 
   /* OSS slide */
@@ -1963,35 +1963,19 @@
   <div class="faq-grid">
     <div class="faq-item">
       <div class="faq-q">Won't BUGBOT.md rot like every other living doc?</div>
-      <div class="faq-a">The quarterly <strong>audit phase</strong> catches staleness: rules that never trigger get removed, fixed patterns get graduated. The harvest Action auto-surfaces new lessons, so fresh rules keep arriving while stale ones get pruned. Entropy is real &mdash; the audit cadence is the answer.</div>
+      <div class="faq-a">The quarterly <strong>audit</strong> catches staleness: rules that never trigger get removed, fixed patterns get graduated to lint. The harvest Action auto-surfaces new lessons. Entropy is real &mdash; the audit cadence is the answer.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Why not just write better linter rules or tests?</div>
-      <div class="faq-a">If a rule <strong>can</strong> be linted or tested deterministically, it <strong>should</strong> be &mdash; and then removed from BUGBOT.md. BUGBOT rules are for fuzzy, contextual knowledge: <em>&ldquo;this === is intentional,&rdquo; &ldquo;these two query paths must stay in sync.&rdquo;</em> Things that need understanding intent, not pattern matching.</div>
+      <div class="faq-q">Why not just write linter rules or tests?</div>
+      <div class="faq-a">If a rule <strong>can</strong> be linted deterministically, it <strong>should</strong> be &mdash; and then removed from BUGBOT.md. BUGBOT is for fuzzy, contextual knowledge: <em>&ldquo;this === is intentional,&rdquo; &ldquo;these two query paths must stay in sync.&rdquo;</em></div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">How do you keep the token budget from creeping?</div>
-      <div class="faq-a"><strong>&lt;400 words</strong> per file, <strong>&lt;2,000 tokens</strong> worst case. Classification is the enforcer: reviewable &rarr; BUGBOT, educational &rarr; LESSONS, single-file &rarr; inline comment. Rules that don't fit any bin don't get added. Fewer rules = more attention per rule.</div>
+      <div class="faq-q">Does this work with Bugbot / CodeRabbit / Copilot?</div>
+      <div class="faq-a">Any reviewer that reads <code>.cursor/BUGBOT.md</code> from the repo. Cursor Bugbot does this natively. For others: <code>LESSONS.md</code> and inline comments are universal &mdash; just files any AI assistant can read.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">What about cross-cutting rules that span modules?</div>
-      <div class="faq-a">Root <code>.cursor/BUGBOT.md</code>. The bot traverses upward, so every PR sees the root rules. Module-level files add specificity, not duplication. If the same bug recurs in a different module, <strong>promote the rule upward</strong>.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Does this actually work with Bugbot / CodeRabbit / Copilot?</div>
-      <div class="faq-a">Any reviewer that reads <code>.cursor/BUGBOT.md</code> from the repo (Cursor Bugbot does this natively). For others: <code>LESSONS.md</code> and inline comments are universal &mdash; they're just files in the repo that any AI assistant can be told to read.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">What if a reviewer's suggestion wasn't adopted?</div>
-      <div class="faq-a">Rejected suggestions are <strong>not rules</strong>. The harvest step explicitly filters for this: only corrections that were actually adopted, and warnings about real pitfalls, become rules. Style preferences and debated alternatives stay as PR conversation.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">How do you handle module renames and big refactors?</div>
-      <div class="faq-a">BUGBOT.md files move with <code>git mv</code>, but <strong>rules inside may reference stale paths</strong>. After any big refactor: <strong>1)</strong>&nbsp;grep BUGBOT.md files for moved/deleted paths, <strong>2)</strong>&nbsp;update <code>scopeRules</code> in harvest-lessons.yml, <strong>3)</strong>&nbsp;check inline comments didn't lose context. LESSONS.md is path-agnostic&nbsp;&mdash; no impact. Add this to your refactor PR checklist.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Is the harvest Action noisy on active repos?</div>
-      <div class="faq-a">It only posts when <strong>substantive human comments</strong> exist (>40 chars, not LGTM/approvals, not bots). Most PRs with only bot reviews produce nothing. On a repo merging 5 PRs/day, expect 1&ndash;2 harvest summaries per week.</div>
+      <div class="faq-q">What about big refactors and module renames?</div>
+      <div class="faq-a">Run <code>/pr-war-stories recheck</code>. It greps every rule for stale path references and flags broken <code>scopeRules</code>. Reports but does not auto-fix &mdash; you decide whether to update, remove, or promote each rule.</div>
     </div>
   </div>
 
