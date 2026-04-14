@@ -189,3 +189,37 @@
 *(pause)*
 
 "Thank you."
+
+---
+
+*Post-scriptum bonus slides — show only if time allows or if the audience asks about testing/QA.*
+
+---
+
+## Slide 14: AI That Sees and Uses Our UI Like a Human
+
+*(advance only if there's interest — this is future research, not shipped work)*
+
+"One more thing. A direction we're exploring."
+
+"Instead of writing Playwright selectors that break every time someone renames a button, what if the test just said 'click submit' — and an AI model *looked at the screen* and found it?"
+
+*(point to the two cards)*
+
+"Two open-source building blocks. Midscene.js — plugs into our existing Playwright setup, replaces selectors with natural language. UI-TARS — a vision model trained specifically to interact with UIs. Sees screenshots, plans actions, executes."
+
+*(point to the callout)*
+
+"Both run on our hardware. No cloud, no licensing, no data leaves the network."
+
+---
+
+## Slide 15: Promising, But Needs Validation
+
+*(two columns — keep it honest)*
+
+"What looks good: it runs on our RTX 6000, handles drag and drop, the ecosystem is moving fast. Test specs are readable by non-engineers — QA and product can write them. And tests survive UI refactors that break selectors."
+
+"What we need to test: speed — can it run a full suite in CI time? Determinism — same result every run? Our specific UIs — link charts, record viewers. And GPU contention with dev workloads."
+
+"This is research, not a recommendation. But the direction is clear — tests that understand intent, not DOM structure."

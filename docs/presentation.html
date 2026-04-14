@@ -1082,6 +1082,73 @@
   .commands-legend { display: flex; gap: 2vw; justify-content: center; margin-top: 2vh; font-size: 0.9vw; color: var(--text-dim); }
   .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
 
+  /* Bonus slides */
+  .slide-bonus {
+    background: var(--gradient-warm);
+    padding: 4vh 6vw;
+    justify-content: flex-start;
+  }
+  .slide-bonus h2 { font-size: 3vw; margin-bottom: 0.5vh; }
+  .bonus-badge {
+    display: inline-block;
+    font-size: 0.75vw;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-purple);
+    border: 1px solid var(--accent-purple);
+    border-radius: 50px;
+    padding: 0.3vw 1.2vw;
+    margin-bottom: 1.5vh;
+  }
+  .bonus-subtitle { font-size: 1.15vw; color: var(--text-dim); margin-bottom: 3vh; line-height: 1.5; }
+  .bonus-cards { display: flex; gap: 2vw; margin-bottom: 2.5vh; }
+  .bonus-card {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid #333355;
+    border-radius: 1vw;
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+  }
+  .bonus-card h3 { font-size: 1.5vw; margin: 0; }
+  .bonus-card p { font-size: 1.05vw; color: var(--text-gray); line-height: 1.6; margin: 0; }
+  .bonus-card--midscene { border-top: 4px solid var(--accent-green); }
+  .bonus-card--uitars { border-top: 4px solid var(--accent-orange); }
+  .bonus-card-tag { font-size: 0.8vw; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .bonus-card--midscene .bonus-card-tag { color: var(--accent-green); }
+  .bonus-card--uitars .bonus-card-tag { color: var(--accent-orange); }
+  .bonus-callout {
+    background: #0d0d20;
+    border: 1px solid #252540;
+    border-radius: 0.6vw;
+    padding: 1.2vw 1.8vw;
+    font-size: 1.1vw;
+    color: var(--text-gray);
+    text-align: center;
+    line-height: 1.5;
+  }
+  .bonus-callout strong { color: var(--accent-green); }
+  .bonus-split { display: flex; gap: 2vw; flex: 1; align-content: start; }
+  .bonus-col {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid #333355;
+    border-radius: 1vw;
+    padding: 2vw;
+  }
+  .bonus-col h3 { font-size: 1.4vw; margin: 0 0 1.5vh 0; }
+  .bonus-col--good { border-top: 4px solid var(--accent-green); }
+  .bonus-col--good h3 { color: var(--accent-green); }
+  .bonus-col--test { border-top: 4px solid var(--accent-orange); }
+  .bonus-col--test h3 { color: var(--accent-orange); }
+  .bonus-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.2vh; }
+  .bonus-list li { font-size: 1.05vw; color: var(--text-gray); line-height: 1.5; padding-left: 1.2vw; border-left: 2px solid #333355; }
+  .bonus-col--good .bonus-list li { border-left-color: var(--accent-green); }
+  .bonus-col--test .bonus-list li { border-left-color: var(--accent-orange); }
+
   /* FAQ slide */
   .slide-faq {
     background: var(--gradient-warm);
@@ -1239,7 +1306,7 @@
   <h1>Review &amp; QA at the Times<br>of AI-Assisted Development</h1>
   <p class="subtitle">How we gave our automated reviewer a memory<br>and turned PR comments into permanent infrastructure</p>
   <p class="meta">Engineering Team | April 2026</p>
-  <span class="slide-number">1 / 13</span>
+  <span class="slide-number">1 / 15</span>
 </div>
 
 <!-- SLIDE 2: THE GAP -->
@@ -1276,7 +1343,7 @@
     </div>
   </div>
   <div class="gap-punchline">The human has the context but not the time.<br>The bot has the time but not the context. <strong style="color: var(--octostar-red-light);">That's the gap.</strong></div>
-  <span class="slide-number">2 / 13</span>
+  <span class="slide-number">2 / 15</span>
 </div>
 
 <!-- SLIDE 3: THREE LAYERS -->
@@ -1334,7 +1401,7 @@
       <div class="layer-how">Most targeted &mdash; zero token waste, bot sees it only when that file is in the PR</div>
     </div>
   </div>
-  <span class="slide-number">3 / 13</span>
+  <span class="slide-number">3 / 15</span>
 </div>
 
 <!-- SLIDE 4: HIERARCHY -->
@@ -1399,7 +1466,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">4 / 13</span>
+  <span class="slide-number">4 / 15</span>
 </div>
 
 <!-- SLIDE 5: FEEDBACK LOOP -->
@@ -1461,7 +1528,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">5 / 13</span>
+  <span class="slide-number">5 / 15</span>
 </div>
 
 <!-- SLIDE 6: CLASSIFICATION -->
@@ -1506,7 +1573,7 @@
     <span style="font-size: 32px;">&#9888;&#65039;</span>
     <p style="font-size: 17px; color: var(--text-gray); line-height: 1.6;"><strong style="color: white;">The #1 failure mode:</strong> dumping everything into BUGBOT.md. This classification prevents context bloat and ensures each rule is placed where it's most effective.</p>
   </div>
-  <span class="slide-number">6 / 13</span>
+  <span class="slide-number">6 / 15</span>
 </div>
 
 <!-- SLIDE 7: REAL EXAMPLES -->
@@ -1573,7 +1640,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">7 / 13</span>
+  <span class="slide-number">7 / 15</span>
 </div>
 
 <!-- SLIDE 8: RESULTS -->
@@ -1610,7 +1677,7 @@
   <div style="margin-top: 28px; text-align: center; color: var(--text-dim); font-size: 16px;">
     <code style="color: var(--accent-green);">/pr-war-stories setup</code> &nbsp;&mdash;&nbsp; available as a Claude Code skill for any repository
   </div>
-  <span class="slide-number">8 / 13</span>
+  <span class="slide-number">8 / 15</span>
 </div>
 
 <!-- SLIDE 9: TWO KINDS OF KNOWLEDGE -->
@@ -1659,7 +1726,7 @@
     </div>
   </div>
   <div class="knowledge-punchline">ADRs document the skeleton. Shadow knowledge is the muscle memory.<br>It only exists in the heads of people who've been burned. <strong style="color:var(--octostar-red-light)">And it walks out the door when they leave.</strong></div>
-  <span class="slide-number">9 / 13</span>
+  <span class="slide-number">9 / 15</span>
 </div>
 
 <!-- SLIDE 10: THE SHIFT -->
@@ -1701,7 +1768,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">10 / 13</span>
+  <span class="slide-number">10 / 15</span>
 </div>
 
 <!-- SLIDE 11: OSS RELEASE -->
@@ -1766,7 +1833,7 @@
     <p class="oss-cta">Works with Cursor Bugbot, any GitHub repo, any language.</p>
   </div>
 
-  <span class="slide-number">11 / 13</span>
+  <span class="slide-number">11 / 15</span>
 </div>
 
 <!-- SLIDE 12: COMMANDS -->
@@ -1831,7 +1898,7 @@
     <span><span class="legend-dot" style="background: var(--accent-blue);"></span>Human-triggered</span>
   </div>
 
-  <span class="slide-number">12 / 13</span>
+  <span class="slide-number">12 / 15</span>
 </div>
 
 <!-- SLIDE 13: FAQ -->
@@ -1878,7 +1945,73 @@
     </div>
   </div>
 
-  <span class="slide-number">13 / 13</span>
+  <span class="slide-number">13 / 15</span>
+</div>
+
+<!-- SLIDE 14: BONUS — The Opportunity -->
+<div class="slide slide-bonus">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+
+  <div class="bonus-badge">Post Scriptum &mdash; Future Research</div>
+  <h2>AI That Sees and Uses Our UI Like a Human</h2>
+  <p class="bonus-subtitle">Instead of writing brittle test scripts that break every time the UI changes, new open-source tools let us describe what we want in plain English &mdash; <em>&ldquo;click the submit button&rdquo;, &ldquo;fill in the form&rdquo;, &ldquo;drag this item to the list&rdquo;</em> &mdash; and an AI model looks at the screen and does it.</p>
+
+  <div class="bonus-cards">
+    <div class="bonus-card bonus-card--midscene">
+      <span class="bonus-card-tag">Automation SDK</span>
+      <h3>Midscene.js</h3>
+      <p>Open-source automation SDK that plugs into our existing <strong>Playwright</strong> setup. Understands UI elements visually &mdash; no selectors, no XPath, no data-testid.</p>
+    </div>
+    <div class="bonus-card bonus-card--uitars">
+      <span class="bonus-card-tag">Vision Model</span>
+      <h3>UI-TARS</h3>
+      <p>Open-source AI model trained specifically to interact with user interfaces. Sees screenshots, plans actions, executes multi-step workflows autonomously.</p>
+    </div>
+  </div>
+
+  <div class="bonus-callout">
+    <strong>Both run entirely on our hardware.</strong> No cloud. No licensing costs. No data leaves our network.
+  </div>
+
+  <span class="slide-number">14 / 15</span>
+</div>
+
+<!-- SLIDE 15: BONUS — What We Know So Far -->
+<div class="slide slide-bonus">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+
+  <div class="bonus-badge">Post Scriptum &mdash; Future Research</div>
+  <h2>Promising, But Needs Validation</h2>
+  <p class="bonus-subtitle">Early signals are strong. The gap is between demo-grade and production-grade.</p>
+
+  <div class="bonus-split">
+    <div class="bonus-col bonus-col--good">
+      <h3>What looks good</h3>
+      <ul class="bonus-list">
+        <li>Works on our existing GPU <strong>(RTX 6000 PRO)</strong> with zero new infrastructure</li>
+        <li>Handles complex UIs including <strong>drag &amp; drop</strong>, nested menus, dynamic content</li>
+        <li>Active open-source ecosystem, evolving fast &mdash; Midscene reached 1.0 in 2026</li>
+        <li>Natural-language test specs are <strong>readable by non-engineers</strong> &mdash; QA, product, design can write them</li>
+        <li>Tests survive UI refactors that break traditional selectors &mdash; the model re-finds elements visually</li>
+      </ul>
+    </div>
+    <div class="bonus-col bonus-col--test">
+      <h3>What we need to test</h3>
+      <ul class="bonus-list">
+        <li><strong>Speed</strong> &mdash; can it run a full regression suite in CI time budgets?</li>
+        <li><strong>Determinism</strong> &mdash; do tests produce consistent results across runs?</li>
+        <li><strong>Octostar-specific UIs</strong> &mdash; link charts, record viewers, complex tables</li>
+        <li><strong>Failure diagnostics</strong> &mdash; when a test fails, can you understand why?</li>
+        <li><strong>GPU contention</strong> &mdash; model inference alongside dev workloads on the same RTX 6000</li>
+      </ul>
+    </div>
+  </div>
+
+  <span class="slide-number">15 / 15</span>
 </div>
 
 <!-- NAVIGATION -->
