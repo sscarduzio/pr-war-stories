@@ -145,10 +145,10 @@
     flex-direction: column;
     gap: 0.8vh;
   }
-  .gap-header { font-size: 1.6vw; font-weight: 700; margin-bottom: 0.5vh; }
+  .gap-header { font-size: 1.35vw; font-weight: 700; margin-bottom: 0.5vh; }
   .gap-item {
-    font-size: 1.15vw;
-    padding: 0.5vh 0 0.5vh 1.2vw;
+    font-size: 1vw;
+    padding: 0.4vh 0 0.4vh 1vw;
     border-left: 3px solid;
     color: var(--text-gray);
   }
@@ -162,12 +162,18 @@
   }
   .gap-bar {
     flex: 1;
-    padding: 1.2vw 1vw;
+    padding: 0.8vw 0.6vw;
     border-radius: 0.5vw;
-    font-size: 1.2vw;
+    font-size: 1vw;
     font-weight: 800;
     letter-spacing: 2px;
     text-align: center;
+  }
+  .gap-neutral { border-color: var(--text-dim); }
+  .gap-bar-neutral {
+    background: rgba(153,153,187,0.15);
+    border: 2px solid var(--text-dim);
+    color: var(--text-dim);
   }
   .gap-bar-good {
     background: rgba(46,204,113,0.18);
@@ -1314,35 +1320,51 @@
   <div class="logo-bar">
     <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
   </div>
-  <h2>The New Manual</h2>
+  <h2>Three Tiers of Review Today</h2>
   <div class="gap-layout">
     <div class="gap-col">
-      <div class="gap-header">&#129489;&#8205;&#128187; The Human Reviewer</div>
-      <div class="gap-item gap-good">Checks out branch, reads diff</div>
-      <div class="gap-item gap-good">Asks LLM: "Race conditions?" "SQL injection?" "What if empty?"</div>
-      <div class="gap-item gap-good">Remembers the war stories</div>
-      <div class="gap-item gap-good">Knows the valid tradeoffs</div>
-      <div class="gap-item gap-bad">Has no time</div>
-      <div class="gap-bars">
-        <div class="gap-bar gap-bar-bad">TIME</div>
-        <div class="gap-bar gap-bar-good">MEMORY</div>
-      </div>
-    </div>
-    <div class="gap-vs">vs</div>
-    <div class="gap-col">
-      <div class="gap-header">&#129302; The Automated Reviewer</div>
-      <div class="gap-item gap-good">Runs on every PR, no human needed</div>
+      <div class="gap-header">&#129302; The Generic Bot</div>
+      <div class="gap-item gap-good">Runs on every PR, fully automatic</div>
       <div class="gap-item gap-good">Reads every line, every time</div>
+      <div class="gap-item gap-neutral">Generic advice: &ldquo;add error handling&rdquo;</div>
       <div class="gap-item gap-bad">Starts from zero every run</div>
-      <div class="gap-item gap-bad">Code is new to it</div>
       <div class="gap-item gap-bad">Zero memory of what went wrong</div>
       <div class="gap-bars">
         <div class="gap-bar gap-bar-good">TIME</div>
         <div class="gap-bar gap-bar-bad">MEMORY</div>
+        <div class="gap-bar gap-bar-bad">CONTEXT</div>
+      </div>
+    </div>
+    <div class="gap-vs">vs</div>
+    <div class="gap-col">
+      <div class="gap-header">&#129489;&#8205;&#128187; The New Manual</div>
+      <div class="gap-item gap-good">Reads diff, asks LLM the right questions</div>
+      <div class="gap-item gap-good">Remembers the war stories</div>
+      <div class="gap-item gap-good">Knows the valid tradeoffs</div>
+      <div class="gap-item gap-bad">Still manual &mdash; every PR, every time</div>
+      <div class="gap-item gap-bad">Has no time</div>
+      <div class="gap-bars">
+        <div class="gap-bar gap-bar-bad">TIME</div>
+        <div class="gap-bar gap-bar-good">MEMORY</div>
+        <div class="gap-bar gap-bar-good">CONTEXT</div>
+      </div>
+    </div>
+    <div class="gap-vs">&rarr;</div>
+    <div class="gap-col" style="border: 1px solid var(--octostar-red); box-shadow: 0 0 30px rgba(231,76,60,0.15);">
+      <div class="gap-header" style="color: var(--octostar-red-light);">&#127942; The Bot With Memory</div>
+      <div class="gap-item gap-good">Runs on every PR, fully automatic</div>
+      <div class="gap-item gap-good">Remembers your team's war stories</div>
+      <div class="gap-item gap-good">Knows the valid tradeoffs</div>
+      <div class="gap-item gap-good">Context scoped to each module</div>
+      <div class="gap-item gap-good">Learns from every merged PR</div>
+      <div class="gap-bars">
+        <div class="gap-bar gap-bar-good">TIME</div>
+        <div class="gap-bar gap-bar-good">MEMORY</div>
+        <div class="gap-bar gap-bar-good">CONTEXT</div>
       </div>
     </div>
   </div>
-  <div class="gap-punchline">The human has the context but not the time.<br>The bot has the time but not the context. <strong style="color: var(--octostar-red-light);">That's the gap.</strong></div>
+  <div class="gap-punchline">We can't create time for people. <strong style="color: var(--octostar-red-light);">We can create memory for the bot.</strong></div>
   <span class="slide-number">2 / 15</span>
 </div>
 

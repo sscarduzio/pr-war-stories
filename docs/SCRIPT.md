@@ -14,15 +14,21 @@
 
 ---
 
-## Slide 2: The New Manual
+## Slide 2: Three Tiers of Review Today
 
-*(gesture to the two columns)*
+*(gesture across the three columns, left to right)*
 
-"Two reviewers. The human remembers the war stories, knows the tradeoffs — but has no time. The bot runs on every PR, reads every line — but starts from zero every run. Zero memory of what went wrong."
+"Today there are actually three tiers. On the left — the generic bot. Bugbot, CodeRabbit, out of the box. Runs on every PR, reads every line — but gives you generic feedback. 'Consider adding error handling.' It starts from zero every run. No memory."
 
-*(point to the bottom line)*
+"In the middle — the new manual. You, the human, reading the diff and asking Claude the smart questions. You remember the war stories. You know the tradeoffs. But it's still manual, every PR, and you have no time."
 
-"The human has the context but not the time. The bot has the time but not the context. That's the gap."
+*(point to the red-bordered third column)*
+
+"On the right — the bot with memory. Runs on every PR, fully automatic, but remembers your team's specific pitfalls."
+
+*(point to the punchline)*
+
+"We can't create time for people. We can create memory for the bot."
 
 ---
 
