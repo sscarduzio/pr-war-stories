@@ -168,7 +168,7 @@
 
 **Rejected suggestions?** "Not rules. Only adopted corrections and real-pitfall warnings make it through."
 
-**Module renames?** "git mv carries the BUGBOT.md. Update scopeRules in the harvest workflow. Audit catches stale paths."
+**Module renames / big refactors?** "The BUGBOT.md file moves with git mv — that's the easy part. The hard part is the rules *inside* it may reference paths and functions that just changed. After a big refactor: grep every BUGBOT.md for stale paths, update scopeRules in the harvest workflow, check inline comments didn't lose context. LESSONS.md is path-agnostic so it's unaffected. Add this to your refactor PR checklist — don't wait for the quarterly audit."
 
 **Noisy?** "Only fires on substantive human comments. Expect 1-2 harvests per week on a busy repo."
 

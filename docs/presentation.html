@@ -1784,8 +1784,8 @@
       <div class="faq-a">Rejected suggestions are <strong>not rules</strong>. The harvest step explicitly filters for this: only corrections that were actually adopted, and warnings about real pitfalls, become rules. Style preferences and debated alternatives stay as PR conversation.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">How do you handle module renames and refactors?</div>
-      <div class="faq-a"><code>git mv</code> carries the BUGBOT.md with the directory. Update the <code>scopeRules</code> array in the harvest workflow. During audit, check if any rule references a path or function that no longer exists &mdash; if so, update or remove it.</div>
+      <div class="faq-q">How do you handle module renames and big refactors?</div>
+      <div class="faq-a">BUGBOT.md files move with <code>git mv</code>, but <strong>rules inside may reference stale paths</strong>. After any big refactor: <strong>1)</strong>&nbsp;grep BUGBOT.md files for moved/deleted paths, <strong>2)</strong>&nbsp;update <code>scopeRules</code> in harvest-lessons.yml, <strong>3)</strong>&nbsp;check inline comments didn't lose context. LESSONS.md is path-agnostic&nbsp;&mdash; no impact. Add this to your refactor PR checklist.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">Is the harvest Action noisy on active repos?</div>
