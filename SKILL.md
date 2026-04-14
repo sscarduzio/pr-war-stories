@@ -1,6 +1,6 @@
 ---
 name: pr-war-stories
-description: Build a self-improving AI code review system from PR history. Mines merged PRs for human review comments and bug-fix lessons, creates hierarchical Cursor Bugbot rules (.cursor/BUGBOT.md), universal engineering lessons (LESSONS.md), inline code comments, and a GitHub Action that auto-harvests review comments on merge. Activate on 'war stories', 'bugbot rules', 'review rules', 'pr lessons', 'teach bugbot', 'ai review setup', 'harvest lessons', 'mine PRs', 'code review rules'. Use when setting up or maintaining AI-assisted PR review for any repository.
+description: Build a self-improving AI code review system from PR history. Mines merged PRs for human review comments and bug-fix lessons, creates hierarchical Cursor Bugbot rules (.cursor/BUGBOT.md), universal engineering lessons (LESSONS.md), inline code comments, and a GitHub Action that auto-harvests review comments on merge. Activate on 'war stories', 'bugbot rules', 'review rules', 'pr lessons', 'teach bugbot', 'ai review setup', 'harvest lessons', 'mine PRs', 'code review rules'. Best for: GitHub repos with substantive PR review history, teams using Cursor Bugbot or AI assistants that read repo docs (Claude Code, Cursor). Requires: gh CLI, GitHub Actions. Works with any language.
 allowed-tools: Read,Write,Edit,Glob,Grep,Bash,Agent,WebFetch,WebSearch
 ---
 
@@ -445,12 +445,20 @@ Then read the existing LESSONS.md and .cursor/BUGBOT.md files.
 
 For each review comment in the harvest summary:
 1. Is this a new lesson not already covered? If no, skip.
-2. Classify: REVIEWABLE / EDUCATIONAL / SINGLE-FILE
-3. Place in the correct location:
+2. Was this suggestion actually adopted? Check if the final merged code
+   reflects the reviewer's feedback. Suggestions that were discussed but
+   rejected (e.g., "let's use X instead" → author replied "no, Y is better
+   because..." → merged with Y) are NOT rules. Only adopted corrections
+   and warnings about real pitfalls become rules.
+3. Is this a style/preference comment? ("I'd prefer early returns here",
+   "maybe rename this variable") Style preferences are NOT rules — they
+   belong in linter config or team style guides, not BUGBOT.md.
+4. Classify: REVIEWABLE / EDUCATIONAL / SINGLE-FILE
+5. Place in the correct location:
    - REVIEWABLE: add to the BUGBOT.md file matching the scope listed in the harvest
    - EDUCATIONAL: add to LESSONS.md under the appropriate category
    - SINGLE-FILE: add as an inline code comment in the source file
-4. Verify token budget (no BUGBOT.md file over 600 words)
+6. Verify token budget (no BUGBOT.md file over 600 words)
 
 Commit all changes as a single PR titled "chore: harvest lessons from PRs #X, #Y, #Z"
 ```
@@ -536,6 +544,50 @@ Write a .cursor/BUGBOT.md in the module directory.
 Keep under 400 words. Only REVIEWABLE rules.
 ```
 
+## When to Graduate a Rule to Lint/Test/CI
+
+BUGBOT.md is for **fuzzy, contextual, project-specific** review logic that deterministic tools can't catch. If a rule CAN be enforced reliably by a linter, type checker, or test, it SHOULD be — and then removed from BUGBOT.md.
+
+**Graduate when:**
+- A linter rule or plugin exists (e.g., `no-floating-promises` replaces "always await async calls")
+- A type constraint catches it (e.g., branded types prevent ID mixups)
+- A test reliably detects it (e.g., integration test catches missing ON CLUSTER)
+- A pre-commit hook can enforce it (e.g., formatting, import ordering)
+
+**Keep in BUGBOT.md when:**
+- The rule requires understanding intent ("this `===` is intentional, don't change to deepEqual")
+- The rule is about a non-obvious interaction between components
+- The pattern is too contextual for static analysis ("when changing timbr→etimbr, update ALL query paths")
+- The rule is about what NOT to do in a specific area (negative knowledge)
+
+During audit, actively look for rules that have matured into lint-able patterns and graduate them.
+
+## Cross-Cutting Rules & Refactor Survival
+
+### When a rule applies across module boundaries
+
+Some rules (e.g., "ClickHouse mutations need ON CLUSTER") apply everywhere, not to one module. These belong in the **root** `.cursor/BUGBOT.md`. Resist the urge to duplicate them into module files — the bot traverses upward and will find the root rules for every PR.
+
+### When modules are renamed or moved
+
+If a directory containing a `.cursor/BUGBOT.md` is moved or renamed:
+1. Move the BUGBOT.md with it (git will track this as a rename)
+2. Update the `scopeRules` array in `harvest-lessons.yml` to match the new path
+3. Check if any inline comments reference the old path and update them
+
+### When to promote a rule upward
+
+A module-level rule should move to app-level or root when:
+- The same bug recurs in a DIFFERENT module (the rule was too narrow)
+- The module is deleted but the pattern applies to its replacement
+- Two module-level rules say the same thing (merge into their common parent)
+
+### When to demote a rule downward
+
+A root-level rule should move to a module when:
+- It only ever triggers on one module's files (wasting attention on other PRs)
+- It references file paths or functions specific to one area
+
 ## Anti-Patterns to Avoid
 
 - **Generic advice** ("write tests", "use TypeScript") -- CI and linters handle this
@@ -545,3 +597,5 @@ Keep under 400 words. Only REVIEWABLE rules.
 - **Over-nesting** -- don't create BUGBOT.md for every directory; only where real war stories exist
 - **Forgetting inline comments** -- single-file rules in BUGBOT.md waste attention on 99% of PRs
 - **Open feedback loop** -- always install the harvest workflow so lessons don't get lost
+- **Style preferences as rules** -- "prefer early returns" or "use descriptive names" belong in linter config, not BUGBOT.md
+- **Rejected suggestions as rules** -- if a reviewer suggested X and the author deliberately chose Y, that's a design decision, not a rule
