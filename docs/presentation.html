@@ -474,6 +474,31 @@
   .loop-step .circle.orange { border-color: var(--accent-orange); background: var(--accent-orange)22; }
   .loop-step .circle.purple { border-color: var(--accent-purple); background: var(--accent-purple)22; }
 
+  .loop-fork {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8vw;
+    width: 240px;
+  }
+  .loop-fork-branch {
+    display: flex;
+    align-items: center;
+    gap: 0.6vw;
+    background: var(--bg-card);
+    border: 1px solid #333355;
+    border-radius: 0.6vw;
+    padding: 0.6vw 1vw;
+    width: 100%;
+  }
+  .loop-fork-branch--bot { border-left: 3px solid var(--accent-green); }
+  .loop-fork-branch--dev { border-left: 3px solid var(--accent-blue); }
+  .loop-fork-icon { font-size: 1.4vw; flex-shrink: 0; }
+  .loop-fork-text { display: flex; flex-direction: column; }
+  .loop-fork-label { font-size: 0.85vw; font-weight: 700; color: var(--text-white); }
+  .loop-fork-desc { font-size: 0.7vw; color: var(--text-dim); }
+  .loop-fork-num { font-size: 1.8vw; font-weight: 800; color: var(--accent-purple); margin-bottom: 0.3vw; }
+
   .loop-step h4 {
     font-size: 16px;
     font-weight: 700;
@@ -1523,10 +1548,22 @@
         <p>Developer runs /pr-war-stories harvest</p>
       </div>
       <div class="loop-arrow">&rarr;</div>
-      <div class="loop-step">
-        <div class="circle purple">5</div>
-        <h4>Bot Gets Smarter</h4>
-        <p>New rules active on the next PR review</p>
+      <div class="loop-fork">
+        <div class="loop-fork-num">5</div>
+        <div class="loop-fork-branch loop-fork-branch--bot">
+          <span class="loop-fork-icon">&#129302;</span>
+          <div class="loop-fork-text">
+            <span class="loop-fork-label">Reviewer gets smarter</span>
+            <span class="loop-fork-desc">BUGBOT.md &amp; inline comments</span>
+          </div>
+        </div>
+        <div class="loop-fork-branch loop-fork-branch--dev">
+          <span class="loop-fork-icon">&#128187;</span>
+          <div class="loop-fork-text">
+            <span class="loop-fork-label">Coding agent gets smarter</span>
+            <span class="loop-fork-desc">LESSONS.md read before writing code</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="loop-return-curved">
