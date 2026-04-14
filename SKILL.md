@@ -333,11 +333,44 @@ jobs:
 
 ### Step 7: Wire Up Discovery
 
-Add pointers so AI assistants find the lessons:
+LESSONS.md is useless if AI assistants don't know to read it. This step ensures the pointer exists.
 
-- `CLAUDE.md`: Add line -- "Before writing or reviewing code, read LESSONS.md"
-- `AGENTS.md` (if exists): Same pointer
-- `README.md`: Add maintenance guide section
+**For CLAUDE.md** (Claude Code reads this automatically):
+
+```bash
+# Check if CLAUDE.md exists and already references LESSONS.md
+if [ -f CLAUDE.md ]; then
+  grep -qi 'LESSONS.md' CLAUDE.md && echo "CLAUDE.md already references LESSONS.md" || echo "NEEDS UPDATE"
+else
+  echo "NO CLAUDE.md FOUND"
+fi
+```
+
+If CLAUDE.md exists but doesn't reference LESSONS.md, add this line near the top (after the first heading):
+
+```markdown
+**Before writing or reviewing code, read [`LESSONS.md`](LESSONS.md)** -- hard-won engineering lessons from real bugs and PR reviews.
+```
+
+If CLAUDE.md doesn't exist, create a minimal one:
+
+```markdown
+# Project Name
+
+**Before writing or reviewing code, read [`LESSONS.md`](LESSONS.md)** -- hard-won engineering lessons from real bugs and PR reviews.
+```
+
+**For AGENTS.md** (Cursor/Codex reads this):
+
+```bash
+if [ -f AGENTS.md ]; then
+  grep -qi 'LESSONS.md' AGENTS.md && echo "AGENTS.md already references LESSONS.md" || echo "NEEDS UPDATE"
+fi
+```
+
+If it exists and doesn't reference LESSONS.md, add the same pointer line.
+
+**Do NOT skip this step.** Without these pointers, the IDE assistant won't read LESSONS.md and developers won't benefit from the upstream filter (Layer 2 of the architecture).
 
 ### Step 8: Verify Token Budget
 
