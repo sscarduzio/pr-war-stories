@@ -33,23 +33,41 @@ The skill will explore your repo, mine your last 50 merged PRs, extract war stor
 
 Not all knowledge belongs in the same place:
 
+```mermaid
+graph LR
+  subgraph "Layer 1 — Bot Memory"
+    B[".cursor/BUGBOT.md"]
+  end
+  subgraph "Layer 2 — Developer Memory"
+    L["LESSONS.md"]
+  end
+  subgraph "Layer 3 — File Memory"
+    I["Inline comments"]
+  end
+
+  PR["PR Review Comment"] --> C{"Can the bot<br/>check this<br/>on a diff?"}
+  C -->|Yes| S{"Scope?"}
+  S -->|Cross-cutting| B
+  S -->|One module| B2[".cursor/BUGBOT.md<br/>(module-level)"]
+  S -->|One file| I
+  C -->|No| E{"Applies to<br/>one file?"}
+  E -->|Yes| I
+  E -->|No| L
+
+  style B fill:#1a3a2a,stroke:#2ecc71,color:#fff
+  style B2 fill:#1a3a2a,stroke:#2ecc71,color:#fff
+  style L fill:#1a2a3a,stroke:#4a9eff,color:#fff
+  style I fill:#2a2a1a,stroke:#f39c12,color:#fff
+  style C fill:#2a1a1a,stroke:#e74c3c,color:#fff
+  style E fill:#2a1a1a,stroke:#e74c3c,color:#fff
+  style S fill:#2a1a2a,stroke:#9b59b6,color:#fff
+```
+
 | Layer | File | When it's read | What goes here |
 |-------|------|---------------|----------------|
 | **Bot rules** | `.cursor/BUGBOT.md` | Bugbot reviews a PR | Rules the bot can enforce on a diff |
 | **Lessons** | `LESSONS.md` | Developer starts coding | Concrete before/after code examples |
 | **Inline** | Source code comments | That file appears in a diff | Single-file warnings |
-
-### Why three layers?
-
-The bot has a context window. Every rule competes for attention. When you dump 50 rules into BUGBOT.md, the bot ignores the important ones.
-
-The fix: **classify every lesson before placing it.**
-
-- Bot can check it on a diff? → `.cursor/BUGBOT.md`
-- Applies to one file only? → Inline code comment
-- Educational, not enforceable? → `LESSONS.md`
-- Duplicate of another rule? → Merge
-- Pattern was fixed? → Remove
 
 ### What does NOT belong
 
@@ -61,14 +79,19 @@ The fix: **classify every lesson before placing it.**
 
 BUGBOT.md files are hierarchical. The bot traverses **upward** from each changed file, collecting rules at every level:
 
-```
-.cursor/BUGBOT.md                              <-- every PR
-  apps/frontend/.cursor/BUGBOT.md              <-- frontend PRs
-    apps/frontend/src/editor/.cursor/BUGBOT.md <-- editor PRs get all three
-  packages/.cursor/BUGBOT.md                   <-- package PRs
+```mermaid
+graph TD
+  R[".cursor/BUGBOT.md<br/><i>every PR</i>"] --> A["apps/frontend/.cursor/BUGBOT.md<br/><i>frontend PRs</i>"]
+  R --> P["packages/.cursor/BUGBOT.md<br/><i>package PRs</i>"]
+  A --> E["apps/.../editor/.cursor/BUGBOT.md<br/><i>editor PRs get all three</i>"]
+
+  style R fill:#1a1a2e,stroke:#e74c3c,color:#fff
+  style A fill:#1a1a2e,stroke:#4a9eff,color:#fff
+  style E fill:#1a1a2e,stroke:#2ecc71,color:#fff
+  style P fill:#1a1a2e,stroke:#9b59b6,color:#fff
 ```
 
-Deeper modules get more context. Simple changes get only relevant rules. Token budget stays under control:
+Token budget stays under control:
 
 - **< 400 words** per file (ideal)
 - **< 2000 tokens** worst-case combined load
@@ -79,43 +102,21 @@ Deeper modules get more context. Simple changes get only relevant rules. Token b
 - If the same bug recurs in a different module, **promote the rule upward**.
 - After big refactors: run `/pr-war-stories recheck` to catch rules referencing moved/deleted code.
 
-## LESSONS.md quality bar
-
-Every lesson **must** include a `// WRONG` / `// RIGHT` code block from the actual codebase. If you can't show the wrong way and the right way in code, the lesson is too abstract — either make it concrete or don't include it.
-
-```markdown
-### Use null to clear fields, not undefined
-`JSON.stringify` silently drops `undefined` properties.
-
-\```ts
-// WRONG: field silently omitted
-const update = { description: undefined };
-
-// RIGHT: null explicitly clears
-const update = { description: null };
-\```
-(PR #NNN)
-```
-
-**Drop aggressively.** 8 concrete lessons beat 15 vague ones.
-
 ## The automated feedback loop
 
-A GitHub Action (`harvest-lessons.yml`) fires on every merged PR:
+```mermaid
+graph LR
+  M["PR Merged"] --> H["harvest-lessons.yml<br/><i>fires automatically</i>"]
+  H --> S["Summary posted<br/>on merged PR"]
+  S --> D["/pr-war-stories harvest<br/><i>human classifies</i>"]
+  D --> R["Rules updated in<br/>BUGBOT / LESSONS / inline"]
+  R -->|"next PR"| M
 
-```
-PR merged to main
-      ↓
-harvest-lessons.yml extracts human review comments
-(filters bots, skips "LGTM", maps to BUGBOT.md scopes)
-      ↓
-Posts harvest summary on the merged PR
-      ↓
-Developer runs /pr-war-stories harvest
-      ↓
-New rules committed, bot uses them on next review
-      ↓
-      (loop continues)
+  style M fill:#1a1a2e,stroke:#e74c3c,color:#fff
+  style H fill:#1a1a2e,stroke:#f39c12,color:#fff
+  style S fill:#1a1a2e,stroke:#4a9eff,color:#fff
+  style D fill:#1a1a2e,stroke:#2ecc71,color:#fff
+  style R fill:#1a1a2e,stroke:#9b59b6,color:#fff
 ```
 
 No knowledge falls through the cracks.
@@ -159,6 +160,76 @@ These are actual rules extracted from production PRs:
 ```
 
 After setup, Bugbot caught a real bug in the harvest workflow itself — the scope detection used `else if` instead of `if`, causing files to miss parent scope rules. The system was already paying for itself.
+
+## Example LESSONS.md entries
+
+Every lesson has concrete `// WRONG` / `// RIGHT` code. Here are three from a real frontend repo:
+
+### Promise.all on unbounded arrays causes OOM
+
+```ts
+// WRONG: OOM on large file lists
+await Promise.all(files.map(f => uploadFile(f)));
+
+// RIGHT: bounded parallelism
+import pLimit from 'p-limit';
+const limit = pLimit(3);
+await Promise.all(files.map(f => limit(() => uploadFile(f))));
+```
+*(PR #781)*
+
+### Use null to clear fields, not undefined
+
+```ts
+// WRONG: field silently omitted from payload
+const update = { name: "new", description: undefined };
+JSON.stringify(update); // '{"name":"new"}' — description not cleared
+
+// RIGHT: null explicitly clears the field
+const update = { name: "new", description: null };
+JSON.stringify(update); // '{"name":"new","description":null}'
+```
+
+### Reference equality (===) can be intentional
+
+```tsx
+// The bot flagged this as a bug:
+if (prev === next) return; // "should be deepEqual"
+
+// But this was intentional — MemoryStorageAdapter preserves references.
+// Deep equality would defeat the optimization.
+if (prev === next) return; // intentional ref check — see PR #748
+```
+*(PR #748)*
+
+And from a Python backend repo:
+
+### Always add ON CLUSTER to ClickHouse mutations
+
+```sql
+-- WRONG: only affects one node
+ALTER TABLE my_table UPDATE col = 'x' WHERE id = 1
+
+-- RIGHT: affects all replicas
+ALTER TABLE my_table ON CLUSTER '{cluster}' UPDATE col = 'x' WHERE id = 1
+```
+*(PRs #573, #572)*
+
+### Use model_dump() to access Pydantic v2 extra fields
+
+```python
+# WRONG: silently misses ontology fields
+for field in field_names:
+    value = getattr(entity, field)  # None for extra fields!
+
+# RIGHT: gets all fields including extras
+data = entity.model_dump()
+for field in field_names:
+    value = data.get(field)
+```
+*(PR #528)*
+
+**Drop aggressively.** 8 concrete lessons beat 15 vague ones. If you can't show the wrong way and the right way in code, it doesn't belong in LESSONS.md.
 
 ## Requirements
 
