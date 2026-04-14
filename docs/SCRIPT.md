@@ -148,7 +148,29 @@
 
 "Today the bot asks generic questions. Tomorrow it asks the right questions — because it remembers what went wrong."
 
-"The LLM wiki gives it documentation. This gives it the battle scars."
+"The LLM wiki gives it documentation. This gives it the scar tissue."
+
+---
+
+## Slide 12: FAQ
+
+*(this slide is a safety net — advance to it during Q&A if a question matches, or skip if time is tight)*
+
+**Won't it rot?** "Quarterly audit. Rules that never trigger get removed. The harvest keeps fresh ones coming in. Entropy is real — the audit cadence is the answer."
+
+**Why not linter rules?** "If it can be linted, lint it — and remove it from BUGBOT.md. BUGBOT is for fuzzy knowledge that needs understanding intent."
+
+**Token creep?** "400 words per file, 2,000 tokens worst case. Classification is the enforcer. Rules that don't fit a bin don't get added."
+
+**Cross-cutting rules?** "Root BUGBOT.md. The bot traverses upward — every PR sees the root."
+
+**Does it work with X reviewer?** "Anything that reads repo files. Cursor Bugbot natively. Others via LESSONS.md and inline comments."
+
+**Rejected suggestions?** "Not rules. Only adopted corrections and real-pitfall warnings make it through."
+
+**Module renames?** "git mv carries the BUGBOT.md. Update scopeRules in the harvest workflow. Audit catches stale paths."
+
+**Noisy?** "Only fires on substantive human comments. Expect 1-2 harvests per week on a busy repo."
 
 *(pause)*
 

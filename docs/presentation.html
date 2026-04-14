@@ -1062,6 +1062,20 @@
   .shift-item { font-size: 1.1vw; color: var(--text-gray); line-height: 1.5; max-width: 20vw; text-align: left; display: flex; gap: 0.6vw; align-items: flex-start; }
   .shift-num { font-size: 1.3vw; font-weight: 800; color: var(--octostar-red-light); flex-shrink: 0; line-height: 1.2; }
 
+  /* FAQ slide */
+  .slide-faq {
+    background: var(--gradient-warm);
+    padding: 4vh 6vw;
+    justify-content: flex-start;
+  }
+  .slide-faq h2 { font-size: 3vw; margin-bottom: 0.5vh; }
+  .slide-faq .faq-subtitle { font-size: 1.1vw; color: var(--text-dim); margin-bottom: 2.5vh; }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5vw 2vw; flex: 1; align-content: start; }
+  .faq-item { background: var(--bg-card); border: 1px solid #333355; border-radius: 0.8vw; padding: 1.4vw 1.6vw; }
+  .faq-q { font-size: 1.1vw; font-weight: 700; color: var(--octostar-red-light); margin-bottom: 0.6vh; line-height: 1.3; }
+  .faq-a { font-size: 0.95vw; color: var(--text-gray); line-height: 1.55; }
+  .faq-a strong { color: var(--text-white); }
+
   /* OSS slide */
   .slide-oss {
     background: var(--gradient-warm);
@@ -1205,7 +1219,7 @@
   <h1>Review &amp; QA at the Times<br>of AI-Assisted Development</h1>
   <p class="subtitle">How we gave our automated reviewer a memory<br>and turned PR comments into permanent infrastructure</p>
   <p class="meta">Engineering Team | April 2026</p>
-  <span class="slide-number">1 / 11</span>
+  <span class="slide-number">1 / 12</span>
 </div>
 
 <!-- SLIDE 2: THE GAP -->
@@ -1242,7 +1256,7 @@
     </div>
   </div>
   <div class="gap-punchline">The human has the context but not the time.<br>The bot has the time but not the context. <strong style="color: var(--octostar-red-light);">That's the gap.</strong></div>
-  <span class="slide-number">2 / 11</span>
+  <span class="slide-number">2 / 12</span>
 </div>
 
 <!-- SLIDE 3: THREE LAYERS -->
@@ -1300,7 +1314,7 @@
       <div class="layer-how">Most targeted &mdash; zero token waste, bot sees it only when that file is in the PR</div>
     </div>
   </div>
-  <span class="slide-number">3 / 11</span>
+  <span class="slide-number">3 / 12</span>
 </div>
 
 <!-- SLIDE 4: HIERARCHY -->
@@ -1365,7 +1379,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">4 / 11</span>
+  <span class="slide-number">4 / 12</span>
 </div>
 
 <!-- SLIDE 5: FEEDBACK LOOP -->
@@ -1427,7 +1441,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">5 / 11</span>
+  <span class="slide-number">5 / 12</span>
 </div>
 
 <!-- SLIDE 6: CLASSIFICATION -->
@@ -1472,7 +1486,7 @@
     <span style="font-size: 32px;">&#9888;&#65039;</span>
     <p style="font-size: 17px; color: var(--text-gray); line-height: 1.6;"><strong style="color: white;">The #1 failure mode:</strong> dumping everything into BUGBOT.md. This classification prevents context bloat and ensures each rule is placed where it's most effective.</p>
   </div>
-  <span class="slide-number">6 / 11</span>
+  <span class="slide-number">6 / 12</span>
 </div>
 
 <!-- SLIDE 7: REAL EXAMPLES -->
@@ -1539,7 +1553,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">7 / 11</span>
+  <span class="slide-number">7 / 12</span>
 </div>
 
 <!-- SLIDE 8: RESULTS -->
@@ -1576,7 +1590,7 @@
   <div style="margin-top: 28px; text-align: center; color: var(--text-dim); font-size: 16px;">
     <code style="color: var(--accent-green);">/pr-war-stories setup</code> &nbsp;&mdash;&nbsp; available as a Claude Code skill for any repository
   </div>
-  <span class="slide-number">8 / 11</span>
+  <span class="slide-number">8 / 12</span>
 </div>
 
 <!-- SLIDE 9: TWO KINDS OF KNOWLEDGE -->
@@ -1625,7 +1639,7 @@
     </div>
   </div>
   <div class="knowledge-punchline">ADRs document the skeleton. Shadow knowledge is the muscle memory.<br>It only exists in the heads of people who've been burned. <strong style="color:var(--octostar-red-light)">And it walks out the door when they leave.</strong></div>
-  <span class="slide-number">9 / 11</span>
+  <span class="slide-number">9 / 12</span>
 </div>
 
 <!-- SLIDE 10: THE SHIFT -->
@@ -1667,7 +1681,7 @@
       </div>
     </div>
   </div>
-  <span class="slide-number">10 / 11</span>
+  <span class="slide-number">10 / 12</span>
 </div>
 
 <!-- SLIDE 11: OSS RELEASE -->
@@ -1732,7 +1746,54 @@
     <p class="oss-cta">Works with Cursor Bugbot, any GitHub repo, any language.</p>
   </div>
 
-  <span class="slide-number">11 / 11</span>
+  <span class="slide-number">11 / 12</span>
+</div>
+
+<!-- SLIDE 12: FAQ -->
+<div class="slide slide-faq">
+  <div class="logo-bar">
+    <a href="https://octostar.com" target="_blank" rel="noopener"><img src="logo-dark.svg" class="logo-img" alt="Octostar"></a>
+  </div>
+
+  <h2>Questions you're probably thinking</h2>
+  <p class="faq-subtitle">Anticipated from senior engineers, architects, and tech leads</p>
+
+  <div class="faq-grid">
+    <div class="faq-item">
+      <div class="faq-q">Won't BUGBOT.md rot like every other living doc?</div>
+      <div class="faq-a">The quarterly <strong>audit phase</strong> catches staleness: rules that never trigger get removed, fixed patterns get graduated. The harvest Action auto-surfaces new lessons, so fresh rules keep arriving while stale ones get pruned. Entropy is real &mdash; the audit cadence is the answer.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Why not just write better linter rules or tests?</div>
+      <div class="faq-a">If a rule <strong>can</strong> be linted or tested deterministically, it <strong>should</strong> be &mdash; and then removed from BUGBOT.md. BUGBOT rules are for fuzzy, contextual knowledge: <em>&ldquo;this === is intentional,&rdquo; &ldquo;these two query paths must stay in sync.&rdquo;</em> Things that need understanding intent, not pattern matching.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do you keep the token budget from creeping?</div>
+      <div class="faq-a"><strong>&lt;400 words</strong> per file, <strong>&lt;2,000 tokens</strong> worst case. Classification is the enforcer: reviewable &rarr; BUGBOT, educational &rarr; LESSONS, single-file &rarr; inline comment. Rules that don't fit any bin don't get added. Fewer rules = more attention per rule.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What about cross-cutting rules that span modules?</div>
+      <div class="faq-a">Root <code>.cursor/BUGBOT.md</code>. The bot traverses upward, so every PR sees the root rules. Module-level files add specificity, not duplication. If the same bug recurs in a different module, <strong>promote the rule upward</strong>.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does this actually work with Bugbot / CodeRabbit / Copilot?</div>
+      <div class="faq-a">Any reviewer that reads <code>.cursor/BUGBOT.md</code> from the repo (Cursor Bugbot does this natively). For others: <code>LESSONS.md</code> and inline comments are universal &mdash; they're just files in the repo that any AI assistant can be told to read.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What if a reviewer's suggestion wasn't adopted?</div>
+      <div class="faq-a">Rejected suggestions are <strong>not rules</strong>. The harvest step explicitly filters for this: only corrections that were actually adopted, and warnings about real pitfalls, become rules. Style preferences and debated alternatives stay as PR conversation.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do you handle module renames and refactors?</div>
+      <div class="faq-a"><code>git mv</code> carries the BUGBOT.md with the directory. Update the <code>scopeRules</code> array in the harvest workflow. During audit, check if any rule references a path or function that no longer exists &mdash; if so, update or remove it.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is the harvest Action noisy on active repos?</div>
+      <div class="faq-a">It only posts when <strong>substantive human comments</strong> exist (>40 chars, not LGTM/approvals, not bots). Most PRs with only bot reviews produce nothing. On a repo merging 5 PRs/day, expect 1&ndash;2 harvest summaries per week.</div>
+    </div>
+  </div>
+
+  <span class="slide-number">12 / 12</span>
 </div>
 
 <!-- NAVIGATION -->
