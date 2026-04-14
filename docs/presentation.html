@@ -478,26 +478,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.8vw;
-    width: 240px;
+    gap: 12px;
   }
-  .loop-fork-branch {
+  .loop-fork-row {
     display: flex;
     align-items: center;
-    gap: 0.6vw;
-    background: var(--bg-card);
-    border: 1px solid #333355;
-    border-radius: 0.6vw;
-    padding: 0.6vw 1vw;
-    width: 100%;
+    gap: 12px;
   }
-  .loop-fork-branch--bot { border-left: 3px solid var(--accent-green); }
-  .loop-fork-branch--dev { border-left: 3px solid var(--accent-blue); }
-  .loop-fork-icon { font-size: 1.4vw; flex-shrink: 0; }
-  .loop-fork-text { display: flex; flex-direction: column; }
-  .loop-fork-label { font-size: 0.85vw; font-weight: 700; color: var(--text-white); }
-  .loop-fork-desc { font-size: 0.7vw; color: var(--text-dim); }
-  .loop-fork-num { font-size: 1.8vw; font-weight: 800; color: var(--accent-purple); margin-bottom: 0.3vw; }
+  .loop-fork-arrow {
+    font-size: 18px;
+    color: var(--text-dim);
+  }
 
   .loop-step h4 {
     font-size: 16px;
@@ -1549,19 +1540,20 @@
       </div>
       <div class="loop-arrow">&rarr;</div>
       <div class="loop-fork">
-        <div class="loop-fork-num">5</div>
-        <div class="loop-fork-branch loop-fork-branch--bot">
-          <span class="loop-fork-icon">&#129302;</span>
-          <div class="loop-fork-text">
-            <span class="loop-fork-label">Reviewer gets smarter</span>
-            <span class="loop-fork-desc">BUGBOT.md &amp; inline comments</span>
+        <div class="loop-fork-row">
+          <span class="loop-fork-arrow">&nearr;</span>
+          <div class="loop-step">
+            <div class="circle green">5a</div>
+            <h4>Reviewer learns</h4>
+            <p>BUGBOT.md rules on next review</p>
           </div>
         </div>
-        <div class="loop-fork-branch loop-fork-branch--dev">
-          <span class="loop-fork-icon">&#128187;</span>
-          <div class="loop-fork-text">
-            <span class="loop-fork-label">Coding agent gets smarter</span>
-            <span class="loop-fork-desc">LESSONS.md read before writing code</span>
+        <div class="loop-fork-row">
+          <span class="loop-fork-arrow">&searr;</span>
+          <div class="loop-step">
+            <div class="circle blue">5b</div>
+            <h4>Coder learns</h4>
+            <p>LESSONS.md read before writing</p>
           </div>
         </div>
       </div>
