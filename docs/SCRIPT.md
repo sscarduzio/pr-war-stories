@@ -152,7 +152,21 @@
 
 ---
 
-## Slide 12: FAQ
+## Slide 12: The Skill Commands
+
+*(gesture down the table)*
+
+"Five commands, each for a different moment. Setup runs once — mines your PRs, creates everything. The harvest Action is fully automatic — fires on every merge, no human needed."
+
+"Harvest is the human-in-the-loop step — you classify and place. Recheck is for after big refactors — verifies every rule still references code that exists. Audit runs quarterly — prunes what's stale, graduates what's now lint-able."
+
+*(point to the legend)*
+
+"One automated, four human-triggered. The system surfaces the knowledge — you decide what to keep."
+
+---
+
+## Slide 13: FAQ
 
 *(this slide is a safety net — advance to it during Q&A if a question matches, or skip if time is tight)*
 
