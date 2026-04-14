@@ -1175,7 +1175,7 @@
   .slide-faq {
     background: var(--gradient-warm);
     padding: 4vh 6vw;
-    justify-content: flex-start;
+    justify-content: center;
   }
   .slide-faq h2 { font-size: 3.2vw; margin-bottom: 0.5vh; }
   .slide-faq .faq-subtitle { font-size: 1.2vw; color: var(--text-dim); margin-bottom: 2.5vh; }
@@ -1963,20 +1963,20 @@
 
   <div class="faq-grid">
     <div class="faq-item">
-      <div class="faq-q">Won't BUGBOT.md rot like every other living doc?</div>
-      <div class="faq-a">The quarterly <strong>audit</strong> catches staleness: rules that never trigger get removed, fixed patterns get graduated to lint. The harvest Action auto-surfaces new lessons. Entropy is real &mdash; the audit cadence is the answer.</div>
+      <div class="faq-q">Won't it rot?</div>
+      <div class="faq-a">Quarterly <strong>audit</strong> removes stale rules. Harvest Action keeps fresh ones coming in.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Why not just write linter rules or tests?</div>
-      <div class="faq-a">If a rule <strong>can</strong> be linted deterministically, it <strong>should</strong> be &mdash; and then removed from BUGBOT.md. BUGBOT is for fuzzy, contextual knowledge: <em>&ldquo;this === is intentional,&rdquo; &ldquo;these two query paths must stay in sync.&rdquo;</em></div>
+      <div class="faq-q">Why not just lint it?</div>
+      <div class="faq-a">If it can be linted, it should &mdash; then <strong>remove it</strong> from BUGBOT.md. BUGBOT is for contextual knowledge only.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">Does this work with Bugbot / CodeRabbit / Copilot?</div>
-      <div class="faq-a">Any reviewer that reads <code>.cursor/BUGBOT.md</code> from the repo. Cursor Bugbot does this natively. For others: <code>LESSONS.md</code> and inline comments are universal &mdash; just files any AI assistant can read.</div>
+      <div class="faq-q">Works with CodeRabbit / Copilot?</div>
+      <div class="faq-a">Cursor Bugbot reads <code>.cursor/BUGBOT.md</code> natively. Others read <code>LESSONS.md</code> and inline comments.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q">What about big refactors and module renames?</div>
-      <div class="faq-a">Run <code>/pr-war-stories recheck</code>. It greps every rule for stale path references and flags broken <code>scopeRules</code>. Reports but does not auto-fix &mdash; you decide whether to update, remove, or promote each rule.</div>
+      <div class="faq-q">What about big refactors?</div>
+      <div class="faq-a">Run <code>/pr-war-stories recheck</code> &mdash; flags stale paths, does not auto-fix.</div>
     </div>
   </div>
 
@@ -1990,7 +1990,7 @@
   </div>
 
   <div class="bonus-badge">Post Scriptum &mdash; Future Research</div>
-  <h2>AI That Sees and Uses Our UI Like a Human</h2>
+  <h2>LLM Vision-Based Automated Testing</h2>
   <p class="bonus-subtitle">Instead of writing brittle test scripts that break every time the UI changes, new open-source tools let us describe what we want in plain English &mdash; <em>&ldquo;click the submit button&rdquo;, &ldquo;fill in the form&rdquo;, &ldquo;drag this item to the list&rdquo;</em> &mdash; and an AI model looks at the screen and does it.</p>
 
   <div class="bonus-cards">

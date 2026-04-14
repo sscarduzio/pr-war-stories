@@ -202,7 +202,7 @@
 
 ---
 
-## Slide 14: AI That Sees and Uses Our UI Like a Human
+## Slide 14: LLM Vision-Based Automated Testing
 
 *(advance only if there's interest — this is future research, not shipped work)*
 
