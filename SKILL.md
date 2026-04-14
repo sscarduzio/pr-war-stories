@@ -182,19 +182,38 @@ This tells the auditor: "this rule is an educated guess, not a battle-tested les
 
 **Note on cross-layer duplication:** Some lessons may appear in both BUGBOT.md and LESSONS.md (e.g., "JSON.stringify drops undefined"). This is intentional -- they serve different consumers (bot vs IDE assistant). During audit, update both or remove from both.
 
-Distill war stories into universal engineering lessons:
+Distill war stories into universal engineering lessons. **Every lesson MUST include a before/after code example.** If you can't show the wrong way and the right way in code, the lesson is too abstract — either make it concrete or don't include it.
 
 ```markdown
 # Engineering Lessons Learned
 
 ## Category Name
 
-### Bold rule statement
-2-3 sentences explaining why. Enough context for someone unfamiliar
-with the specific bug to understand the general principle.
+### Bold rule statement (verb-first, imperative)
+1-2 sentences explaining what goes wrong.
+
+\```python
+# WRONG: what the bug looked like
+bad_code_here()
+
+# RIGHT: the fix
+good_code_here()
+\```
+
+(PR #NNN)
 ```
 
-Good categories: State & Timing, Serialization & APIs, Shared Code & CSS, Architecture & Design, Concurrency & Performance, API Contracts & Boundaries.
+**Quality bar for LESSONS.md entries:**
+- Every lesson has a `# WRONG` / `# RIGHT` code block — no exceptions
+- The code is real (from the actual codebase), not pseudocode
+- Includes the PR number for provenance
+- If the lesson is team policy ("no TODOs"), it belongs in CLAUDE.md or CONTRIBUTING.md, not LESSONS.md
+- If the lesson has no actionable fix right now ("needs X migration first"), don't include it — it's a TODO, not a lesson
+- If the lesson is about dev tooling that most contributors won't touch, skip it
+
+**Drop aggressively.** 8 concrete lessons beat 15 vague ones. The IDE assistant pays more attention to each lesson when there are fewer of them — same principle as BUGBOT token budgets.
+
+Good categories: Database & ORM, Data Model & Serialization, External Services & APIs, Deployment & Infrastructure, AI / LLM, Configuration.
 
 ### Step 6: Install the Automated Harvest Workflow
 
