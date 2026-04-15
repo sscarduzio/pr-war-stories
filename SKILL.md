@@ -14,7 +14,7 @@ Builds a self-improving AI code review pipeline by extracting institutional know
 - `/pr-war-stories harvest` -- Process harvest summaries or mine PRs manually
 - `/pr-war-stories audit` -- Measure rule effectiveness and optimize (run quarterly)
 - `/pr-war-stories add-module <path>` -- Add rules for a new codebase module
-- `/pr-war-stories recheck` -- Verify all rules still reference existing code (run after big refactors)
+- `/pr-war-stories recheck` -- Verify all rules still reference existing code (run after setup, harvest, and big refactors)
 
 ## Core Concepts
 
@@ -99,8 +99,10 @@ Explore the repository:
 
 Use GitHub CLI to extract institutional knowledge:
 
+For mature repos (>100 merged PRs), mine deeper. The first 50 PRs yield the obvious wins; PRs 50-200 yield more architectural and generally applicable lessons. Use `--limit 200` for repos with long history.
+
 ```bash
-# List recent merged PRs
+# List recent merged PRs (use --limit 200 for mature repos)
 gh pr list --state merged --limit 50 --json number,title,body,mergedAt
 
 # For each promising PR (bug fixes, ones with "fix" in title):
@@ -159,9 +161,10 @@ For each verified war story, write a BUGBOT.md rule:
 ```markdown
 ## Short Imperative Heading
 
-1-3 sentences: what the rule is, what goes wrong if violated, and what to do instead.
-Reference specific file paths and function names when relevant.
+1 sentence: what goes wrong and what to do instead. Reference a PR number. (PR #NNN)
 ```
+
+**Prefer one-liners.** Every word in BUGBOT.md competes for the bot's attention. A rule that takes a paragraph to explain is either too complex for a bot or should be split into multiple rules. In practice, 15-30 words per rule is the sweet spot.
 
 **If a rule was bootstrapped from code reading** (not from a PR war story), tag it:
 
@@ -175,8 +178,9 @@ This tells the auditor: "this rule is an educated guess, not a battle-tested les
 - Actionable: bot can check it against a diff
 - Specific: references real patterns, not generic advice
 - Surprising: not obvious to a competent developer
-- Concise: under 50 words per rule
+- Concise: 15-30 words per rule (one sentence ideal)
 - Verified: referenced code actually exists in the current codebase
+- Not already fixed: if the pattern was eliminated from the codebase, don't write a rule for it — it's history, not a live threat
 
 ### Step 5: Create LESSONS.md
 
@@ -429,7 +433,9 @@ cat $(find . -name BUGBOT.md -path '*/.cursor/*' | sort | head -3) | wc -w
 echo "Bootstrapped rules:" && grep -rc 'bootstrapped' $(find . -name BUGBOT.md -path '*/.cursor/*') | awk -F: '$2>0 {s+=$2} END {print s+0}'
 ```
 
-Then output the results as a formatted summary. End with: "Next: run /pr-war-stories audit in 2-4 weeks."
+Then run `/pr-war-stories recheck` to verify all rules reference code that still exists. Rules mined from old PRs often reference patterns that were already fixed — recheck catches these before they ship.
+
+Output the results as a formatted summary. End with: "Next: run /pr-war-stories audit in 2-4 weeks."
 
 ### Step 0: Preflight Checks
 
@@ -566,7 +572,7 @@ Keep under 400 words. Only REVIEWABLE rules.
 
 ## Phase 5: Recheck (`/pr-war-stories recheck`)
 
-Run after big refactors, directory renames, or major code reorganizations. Verifies that existing rules still reference code that exists.
+Run after setup, harvest, big refactors, or directory renames. Verifies that existing rules still reference code that exists. Also surfaces current violations of the rules — a rule that flags live violations is working; a rule that references eliminated patterns is stale and should be removed.
 
 ```
 For each BUGBOT.md file found under .cursor/:
@@ -593,6 +599,10 @@ Report:
   - scopeRules with stale prefixes
   - Suggested fixes (update path, remove rule, or promote to parent scope)
 
+Also check for rules whose anti-pattern was already eliminated from the codebase:
+  - grep for the pattern the rule warns about
+  - If zero matches remain, the rule is a candidate for removal (the fix stuck)
+
 Do NOT auto-fix. Present findings and let the human decide — a "missing"
 reference might be intentionally removed code where the rule should be
 promoted to a broader scope rather than deleted.
@@ -607,6 +617,7 @@ BUGBOT.md is for **fuzzy, contextual, project-specific** review logic that deter
 - A type constraint catches it (e.g., branded types prevent ID mixups)
 - A test reliably detects it (e.g., integration test catches missing ON CLUSTER)
 - A pre-commit hook can enforce it (e.g., formatting, import ordering)
+- The pattern was eliminated from the codebase (e.g., all connection strings already specify utf8mb4, the SISMEMBER anti-pattern was already replaced with SADD return values). A rule for a dead pattern is noise.
 
 **Keep in BUGBOT.md when:**
 - The rule requires understanding intent ("this `===` is intentional, don't change to deepEqual")
