@@ -180,7 +180,7 @@ This tells the auditor: "this rule is an educated guess, not a battle-tested les
 
 ### Step 5: Create LESSONS.md
 
-**Note on cross-layer duplication:** Some lessons may appear in both BUGBOT.md and LESSONS.md (e.g., "JSON.stringify drops undefined"). This is intentional -- they serve different consumers (bot vs IDE assistant). During audit, update both or remove from both.
+**No cross-layer duplication.** A rule lives in ONE place. If the bot can check it on a diff, it goes in BUGBOT.md only. If it's educational and not enforceable, it goes in LESSONS.md only. Duplicating across both layers is noise — the same developer sees the same rule twice in the same PR. During audit, check for and eliminate duplicates.
 
 Distill war stories into universal engineering lessons. **Every lesson MUST include a before/after code example.** If you can't show the wrong way and the right way in code, the lesson is too abstract — either make it concrete or don't include it.
 
