@@ -175,6 +175,7 @@ No knowledge falls through the cracks.
 | `/pr-war-stories harvest` | When harvest summaries appear | Classify new lessons, place in the right layer |
 | `/pr-war-stories recheck` | After big refactors | Verify all rules reference code that still exists |
 | `/pr-war-stories audit` | Quarterly | Measure hit rate, prune stale rules, graduate to lint |
+| `/pr-war-stories rebalance` | When audit flags hierarchy mismatch | Promote hot modules, demote cold scopes |
 | `/pr-war-stories add-module <path>` | New complex module added | Bootstrap scoped rules for it |
 
 ### Automated (no human trigger)
@@ -196,16 +197,21 @@ These are actual rules extracted from production PRs:
 - .custom-antlayout { height: 100% }
 + .schema-editor-layout { height: 100% }
 
-# PR #748 — Bot flagged === as bug → Inline comment
-- if (deepEqual(prev, next))
-+ if (prev === next) // intentional ref check
+# PR #735 — Bugbot dismissed 7× on one line → BUGBOT.md (scope-level)
+- useEffect(() => {...}, [data, setData])    // bot: "missing dep!"
++ one scope rule silenced all 7 future false positives
+
+# PR #760 — Runtime-evaluated JS string, can't DRY → Inline comment
+// AIPanelTemplate.ts is a runtime-evaluated CustomTemplate string.
+// It cannot import TypeScript modules. Duplication is structural.
+// (See PR #760)
 
 # PR #741 — useState 1 frame late → LESSONS.md
 - const [val, setVal] = useState(x)
 + const valRef = useRef(x) // sync capture
 ```
 
-After setup, Bugbot caught a real bug in the harvest workflow itself — the scope detection used `else if` instead of `if`, causing files to miss parent scope rules. The system was already paying for itself.
+Running the v0.7 harvest on these two repos surfaced a real miscalibration: one module in the frontend had 442 of 1,067 substantive review comments (41% of all review activity) but no scope file. The skill flagged it. New `rebalance` command now catches this pattern across any repo.
 
 ## Example LESSONS.md entries
 

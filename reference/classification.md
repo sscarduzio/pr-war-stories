@@ -37,6 +37,6 @@ A rule lives in ONE place. If it's in BUGBOT.md, it does NOT also go in LESSONS.
 
 - *"Don't use Promise.all on unbounded arrays — use a concurrency limiter."* → REVIEWABLE → root BUGBOT.md
 - *"Build order: packages must compile before apps."* → EDUCATIONAL → LESSONS.md
-- *"This adapter uses reference equality intentionally — do not change to deepEqual."* → SINGLE-FILE → inline comment in `memoryStorageAdapter.ts`
+- *"This adapter uses reference equality intentionally — do not change to deepEqual."* → SINGLE-FILE → inline comment in the adapter file.
 - *"Always validate user input."* → pre-gate: generic → drop (not a classification target).
 - *"Never call the legacy `v1Client`."* — but `v1Client` was deleted two quarters ago → STALE → drop.

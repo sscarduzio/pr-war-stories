@@ -2,7 +2,7 @@
 name: pr-war-stories
 version: 0.7.0
 updated: 2026-04-17
-description: Activate when the user wants to teach their AI code reviewer from PR history, set up Cursor Bugbot rules (.cursor/BUGBOT.md), harvest review comments into review rules, or audit existing rules. Commands — /pr-war-stories setup | harvest | audit | add-module | recheck.
+description: Activate when the user wants to teach their AI code reviewer from PR history, set up Cursor Bugbot rules (.cursor/BUGBOT.md), harvest review comments into review rules, or audit existing rules. Commands — /pr-war-stories setup | harvest | audit | rebalance | add-module | recheck.
 allowed-tools: Read,Write,Edit,Glob,Grep,Bash
 ---
 

@@ -90,7 +90,7 @@
 
 "PR 735 — Bugbot flagged the same 'missing dependency' 7 times in the same PR. Author kept dismissing: React's useState setters are referentially stable; including them in deps is a no-op. One author-dismissal became one scope rule — and silenced all 7 future false-positives."
 
-"PR 748 — the bot *itself* flagged `===` as a bug. A senior said: 'That's intentional — reference equality prevents unnecessary re-renders.' Now there's an inline comment protecting it."
+"PR 760 — a reviewer asked why AIPanelTemplate had duplicated helpers. Author replied: the template is a runtime-evaluated JS string and literally *can't* import TypeScript modules. The duplication is structural. That rationale became an inline comment, pinned to the file, so the next reviewer and the bot both see it immediately."
 
 "PR 741 — useState captures values one frame late. That lesson went into the coding assistant."
 
@@ -100,7 +100,7 @@
 
 ## Slide 8: What We Shipped
 
-"759 merged PRs mined across 8 months. 13 BUGBOT files across two production monorepos. 29 lessons in LESSONS.md. About 92 rules."
+"759 merged PRs mined across 8 months. 11 BUGBOT files across two production repos. 19 lessons in LESSONS.md. 87 rules total — all under budget."
 
 *(beat)*
 

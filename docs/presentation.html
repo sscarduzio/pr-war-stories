@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Octostar — AI Code Review Knowledge System</title>
+<title>pr-war-stories — Review & QA in the Age of AI-Assisted Development</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
@@ -1433,7 +1433,7 @@
 <!-- SLIDE 4: HIERARCHY -->
 <div class="slide slide-hierarchy" id="s4">
   <h2>Hierarchical Scoping</h2>
-  <p class="subtitle">Deeper modules get more context. Simple changes get only relevant rules. <em style="color: var(--text-dim); font-size: 0.85em;">(Example from the Octostar monorepo.)</em></p>
+  <p class="subtitle">Deeper modules get more context. Simple changes get only relevant rules. <em style="color: var(--text-dim); font-size: 0.85em;">(Example from the Octostar frontend repo.)</em></p>
   <div class="hierarchy-content">
     <div class="tree">
       <div class="tree-node l1">
@@ -1640,16 +1640,16 @@
     </div>
     <div class="example-card war3">
       <div class="war-header">
-        <span class="war-icon">&#9989;</span>
+        <span class="war-icon">&#128204;</span>
         <div>
-          <div class="source">PR #748</div>
-          <div class="rule">=== is correct. Don't "fix" it.</div>
+          <div class="source">PR #760</div>
+          <div class="rule">Runtime-evaluated JS string &mdash; cannot DRY</div>
         </div>
         <span class="tag inline">Inline</span>
       </div>
       <div class="war-diff">
-        <div class="diff-bad">- if (deepEqual(prev, next))</div>
-        <div class="diff-good">+ if (prev === next) // intentional ref check</div>
+        <div class="diff-bad">// reviewer: "can't you extract this duplication?"</div>
+        <div class="diff-good">// inline: "runtime-eval'd CustomTemplate, can't import TS"</div>
       </div>
     </div>
     <div class="example-card war4">
@@ -1679,15 +1679,15 @@
       <div class="label">Merged PRs mined<br>across 8 months</div>
     </div>
     <div class="stat-card">
-      <div class="number blue">13</div>
-      <div class="label">BUGBOT.md files<br>across 2 monorepos</div>
+      <div class="number blue">11</div>
+      <div class="label">BUGBOT.md files<br>across 2 repos</div>
     </div>
     <div class="stat-card">
-      <div class="number green">29</div>
+      <div class="number green">19</div>
       <div class="label">Lessons in LESSONS.md<br>across 2 repos</div>
     </div>
     <div class="stat-card">
-      <div class="number orange">~92</div>
+      <div class="number orange">87</div>
       <div class="label">Rules extracted<br>frontend + backend</div>
     </div>
   </div>
@@ -1829,7 +1829,7 @@
     <div class="oss-features">
       <div class="oss-feature">
         <span class="oss-feature-icon" style="color: var(--octostar-red-light);">&#9733;</span>
-        <span>Mines 50+ merged PRs for war stories</span>
+        <span>Mines your merged PR history for war stories</span>
       </div>
       <div class="oss-feature">
         <span class="oss-feature-icon" style="color: var(--accent-blue);">&#9733;</span>
@@ -1864,7 +1864,7 @@
         <span class="cmd-when">Once per repo</span>
       </div>
       <div class="cmd-right">
-        <span class="cmd-desc">Mines 50+ merged PRs, creates hierarchical BUGBOT.md files, LESSONS.md, installs the harvest GitHub Action, wires CLAUDE.md. <strong>Full bootstrap.</strong></span>
+        <span class="cmd-desc">Mines the last 50 merged PRs (up to 200 with <code>--limit</code>), creates hierarchical BUGBOT.md files, LESSONS.md, installs the harvest GitHub Action, wires CLAUDE.md. <strong>Full bootstrap.</strong></span>
       </div>
     </div>
     <div class="cmd-row cmd-row--auto">
@@ -1939,7 +1939,7 @@
     </div>
     <div class="faq-item">
       <div class="faq-q">Works with CodeRabbit / Copilot?</div>
-      <div class="faq-a">Cursor Bugbot reads <code>.cursor/BUGBOT.md</code> natively. Others read <code>LESSONS.md</code> and inline comments.</div>
+      <div class="faq-a">Cursor Bugbot reads <code>.cursor/BUGBOT.md</code> natively. Other bots need their own wiring to find it &mdash; but inline comments work everywhere, and <code>LESSONS.md</code> works with any IDE assistant (Claude Code, Cursor).</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">What about big refactors?</div>

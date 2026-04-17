@@ -1450,21 +1450,21 @@ footer a { color: var(--text-secondary); }
       </div>
     </div>
     <div class="hero-right">
-      <div class="hero-evidence-label">The pattern this fixes</div>
+      <div class="hero-evidence-label">The pattern this fixes &middot; from a real PR</div>
       <div class="story-strip">
         <div class="story-step story-step-past">
-          <div class="story-step-when">3 months ago &middot; PR review</div>
-          <div class="story-step-what">Senior dev comments: <em>"<code>===</code> is intentional here. Don't change it to deep equality &mdash; cost us two days last quarter."</em></div>
+          <div class="story-step-when">PR #735 &middot; author dismisses bot (7&times;)</div>
+          <div class="story-step-what"><em>"<code>setEditorStatus</code> is a React <code>useState</code> setter &mdash; guaranteed referentially stable. Adding it to deps is a no-op."</em></div>
         </div>
         <div class="story-step-arrow">&darr;</div>
         <div class="story-step story-step-now">
-          <div class="story-step-when">Today &middot; new PR</div>
-          <div class="story-step-what">Junior changes <code>===</code> &rarr; <code>deepEqual</code>. AI reviewer: <span style="color:var(--green);font-weight:700">Approved &#10003;</span></div>
+          <div class="story-step-when">Without this skill</div>
+          <div class="story-step-what">Next PR touches the same file. Bot re-flags the same &ldquo;missing dependency&rdquo;. Author types the same explanation again. <span style="color:var(--orange);font-weight:700">Forever.</span></div>
         </div>
         <div class="story-step-arrow">&darr;</div>
         <div class="story-step story-step-fix">
           <div class="story-step-when">With pr-war-stories</div>
-          <div class="story-step-what"><span style="color:var(--red-light);font-weight:700">Blocked &#10060;</span> &mdash; cites rule harvested from that 3-month-old review comment.</div>
+          <div class="story-step-what"><span style="color:var(--red-light);font-weight:700">One rule harvested</span> &mdash; author's rationale becomes a scope-level BUGBOT.md rule. Silences all 7 future false positives.</div>
         </div>
       </div>
     </div>
@@ -1655,13 +1655,13 @@ detection."</div>
       </div>
       <div class="story-card">
         <div class="story-header">
-          <span class="story-icon">&#9989;</span>
-          <div><div class="pr">PR #748</div><h3>=== is correct. Don't "fix" it.</h3></div>
-          <span class="placed inline">Inline</span>
+          <span class="story-icon">&#128683;</span>
+          <div><div class="pr">PR #735 &middot; dismissed 7&times;</div><h3>setX from useState is stable. Don't flag as missing dep.</h3></div>
+          <span class="placed bugbot">BUGBOT.md</span>
         </div>
         <div class="story-diff">
-          <div class="diff-bad">- if (deepEqual(prev, next))</div>
-          <div class="diff-good">+ if (prev === next) // intentional ref check</div>
+          <div class="diff-bad">- useEffect(() =&gt; {...}, [data, setData]) // bot: "missing dep!"</div>
+          <div class="diff-good">+ one scope rule silenced all 7 false positives</div>
         </div>
       </div>
       <div class="story-card">
@@ -1696,7 +1696,7 @@ detection."</div>
         <div class="desc">Scoped BUGBOT.md<br>across 2 repos</div>
       </div>
       <div class="stat-tile">
-        <div class="big" style="color:var(--green)">20</div>
+        <div class="big" style="color:var(--green)">19</div>
         <div class="desc">Lessons in<br>LESSONS.md</div>
       </div>
       <div class="stat-tile">
