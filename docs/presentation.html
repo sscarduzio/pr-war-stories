@@ -1628,14 +1628,14 @@
       <div class="war-header">
         <span class="war-icon">&#128683;</span>
         <div>
-          <div class="source">PR #735 &middot; Bugbot dismissed 7&times;</div>
+          <div class="source">PR #735 &middot; 42 author-dismissals, one recurring theme</div>
           <div class="rule">React useState setters are stable &mdash; don't flag as deps</div>
         </div>
         <span class="tag bugbot">BUGBOT.md</span>
       </div>
       <div class="war-diff">
         <div class="diff-bad">- useEffect(() =&gt; {...}, [data, setData]) // bot: "missing dep!"</div>
-        <div class="diff-good">+ // author-dismissal turned into 1 scope rule, silenced all 7</div>
+        <div class="diff-good">+ author-dismissal &rarr; 1 scope rule &rarr; bot stops re-flagging</div>
       </div>
     </div>
     <div class="example-card war3">
@@ -1695,7 +1695,7 @@
     <div class="icon">&#127919;</div>
     <div class="text">
       <h3>The skill audits itself</h3>
-      <p>Running the v0.7 harvest on our own repos found: (1) one module had 442 of 1,067 substantive review comments but <em>no scope file</em> &mdash; the original intuition-based hierarchy was wrong; (2) the harvest workflow was misclassifying 308 GitHub-Copilot comments as &ldquo;substantive human feedback&rdquo; because Copilot's login lacks a <code>[bot]</code> suffix. Both findings became new doctrine. The skill's own rules made the skill better.</p>
+      <p>Running the v0.7 harvest on our own repos surfaced two mistakes: (1) one module had 442 of 1,067 substantive review comments but <em>no scope file</em> &mdash; the intuition-based hierarchy was wrong; (2) the shipped workflow's bot filter would have misclassified 308 GitHub-Copilot comments as &ldquo;substantive human feedback&rdquo; because Copilot's login lacks a <code>[bot]</code> suffix. Caught and fixed before the skill saw any real-world install. Both findings became new doctrine.</p>
     </div>
   </div>
   <div style="margin-top: 28px; text-align: center; color: var(--text-dim); font-size: 16px;">

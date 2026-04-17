@@ -88,7 +88,7 @@
 
 "PR 781 — Promise.all on 200 files, OOM. Now the bot flags unbounded parallel operations."
 
-"PR 735 — Bugbot flagged the same 'missing dependency' 7 times in the same PR. Author kept dismissing: React's useState setters are referentially stable; including them in deps is a no-op. One author-dismissal became one scope rule — and silenced all 7 future false-positives."
+"PR 735 — Bugbot flagged the same file repeatedly, author kept dismissing: React's useState setters are referentially stable; including them in deps is a no-op. One author-dismissal became one scope rule — the bot stops re-flagging the pattern."
 
 "PR 760 — a reviewer asked why AIPanelTemplate had duplicated helpers. Author replied: the template is a runtime-evaluated JS string and literally *can't* import TypeScript modules. The duplication is structural. That rationale became an inline comment, pinned to the file, so the next reviewer and the bot both see it immediately."
 
@@ -104,7 +104,7 @@
 
 *(beat)*
 
-"Running the v0.7 harvest on our own repos caught two mistakes. First, one module had 442 of 1,067 substantive review comments but no scope file — the original intuition-based hierarchy was just wrong. Second, the harvest workflow was misclassifying 308 GitHub-Copilot comments as 'substantive human feedback' because Copilot's login has no `[bot]` suffix."
+"Running the v0.7 harvest on our own repos caught two mistakes. First, one module had 442 of 1,067 substantive review comments but no scope file — the intuition-based hierarchy was just wrong. Second, the shipped bot filter would have misclassified 308 GitHub-Copilot comments as 'substantive human feedback' because Copilot's login has no `[bot]` suffix. Caught and fixed before the skill saw any real-world install."
 
 *(pause)*
 

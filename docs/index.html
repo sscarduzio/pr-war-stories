@@ -1453,7 +1453,7 @@ footer a { color: var(--text-secondary); }
       <div class="hero-evidence-label">The pattern this fixes &middot; from a real PR</div>
       <div class="story-strip">
         <div class="story-step story-step-past">
-          <div class="story-step-when">PR #735 &middot; author dismisses bot (7&times;)</div>
+          <div class="story-step-when">PR #735 &middot; author dismisses same bot finding repeatedly</div>
           <div class="story-step-what"><em>"<code>setEditorStatus</code> is a React <code>useState</code> setter &mdash; guaranteed referentially stable. Adding it to deps is a no-op."</em></div>
         </div>
         <div class="story-step-arrow">&darr;</div>
@@ -1464,7 +1464,7 @@ footer a { color: var(--text-secondary); }
         <div class="story-step-arrow">&darr;</div>
         <div class="story-step story-step-fix">
           <div class="story-step-when">With pr-war-stories</div>
-          <div class="story-step-what"><span style="color:var(--red-light);font-weight:700">One rule harvested</span> &mdash; author's rationale becomes a scope-level BUGBOT.md rule. Silences all 7 future false positives.</div>
+          <div class="story-step-what"><span style="color:var(--red-light);font-weight:700">One rule harvested</span> &mdash; author's rationale becomes a scope-level BUGBOT.md rule. The bot stops re-flagging it.</div>
         </div>
       </div>
     </div>
@@ -1656,12 +1656,12 @@ detection."</div>
       <div class="story-card">
         <div class="story-header">
           <span class="story-icon">&#128683;</span>
-          <div><div class="pr">PR #735 &middot; dismissed 7&times;</div><h3>setX from useState is stable. Don't flag as missing dep.</h3></div>
+          <div><div class="pr">PR #735 &middot; 42 dismissals, one recurring theme</div><h3>setX from useState is stable. Don't flag as missing dep.</h3></div>
           <span class="placed bugbot">BUGBOT.md</span>
         </div>
         <div class="story-diff">
           <div class="diff-bad">- useEffect(() =&gt; {...}, [data, setData]) // bot: "missing dep!"</div>
-          <div class="diff-good">+ one scope rule silenced all 7 false positives</div>
+          <div class="diff-good">+ one scope rule. Bot stops re-flagging.</div>
         </div>
       </div>
       <div class="story-card">

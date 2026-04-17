@@ -36,11 +36,11 @@ I ran the skill on two production repos I maintain — a React TS frontend (415 
 
 Three findings that changed how I think about this problem:
 
-**Author dismissals of bot findings are the single highest-yield source of rule material.** When a senior engineer replies *"Dismissed — X is intentional because Y"* to a review bot, X is a pre-written invariant with the rationale already attached. Harvesting these first beats harvesting reviewer suggestions 2–3×. The skill now prioritizes them. One file in the frontend repo had 42 dismissals across 8 months — 42 opportunities for the bot to re-learn the same false positive. One inline comment stops all of them.
+**Author dismissals of bot findings are the single highest-yield source of rule material.** When a senior engineer replies *"Dismissed — X is intentional because Y"* to a review bot, X is a pre-written invariant with the rationale already attached. No interpretation needed; paste into an inline comment or a BUGBOT.md rule and move on. Compare that to reviewer suggestions, which need you to check whether the suggestion was adopted, whether it was a style nit, whether the team agreed — most don't clear that bar. The skill now harvests dismissals first. In the frontend repo, the single most-dismissed file had 42 author-dismissals across 8 months, and roughly half of those were the same "`useState` setter is referentially stable, stop flagging it as a missing dep" pattern repeating. One scope-level rule (PR #735) silences all of them.
 
 **The initial module hierarchy was wrong in both repos.** I'd picked "complex-looking" modules intuitively at setup time. The data showed otherwise: the `Apps/` module accumulated 442 of the 1,067 frontend review comments (41% of all review activity) but had no scope file, while `Composer/` (13 comments) and `linkchart-nt/` (31) did. In the backend repo, `app/api/v1/apps/` (167 comments) had no scope while `relationships/` (29 comments, 1 rule) did. Rule of thumb now baked into the skill: rank modules by review-comment density, not by perceived complexity.
 
-**I discovered a bug in my own harvest workflow.** GitHub's Copilot Code Review bot posts as login `Copilot` — no `[bot]` suffix, unlike every other bot. My filter was missing it. 308 Copilot comments in the backend repo had been leaking through as "substantive human review input" for months. Fixed it. Added the fix to the skill's template so every future installation inherits it.
+**I discovered a bug in my own harvest workflow — before it shipped.** GitHub's Copilot Code Review bot posts as login `Copilot` — no `[bot]` suffix, unlike every other bot. My filter was missing it. Had anyone installed the workflow with that filter, 308 Copilot comments in my backend repo alone would have been misclassified as "substantive human review input." The retrospective sweep caught this before the skill had shipped to any real user beyond me. Filter fixed in the skill template.
 
 ## What it isn't
 
@@ -86,10 +86,10 @@ A few things I expect will come up:
 
 ## What I'd emphasize in a tweet/x-post sibling
 
-*"I built an AI code reviewer, then ran it on my own repos and found:*
+*"I built an AI code reviewer, then ran it on my own repos (759 merged PRs) and found:*
 *– 442 of 1067 review comments landed in 1 unscoped module*
 *– 308 Copilot comments leaking through my own bot-filter*
-*– author-dismissals beat reviewer suggestions 2-3x as rule material*
+*– one file had 42 author-dismissals; half were the same recurring false-positive*
 *Shipped all three findings back into the skill. → link"*
 
 Thread format works better than the single post for this kind of "findings" content.

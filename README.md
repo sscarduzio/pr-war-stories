@@ -25,11 +25,12 @@ Plus one self-learning mechanism:
 
 ## Real results
 
-Ran on `Octostarco/octostar-frontend` (415 PRs, 8 months): mined 1,067 substantive review comments + 227 author-dismissals. Surfaced that the `Apps/` module had 442 of those 1,067 comments (41% of all review activity) but **no scope file** — the original setup picked the wrong modules. [PR #805](https://github.com/Octostarco/octostar-frontend/pull/805).
+Ran a one-shot retrospective harvest across 8 months of PR history on two production repos:
 
-Ran on `Octostarco/octostar-api` (344 PRs, 8 months): mined 1,685 comments + 174 dismissals. Discovered my own harvest workflow was misclassifying 308 GitHub-Copilot review comments as "substantive human feedback" because Copilot's login has no `[bot]` suffix. Fixed.
+- `Octostarco/octostar-frontend` (415 merged PRs): mined 1,067 substantive review comments + 227 author-dismissals. Revealed that the `Apps/` module accumulated 442 of those 1,067 comments (41% of all review activity) while having **no scope file** — the initial hierarchy missed it. Proposed fix: [PR #805](https://github.com/Octostarco/octostar-frontend/pull/805).
+- `Octostarco/octostar-api` (344 merged PRs): mined 1,685 comments + 174 dismissals. Surfaced a bug in the skill's default bot filter — GitHub's Copilot Code Review posts as `Copilot` (no `[bot]` suffix), and would have misclassified 308 of its comments as "substantive human review input" if the workflow had been running. Filter fixed in the skill template before it shipped.
 
-Both findings became new skill doctrine. The skill's own `/audit` and `/rebalance` commands are designed to catch exactly these mistakes going forward.
+Both findings became new skill doctrine. The new `/rebalance` command catches the first pattern; the updated filter prevents the second.
 
 ## Install
 
@@ -197,9 +198,9 @@ These are actual rules extracted from production PRs:
 - .custom-antlayout { height: 100% }
 + .schema-editor-layout { height: 100% }
 
-# PR #735 — Bugbot dismissed 7× on one line → BUGBOT.md (scope-level)
+# PR #735 — 42 author-dismissals on one file, one recurring theme → BUGBOT.md (scope-level)
 - useEffect(() => {...}, [data, setData])    // bot: "missing dep!"
-+ one scope rule silenced all 7 future false positives
++ author's rationale → one scope rule → bot stops re-flagging
 
 # PR #760 — Runtime-evaluated JS string, can't DRY → Inline comment
 // AIPanelTemplate.ts is a runtime-evaluated CustomTemplate string.
