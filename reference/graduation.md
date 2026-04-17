@@ -14,7 +14,7 @@ BUGBOT.md is for **fuzzy, contextual, project-specific** review logic that deter
 
 - It requires understanding intent — e.g., *"this `===` is intentional, do not change to deepEqual."*
 - It's about a non-obvious interaction between components.
-- The pattern is too contextual for static analysis — e.g., *"when changing `timbr` → `etimbr`, update ALL query paths."*
+- The pattern is too contextual for static analysis — e.g., *"when renaming a shared enum value, update ALL serialization sites, not just the type definition."*
 - It's about what NOT to do in a specific area — negative knowledge that linters can't express.
 
 During every audit ([audit.md](../commands/audit.md)), actively look for rules that have matured into lint-able patterns and graduate them. Shrinking BUGBOT.md is a health signal, not a regression.

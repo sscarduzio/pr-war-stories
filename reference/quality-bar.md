@@ -70,22 +70,23 @@ good_code_here()
 When the comment comes from an author rebutting a review bot ("Dismissed — intentional because X"), use the author's explanation almost verbatim. The author has already written the invariant in the most precise form; rewriting it tends to lose nuance. Strip the "Dismissed —" prefix, keep the reasoning, add the provenance cite.
 
 Good source (PR author comment):
-> *"Dismissed — intentional by design. `DataItem.value` is typed `string | null` where `null` is a first-class state representing a deleted secret. Coalescing `null → ''` inside `makeDataItem` would silently convert deletions into empty-string upserts."*
+> *"Dismissed — intentional. `value: string | null` uses `null` as a first-class 'deleted' signal. Coalescing `null → ''` would silently convert deletions into empty-string upserts."*
 
 Resulting inline comment:
 
 ```typescript
-// NOTE to review bots: `DataItem.value` is typed `string | null` where `null` is
-// a first-class state representing a deleted secret. Do NOT coalesce null → '' —
-// that silently converts deletions into empty-string upserts. (Bugbot dismissed in PR #733)
-const item = makeDataItem(key, value);
+// NOTE to review bots: `value` is `string | null` where `null` means "delete
+// this field on the server." Do NOT coalesce null → '' — that silently
+// turns deletions into empty-string upserts. (Bugbot dismissed in PR #NNN)
+const item = makeItem(key, value);
 ```
 
 Format:
 
 ```javascript
-// WARNING: MemoryStorageAdapter preserves object references intentionally.
-// Do NOT change === to deepEqual here. (See PR #748)
+// NOTE: this reference-equality check is intentional. The upstream cache
+// preserves identity across reads, so `===` is correct and faster than
+// deepEqual here. Do NOT "fix" it. (See PR #NNN)
 if (prev === next) {
   ...
 }

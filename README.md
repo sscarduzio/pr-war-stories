@@ -2,18 +2,34 @@
 
 **Stop reviewing the same bugs.**
 
-An engineer left a PR comment three months ago. Nobody read it again. A junior dev "fixed" the code. The bot approved it. This skill makes sure that never happens again.
-
-## What it does
-
-`pr-war-stories` is a Claude Code skill that mines your PR history for lessons learned, then injects them where your AI code reviewer will actually use them.
+Every PR review is a debate about architecture, tradeoffs, style, and quality. Then the PR merges and the debate dies. `pr-war-stories` distills those review comments into rules your AI code reviewer enforces on the next PR.
 
 ```
 - await Promise.all(files.map(upload))          // PR #781: OOM'd in prod
 + await asyncPool(3, files, upload)             // Now a BUGBOT.md rule
 ```
 
-**Best for:** GitHub repos with substantive PR review history, teams using Cursor Bugbot or AI assistants that read repo docs (Claude Code, Cursor). Requires `gh` CLI and GitHub Actions.
+## Why this works when other "feed the bot your style guide" tools don't
+
+Three insights, each validated on 759 real merged PRs across two production repos:
+
+**1. Where a rule lives decides whether anyone reads it.** A bot reading your diff, an IDE assistant helping you write code, and a human scanning source all have different contexts. Rules at the wrong layer are invisible. The skill writes three layers — `.cursor/BUGBOT.md`, `LESSONS.md`, and inline source comments — and classifies every rule into exactly one.
+
+**2. Author-dismissals of bot findings are the highest-yield source of rule material.** When the author replies *"Dismissed — intentional because X"* to a bot, X is a pre-written, locally-scoped, immediately-preventive rule. Harvesting these first beat harvesting reviewer suggestions by 2–3× on real data. The skill prioritizes them.
+
+**3. Token budget beats rule count.** 50 rules crammed in one config file means the bot ignores all of them. Caps per scope: 400w ideal, 600w acceptable, >800 fails. Fewer rules = more attention per rule.
+
+Plus one self-learning mechanism:
+
+**4. A GitHub Action closes the loop.** Every merged PR with substantive human review comments produces a harvest proposal. `/pr-war-stories harvest` classifies and commits. The bot gets smarter on the next PR.
+
+## Real results
+
+Ran on `Octostarco/octostar-frontend` (415 PRs, 8 months): mined 1,067 substantive review comments + 227 author-dismissals. Surfaced that the `Apps/` module had 442 of those 1,067 comments (41% of all review activity) but **no scope file** — the original setup picked the wrong modules. [PR #805](https://github.com/Octostarco/octostar-frontend/pull/805).
+
+Ran on `Octostarco/octostar-api` (344 PRs, 8 months): mined 1,685 comments + 174 dismissals. Discovered my own harvest workflow was misclassifying 308 GitHub-Copilot review comments as "substantive human feedback" because Copilot's login has no `[bot]` suffix. Fixed.
+
+Both findings became new skill doctrine. The skill's own `/audit` and `/rebalance` commands are designed to catch exactly these mistakes going forward.
 
 ## Install
 
@@ -21,18 +37,27 @@ An engineer left a PR comment three months ago. Nobody read it again. A junior d
 claude install-skill sscarduzio/pr-war-stories
 ```
 
-Then open Claude Code in any repo:
+Then, in any repo with merged PRs and review history:
 
 ```
 /pr-war-stories setup
 ```
 
-The skill will explore your repo, mine your last 50 merged PRs, extract war stories from human review comments, and create everything automatically.
+The skill mines your last 50 merged PRs, classifies review comments into rules, writes the three memory layers, wires up the GitHub Action, and reports a budget summary. One command, about 10 seconds of your time, a few minutes of its time.
+
+## Works with
+
+- **Cursor Bugbot** — first-class. Reads `.cursor/BUGBOT.md` hierarchy automatically.
+- **CodeRabbit, Copilot Code Review, other bots** — the `BUGBOT.md` files exist in the repo; those bots won't find them unless you configure their "read this file" setting manually. The skill writes the rules; wiring the reader is out of scope.
+- **Claude Code, Cursor (IDE assistants)** — wired automatically by setup via `CLAUDE.md` / `AGENTS.md` pointers.
+- **Any reviewer that reads source files** — Layer 3 inline comments Just Work.
+
+Requires `gh` CLI and GitHub Actions. Works with any merge strategy. Any language. MIT.
 
 ## Repository layout
 
 ```
-SKILL.md              Entry point — concepts, command dispatch table, terminology.
+SKILL.md              Entry point — concepts, command dispatch, terminology.
 commands/             One file per command. Loaded on demand.
   setup.md            Bootstrap the system (runs once per repo).
   harvest.md          Process review comments on merged PRs into rules.
@@ -41,16 +66,14 @@ commands/             One file per command. Loaded on demand.
   add-module.md       Create BUGBOT.md for a new complex module.
   recheck.md          Verify rules still reference real code.
 reference/            Shared definitions, linked from every command.
-  classification.md   REVIEWABLE / EDUCATIONAL / SINGLE-FILE / OVERLAPPING / STALE taxonomy.
+  classification.md   REVIEWABLE / EDUCATIONAL / SINGLE-FILE / OVERLAPPING / STALE.
   quality-bar.md      Format and quality criteria for each layer.
-  anti-patterns.md    Canonical list of what NOT to do.
+  anti-patterns.md    What NOT to do.
   graduation.md       When to retire a rule into lint/test/CI.
 templates/
   harvest-lessons.yml The GitHub Action installed by `/pr-war-stories setup`.
-docs/                 The landing page at sscarduzio.github.io/pr-war-stories — not part of the skill.
+docs/                 Landing page at sscarduzio.github.io/pr-war-stories.
 ```
-
-You only ever need to touch `SKILL.md` and the `commands/` / `reference/` files when improving the skill. The `templates/harvest-lessons.yml` is copied verbatim into `.github/workflows/` during setup; edit it in a target repo, not here.
 
 ## The three-layer architecture
 
@@ -219,38 +242,30 @@ JSON.stringify(update); // '{"name":"new","description":null}'
 // The bot flagged this as a bug:
 if (prev === next) return; // "should be deepEqual"
 
-// But this was intentional — MemoryStorageAdapter preserves references.
-// Deep equality would defeat the optimization.
-if (prev === next) return; // intentional ref check — see PR #748
+// But it was intentional — the upstream cache preserves identity across
+// reads, so === is both correct and faster than deep equality here.
+if (prev === next) return; // intentional ref check — see PR #NNN
 ```
-*(PR #748)*
+*(PR #NNN)*
 
 And from a Python backend repo:
 
-### Always add ON CLUSTER to ClickHouse mutations
-
-```sql
--- WRONG: only affects one node
-ALTER TABLE my_table UPDATE col = 'x' WHERE id = 1
-
--- RIGHT: affects all replicas
-ALTER TABLE my_table ON CLUSTER '{cluster}' UPDATE col = 'x' WHERE id = 1
-```
-*(PRs #573, #572)*
-
-### Use model_dump() to access Pydantic v2 extra fields
+### Don't catch `Exception` — catch what you expect
 
 ```python
-# WRONG: silently misses ontology fields
-for field in field_names:
-    value = getattr(entity, field)  # None for extra fields!
+# WRONG: swallows KeyboardInterrupt, SystemExit, every import error, …
+try:
+    parsed = json.loads(content)
+except Exception:
+    parsed = content
 
-# RIGHT: gets all fields including extras
-data = entity.model_dump()
-for field in field_names:
-    value = data.get(field)
+# RIGHT: narrow except, fall-through is intentional
+try:
+    parsed = json.loads(content)
+except json.JSONDecodeError:
+    pass  # content is YAML or raw text; caller handles
 ```
-*(PR #528)*
+*(PR #NNN)*
 
 **Drop aggressively.** 8 concrete lessons beat 15 vague ones. If you can't show the wrong way and the right way in code, it doesn't belong in LESSONS.md.
 
