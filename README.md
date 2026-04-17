@@ -29,6 +29,29 @@ Then open Claude Code in any repo:
 
 The skill will explore your repo, mine your last 50 merged PRs, extract war stories from human review comments, and create everything automatically.
 
+## Repository layout
+
+```
+SKILL.md              Entry point — concepts, command dispatch table, terminology.
+commands/             One file per command. Loaded on demand.
+  setup.md            Bootstrap the system (runs once per repo).
+  harvest.md          Process review comments on merged PRs into rules.
+  audit.md            Quarterly effectiveness review.
+  rebalance.md        Promote hot-traffic modules, demote cold scopes.
+  add-module.md       Create BUGBOT.md for a new complex module.
+  recheck.md          Verify rules still reference real code.
+reference/            Shared definitions, linked from every command.
+  classification.md   REVIEWABLE / EDUCATIONAL / SINGLE-FILE / OVERLAPPING / STALE taxonomy.
+  quality-bar.md      Format and quality criteria for each layer.
+  anti-patterns.md    Canonical list of what NOT to do.
+  graduation.md       When to retire a rule into lint/test/CI.
+templates/
+  harvest-lessons.yml The GitHub Action installed by `/pr-war-stories setup`.
+docs/                 The landing page at sscarduzio.github.io/pr-war-stories — not part of the skill.
+```
+
+You only ever need to touch `SKILL.md` and the `commands/` / `reference/` files when improving the skill. The `templates/harvest-lessons.yml` is copied verbatim into `.github/workflows/` during setup; edit it in a target repo, not here.
+
 ## The three-layer architecture
 
 Not all knowledge belongs in the same place:
