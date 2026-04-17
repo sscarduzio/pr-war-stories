@@ -88,9 +88,9 @@
 
 "PR 781 — Promise.all on 200 files, OOM. Now the bot flags unbounded parallel operations."
 
-"PR 775 — an LLM renamed a CSS class, collapsed an unrelated panel. Now the bot flags shared class name changes."
+"PR 735 — Bugbot flagged the same 'missing dependency' 7 times in the same PR. Author kept dismissing: React's useState setters are referentially stable; including them in deps is a no-op. One author-dismissal became one scope rule — and silenced all 7 future false-positives."
 
-"PR 748 — the bot *itself* flagged `===` as a bug. A senior said: 'That's intentional — reference equality prevents Redux re-dispatches.' Now there's an inline comment protecting it."
+"PR 748 — the bot *itself* flagged `===` as a bug. A senior said: 'That's intentional — reference equality prevents unnecessary re-renders.' Now there's an inline comment protecting it."
 
 "PR 741 — useState captures values one frame late. That lesson went into the coding assistant."
 
@@ -100,17 +100,15 @@
 
 ## Slide 8: What We Shipped
 
-"22 war stories from 50 merged PRs. 5 BUGBOT files across the monorepo. 6 inline comments. One GitHub Action."
+"759 merged PRs mined across 8 months. 13 BUGBOT files across two production monorepos. 29 lessons in LESSONS.md. About 92 rules."
 
 *(beat)*
 
-"On its first review, Bugbot caught a real bug in the harvest workflow itself. The system improved itself."
+"Running the v0.7 harvest on our own repos caught two mistakes. First, one module had 442 of 1,067 substantive review comments but no scope file — the original intuition-based hierarchy was just wrong. Second, the harvest workflow was misclassifying 308 GitHub-Copilot comments as 'substantive human feedback' because Copilot's login has no `[bot]` suffix."
 
 *(pause)*
 
-"There's just one problem — this PR is stuck in review."
-
-*(let the laugh land)*
+"Both became new skill doctrine. The skill's own rules made the skill better."
 
 ---
 
@@ -162,13 +160,13 @@
 
 *(gesture down the table)*
 
-"Five commands, each for a different moment. Setup runs once — mines your PRs, creates everything. The harvest Action is fully automatic — fires on every merge, no human needed."
+"Six commands + one workflow. Setup runs once — mines your PRs, creates everything. The harvest Action is fully automatic — fires on every merge, no human needed."
 
-"Harvest is the human-in-the-loop step — you classify and place. Recheck is for after big refactors — verifies every rule still references code that exists. Audit runs quarterly — prunes what's stale, graduates what's now lint-able."
+"Harvest is the human-in-the-loop step — you classify and place. Rebalance ranks modules by real review activity — it's what caught our miscalibrated hierarchy. Recheck verifies every rule still references code that exists. Audit runs quarterly — prunes what's stale, graduates what's now lint-able."
 
 *(point to the legend)*
 
-"One automated, four human-triggered. The system surfaces the knowledge — you decide what to keep."
+"One automated, five human-triggered. The system surfaces the knowledge — you decide what to keep."
 
 ---
 

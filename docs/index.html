@@ -117,11 +117,9 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
   padding: 100px 24px 48px;
   position: relative;
   background:
-    radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(15,17,23,0.92) 70%),
-    radial-gradient(ellipse at 25% 0%, #e74c3c10 0%, transparent 50%),
-    radial-gradient(ellipse at 75% 0%, #4a9eff08 0%, transparent 50%),
-    linear-gradient(180deg, rgba(24,27,40,0.85) 0%, rgba(15,17,23,0.95) 100%),
-    url('elephantskin.jpg') center/cover no-repeat;
+    radial-gradient(ellipse at 25% 0%, #e74c3c14 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 10%, #4a9eff10 0%, transparent 55%),
+    linear-gradient(180deg, #181b28 0%, var(--bg) 100%);
 }
 
 .hero-split {
@@ -137,31 +135,62 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 .hero-right { display: flex; flex-direction: column; gap: 12px; }
 
 .hero-evidence-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--orange);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
 }
 
-.hero-verdict { display: flex; flex-direction: column; gap: 6px; }
+.story-strip { display: flex; flex-direction: column; gap: 0; }
 
-.verdict-line {
-  font-size: 13px;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-weight: 500;
+.story-step {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: var(--shadow);
+  position: relative;
 }
 
-.verdict-line code {
-  background: #eff1f3;
+.story-step-past { border-left: 3px solid var(--orange); }
+.story-step-now { border-left: 3px solid var(--red); background: #e74c3c0a; }
+.story-step-fix { border-left: 3px solid var(--green); background: #2ecc710a; }
+
+.story-step-when {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.story-step-what {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.story-step-what code {
+  background: rgba(255,255,255,0.08);
   border-radius: 3px;
-  padding: 1px 5px;
-  font-size: 12px;
-  color: #1f2328;
+  padding: 1px 6px;
+  font-size: 12.5px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
 }
 
-.verdict-bad { background: #e74c3c18; color: var(--text-secondary); border: 1px solid #e74c3c33; }
-.verdict-worse { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); }
-.verdict-fix { background: #2ecc7112; color: var(--green); border: 1px solid #2ecc7133; }
+.story-step-what em { color: var(--text-secondary); font-style: normal; }
+
+.story-step-arrow {
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-dim);
+  line-height: 1;
+  padding: 6px 0;
+}
 
 @media (max-width: 900px) {
   .hero-split { grid-template-columns: 1fr; gap: 32px; }
@@ -184,51 +213,197 @@ code, .mono { font-family: 'JetBrains Mono', monospace; }
 }
 
 .hero-sub {
-  font-size: clamp(16px, 1.6vw, 19px);
+  font-size: clamp(16px, 1.55vw, 19px);
   color: var(--text-secondary);
-  max-width: 480px;
-  margin-bottom: 8px;
+  max-width: 520px;
+  margin-bottom: 14px;
   line-height: 1.6;
 }
 
+.hero-inline-code {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88em;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.hero-sub-accent {
+  color: var(--text);
+  font-weight: 700;
+}
+
 .hero-sub-sm {
-  font-size: clamp(14px, 1.3vw, 16px);
+  font-size: clamp(13px, 1.15vw, 14px);
   color: var(--text-dim);
   max-width: 440px;
   margin-bottom: 28px;
   line-height: 1.55;
+  letter-spacing: 0.2px;
 }
 
 .hero-cta {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
+  align-items: center;
 }
+
+/* ===== BUTTONS — layered construction, stateful motion ===== */
 
 .btn {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 13px 26px;
-  border-radius: 8px;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: 10px;
   font-size: 15px;
   font-weight: 600;
+  font-family: inherit;
+  line-height: 1;
+  letter-spacing: -0.1px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+  will-change: transform;
+  transition:
+    transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.btn-primary { background: var(--red); color: white; }
-.btn-primary:hover { background: var(--red-light); text-decoration: none; }
+.btn:focus-visible {
+  outline: 2px solid var(--red-light);
+  outline-offset: 3px;
+}
 
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); transition-duration: 60ms; }
+
+.btn .btn-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.btn .btn-kbd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 5px;
+  margin-left: 4px;
+  line-height: 1;
+}
+
+/* --- Primary: layered red with inner highlight, tinted shadow, glossy depth --- */
+.btn-primary {
+  color: #fff;
+  background:
+    linear-gradient(180deg, #f25a48 0%, var(--red) 55%, #c93d2e 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -1px 0 rgba(0,0,0,0.15),
+    0 1px 0 rgba(0,0,0,0.4),
+    0 6px 16px -4px rgba(231,76,60,0.55),
+    0 12px 32px -8px rgba(231,76,60,0.35);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 1px 1px auto 1px;
+  height: 40%;
+  border-radius: 9px 9px 20px 20px / 9px 9px 40px 40px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.btn-primary > * { position: relative; z-index: 2; }
+
+.btn-primary:hover {
+  filter: brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    inset 0 -1px 0 rgba(0,0,0,0.15),
+    0 1px 0 rgba(0,0,0,0.4),
+    0 10px 24px -4px rgba(231,76,60,0.65),
+    0 20px 44px -8px rgba(231,76,60,0.4);
+}
+
+.btn-primary:active {
+  filter: brightness(0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 rgba(0,0,0,0.2),
+    0 2px 6px -2px rgba(231,76,60,0.5);
+}
+
+.btn-primary .btn-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  margin-left: 2px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2px;
+}
+
+.btn-primary .btn-count svg {
+  width: 11px;
+  height: 11px;
+  fill: #ffd76a;
+  filter: drop-shadow(0 0 4px rgba(255,215,106,0.6));
+}
+
+/* --- Secondary: dark glass with hairline border and subtle green-install tint --- */
 .btn-secondary {
-  background: var(--bg-card);
   color: var(--text);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+  background:
+    linear-gradient(180deg, rgba(46,204,113,0.04) 0%, rgba(28,31,46,0.9) 100%),
+    var(--bg-card);
+  border: 1px solid rgba(46,204,113,0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 1px 0 rgba(0,0,0,0.3),
+    0 6px 14px -4px rgba(0,0,0,0.5);
 }
-.btn-secondary:hover { border-color: var(--text-dim); text-decoration: none; }
+
+.btn-secondary .btn-icon { color: var(--green); }
+
+.btn-secondary:hover {
+  border-color: rgba(46,204,113,0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 1px 0 rgba(0,0,0,0.3),
+    0 10px 22px -4px rgba(46,204,113,0.18),
+    0 14px 28px -8px rgba(0,0,0,0.5);
+}
+
+.btn-secondary:active {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.02),
+    0 1px 3px rgba(0,0,0,0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn:hover, .btn:active { transform: none; }
+}
 
 .hero-install {
   background: var(--bg-card);
@@ -1253,11 +1428,21 @@ footer a { color: var(--text-secondary); }
   <div class="hero-split">
     <div class="hero-left">
       <h1>Stop reviewing the<br>same <span class="highlight">bugs</span></h1>
-      <p class="hero-sub">Your senior engineer left a review comment 3 months ago. Nobody read it again. A junior dev "fixed" the code. <strong style="color:var(--red-light)">The bot approved it.</strong></p>
-      <p class="hero-sub-sm">This skill mines your PR history, extracts the lessons, and teaches the AI reviewer to never make the same mistake twice.</p>
+      <p class="hero-sub">Every PR review is a debate: <strong class="hero-sub-accent">architecture, tradeoffs, style, quality</strong>. Then the PR merges and the debate dies. This <strong class="hero-sub-accent">distills</strong> those comments into rules your AI reviewer enforces on the next PR.</p>
+      <p class="hero-sub-sm">Outputs <code class="hero-inline-code">.cursor/BUGBOT.md</code> and <code class="hero-inline-code">LESSONS.md</code>. Claude Code skill. Runs on GitHub Actions. Works with Cursor Bugbot today.</p>
       <div class="hero-cta">
-        <a href="https://github.com/sscarduzio/pr-war-stories" class="btn btn-primary">&#11088; Star on GitHub</a>
-        <a href="#install" class="btn btn-secondary">Install in 10 seconds</a>
+        <a href="https://github.com/sscarduzio/pr-war-stories" class="btn btn-primary" aria-label="Star sscarduzio/pr-war-stories on GitHub">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <span>Star on GitHub</span>
+          <span class="btn-count" id="starCount">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"/></svg>
+            <span class="btn-count-num">&#9733;</span>
+          </span>
+        </a>
+        <a href="#install" class="btn btn-secondary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Install in 10 seconds</span>
+        </a>
       </div>
       <div class="hero-install">
         <code id="installCmd">claude install-skill sscarduzio/pr-war-stories</code>
@@ -1265,29 +1450,22 @@ footer a { color: var(--text-secondary); }
       </div>
     </div>
     <div class="hero-right">
-      <div class="hero-evidence-label">&#9888;&#65039; This actually happened</div>
-      <div class="gh-comment">
-        <div class="gh-comment-header">
-          <img class="gh-avatar" src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=gilfoyle&backgroundColor=f6f8fa" alt="avatar">
-          <span class="gh-username">gilfoyle</span>
-          <span class="gh-badge">Contributor</span>
-          <span class="gh-time">3 months ago</span>
-          <span class="gh-dots">&middot;&middot;&middot;</span>
+      <div class="hero-evidence-label">The pattern this fixes</div>
+      <div class="story-strip">
+        <div class="story-step story-step-past">
+          <div class="story-step-when">3 months ago &middot; PR review</div>
+          <div class="story-step-what">Senior dev comments: <em>"<code>===</code> is intentional here. Don't change it to deep equality &mdash; cost us two days last quarter."</em></div>
         </div>
-        <div class="gh-comment-body">
-          <p>Be careful &mdash; <code>MemoryStorageAdapter</code> preserves object references intentionally. The <code>===</code> check is correct. Don't change it to deep equality.</p>
-          <p class="gh-aside-text">This cost us two days last quarter.</p>
+        <div class="story-step-arrow">&darr;</div>
+        <div class="story-step story-step-now">
+          <div class="story-step-when">Today &middot; new PR</div>
+          <div class="story-step-what">Junior changes <code>===</code> &rarr; <code>deepEqual</code>. AI reviewer: <span style="color:var(--green);font-weight:700">Approved &#10003;</span></div>
         </div>
-        <div class="gh-comment-footer">
-          <span class="gh-reaction">&#128077; 4</span>
-          <span class="gh-reaction">&#128293; 2</span>
-          <span class="gh-reaction">&#128064; 7</span>
+        <div class="story-step-arrow">&darr;</div>
+        <div class="story-step story-step-fix">
+          <div class="story-step-when">With pr-war-stories</div>
+          <div class="story-step-what"><span style="color:var(--red-light);font-weight:700">Blocked &#10060;</span> &mdash; cites rule harvested from that 3-month-old review comment.</div>
         </div>
-      </div>
-      <div class="hero-verdict">
-        <div class="verdict-line verdict-bad">&#10060; 3 months later: junior dev changed <code>===</code> to <code>deepEqual</code></div>
-        <div class="verdict-line verdict-worse">&#129302; Bugbot: <span style="color:var(--green)">Approved</span></div>
-        <div class="verdict-line verdict-fix">&#128161; With pr-war-stories: <span style="color:var(--red-light)">Blocked &mdash; rule from PR #748</span></div>
       </div>
     </div>
   </div>
@@ -1432,29 +1610,17 @@ detection."</div>
 <section class="loop-section">
   <div class="container">
     <span class="section-label">The feedback loop</span>
-    <h2 class="section-title">Knowledge capture is automated.<br>No lesson falls through the cracks.</h2>
-    <p class="section-desc">A GitHub Action fires on every merged PR. Human review comments are surfaced automatically.</p>
+    <h2 class="section-title">Every merged PR makes the bot smarter</h2>
+    <p class="section-desc">A GitHub Action fires on merge, extracts review comments, and posts a harvest proposal on the PR. One command to classify. Rules apply on the next review.</p>
     <div class="loop-visual">
       <div class="loop-node"><div class="num">1</div><h4>PR Merged</h4><p>Code lands on main</p></div>
       <div class="loop-connector">&rarr;</div>
-      <div class="loop-node"><div class="num">2</div><h4>Action Fires</h4><p>Extracts review comments</p></div>
+      <div class="loop-node"><div class="num">2</div><h4>Action Fires</h4><p>Harvest proposal posted</p></div>
       <div class="loop-connector">&rarr;</div>
-      <div class="loop-node"><div class="num">3</div><h4>Summary Posted</h4><p>Harvest proposal on PR</p></div>
+      <div class="loop-node"><div class="num">3</div><h4>Classify</h4><p>/pr-war-stories harvest</p></div>
       <div class="loop-connector">&rarr;</div>
-      <div class="loop-node"><div class="num">4</div><h4>Classify</h4><p>/pr-war-stories harvest</p></div>
-      <div class="loop-connector">&rarr;</div>
-      <div class="loop-node"><div class="num">5</div><h4>Bot Learns</h4><p>Rules on next review</p></div>
+      <div class="loop-node"><div class="num">4</div><h4>Bot Learns</h4><p>Enforces on next PR</p></div>
     </div>
-    <div class="loop-curve">
-      <svg viewBox="0 0 1000 48" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="lg" x1="0%" x2="100%"><stop offset="0%" stop-color="#9b59b6"/><stop offset="100%" stop-color="#e74c3c"/></linearGradient>
-          <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#e74c3c"/></marker>
-        </defs>
-        <path d="M 880 4 Q 960 4 960 24 Q 960 44 880 44 L 120 44 Q 40 44 40 24 Q 40 4 120 4" stroke="url(#lg)" stroke-width="2" fill="none" marker-end="url(#ah)"/>
-      </svg>
-    </div>
-    <p class="loop-label"><span style="color:var(--green)">&#10003; Next PR catches more</span> &mdash; <span style="color:var(--red-light)">loop continues</span></p>
   </div>
 </section>
 
@@ -1651,6 +1817,18 @@ detection."</div>
 <footer>
   <p>Built by <a href="https://github.com/sscarduzio">@sscarduzio</a> &middot; <a href="https://github.com/sscarduzio/pr-war-stories">GitHub</a> &middot; MIT License</p>
 </footer>
+
+<script>
+(function(){
+  var fmt = function(n){ return n >= 1000 ? (n/1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, '') + 'k' : String(n); };
+  var el = document.querySelector('#starCount .btn-count-num');
+  if (!el) return;
+  fetch('https://api.github.com/repos/sscarduzio/pr-war-stories', { headers: { 'Accept': 'application/vnd.github+json' } })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){ if (d && typeof d.stargazers_count === 'number') el.textContent = fmt(d.stargazers_count); })
+    .catch(function(){});
+})();
+</script>
 
 </body>
 </html>
