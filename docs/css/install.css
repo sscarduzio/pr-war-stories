@@ -1,0 +1,65 @@
+/* ===== INSTALL ===== */
+.install-section {
+  background:
+    radial-gradient(ellipse at 50% 80%, #e74c3c08 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg) 0%, #181b28 100%);
+  text-align: center;
+}
+
+.install-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 40px;
+  max-width: 640px;
+  margin: 0 auto 36px;
+  box-shadow: var(--shadow-lg), var(--glow-red);
+}
+
+.install-box h3 { font-size: 22px; font-weight: 800; margin-bottom: 20px; }
+
+.install-cmd { display: flex; flex-direction: column; gap: 10px; }
+
+.install-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #0a0a16;
+  border: 1px solid #1a1d30;
+  padding: 12px 18px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.install-row .label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  min-width: 72px;
+}
+
+.install-row code { font-size: 14px; color: var(--green); }
+
+.features-row {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.feature-pill .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}

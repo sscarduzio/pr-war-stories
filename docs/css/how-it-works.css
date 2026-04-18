@@ -1,0 +1,74 @@
+/* ===== HOW IT WORKS ===== */
+.how-section {
+  background: linear-gradient(180deg, var(--bg-mid) 0%, var(--bg) 100%);
+}
+
+.layers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 768px) {
+  .layers-grid { grid-template-columns: 1fr; }
+}
+
+.layer-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+}
+.layer-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: #4a9eff33;
+}
+
+.layer-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.layer-card.l1::before { background: var(--red); }
+.layer-card.l2::before { background: var(--blue); }
+.layer-card.l3::before { background: var(--green); }
+
+.layer-card .layer-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.layer-card.l1 .layer-num { color: var(--red-light); }
+.layer-card.l2 .layer-num { color: var(--blue); }
+.layer-card.l3 .layer-num { color: var(--green); }
+
+.layer-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+
+.layer-card .when {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.layer-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6; }
+
+.layer-card .example-box {
+  background: #0a0a16;
+  border: 1px solid #1a1d30;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 12px;
+  color: var(--green);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}

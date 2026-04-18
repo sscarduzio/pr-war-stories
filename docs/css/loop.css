@@ -1,0 +1,54 @@
+/* ===== LOOP ===== */
+.loop-section {
+  background:
+    radial-gradient(ellipse at 50% 50%, #4a9eff06 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-mid) 100%);
+}
+
+.loop-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.loop-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 150px;
+  padding: 12px 6px;
+}
+
+.loop-node .num {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  border: 2px solid;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.loop-node:nth-child(1) .num { border-color: var(--red); color: var(--red-light); }
+.loop-node:nth-child(3) .num { border-color: var(--blue); color: var(--blue); }
+.loop-node:nth-child(5) .num { border-color: var(--green); color: var(--green); }
+.loop-node:nth-child(7) .num { border-color: var(--orange); color: var(--orange); }
+.loop-node:nth-child(9) .num { border-color: var(--purple); color: var(--purple); }
+
+.loop-node h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.loop-node p { font-size: 11px; color: var(--text-dim); }
+
+.loop-connector { font-size: 18px; color: var(--text-dim); padding-bottom: 44px; }
+
+.loop-curve { max-width: 780px; margin: 0 auto 12px; }
+.loop-curve svg { width: 100%; height: 44px; }
+
+.loop-label { text-align: center; font-size: 14px; color: var(--text-dim); }
