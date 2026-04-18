@@ -32,19 +32,21 @@ The core doctrine is short:
 
 ## What surprised me
 
-I ran the skill on two production repos I maintain — a React TS frontend (415 merged PRs over 8 months, 1,067 substantive review comments) and a FastAPI/Python backend (344 PRs, 1,685 comments).
+I ran the skill on three production repos: a React TS frontend (415 merged PRs, 1,067 substantive review comments), a FastAPI/Python backend (344 PRs, 1,685 comments), and — for independent validation — a public OSS Elasticsearch plugin in Scala/JVM that I also maintain (755 PRs spanning 12 years, completely different stack from the first two).
 
-Three findings that changed how I think about this problem:
+Four findings that changed how I think about this problem:
 
-**Author dismissals of bot findings are the single highest-yield source of rule material.** When a senior engineer replies *"Dismissed — X is intentional because Y"* to a review bot, X is a pre-written invariant with the rationale already attached. No interpretation needed; paste into an inline comment or a BUGBOT.md rule and move on. Compare that to reviewer suggestions, which need you to check whether the suggestion was adopted, whether it was a style nit, whether the team agreed — most don't clear that bar. The skill now harvests dismissals first. In the frontend repo, the single most-dismissed file had 42 author-dismissals across 8 months, and roughly half of those were the same "`useState` setter is referentially stable, stop flagging it as a missing dep" pattern repeating. One scope-level rule (PR #735) silences all of them.
+**Author dismissals of bot findings are the single highest-yield source of rule material.** When a senior engineer replies *"Dismissed — X is intentional because Y"* to a review bot, X is a pre-written invariant with the rationale already attached. No interpretation needed; paste into an inline comment or a BUGBOT.md rule and move on. Compare that to reviewer suggestions, which need you to check whether the suggestion was adopted, whether it was a style nit, whether the team agreed — most don't clear that bar. The skill now harvests dismissals first. In the frontend repo, the single most-dismissed file had 42 author-dismissals, and roughly half of those were the same "`useState` setter is referentially stable, stop flagging it as a missing dep" pattern repeating. One scope-level rule (PR #735) silences all of them. On the Scala repo, **52% of all the rules the skill produced trace directly to author-dismissals** — the pattern replicates on a completely different stack.
 
 **The initial module hierarchy was wrong in both repos.** I'd picked "complex-looking" modules intuitively at setup time. The data showed otherwise: the `Apps/` module accumulated 442 of the 1,067 frontend review comments (41% of all review activity) but had no scope file, while `Composer/` (13 comments) and `linkchart-nt/` (31) did. In the backend repo, `app/api/v1/apps/` (167 comments) had no scope while `relationships/` (29 comments, 1 rule) did. Rule of thumb now baked into the skill: rank modules by review-comment density, not by perceived complexity.
 
 **I discovered a bug in my own harvest workflow — before it shipped.** GitHub's Copilot Code Review bot posts as login `Copilot` — no `[bot]` suffix, unlike every other bot. My filter was missing it. Had anyone installed the workflow with that filter, 308 Copilot comments in my backend repo alone would have been misclassified as "substantive human review input." The retrospective sweep caught this before the skill had shipped to any real user beyond me. Filter fixed in the skill template.
 
+**What it costs: ~$0.30 – $0.83 and 77 minutes for a full setup + harvest.** Measured on the Scala repo: 175,023 total Claude Code tokens, 195 `gh` API calls, 11 files written. The automated GitHub Action on every merged PR runs for free (pure JavaScript, zero LLM calls) — you only spend Claude tokens when you manually run the slash-commands. Steady-state on a busy repo is 1–2 harvests per week at ~$0.03–$0.15 each. **The cost table is in the README** because I'd rather answer the question than hide it.
+
 ## What it isn't
 
-It doesn't monitor production incidents. It doesn't auto-commit rules — every harvest produces a PR for human review. It doesn't edit your code; it only writes BUGBOT.md, LESSONS.md, and inline comments. It works with any GitHub repo in any language, but only Cursor Bugbot reads the BUGBOT.md hierarchy automatically — other review bots need their own wiring.
+It doesn't monitor production incidents. It doesn't auto-commit rules — every harvest produces a PR for human review. It doesn't edit your code; it only writes BUGBOT.md, LESSONS.md, and inline comments. It works with any GitHub repo in any language, but only Cursor Bugbot reads the BUGBOT.md hierarchy automatically — other review bots need their own wiring (I tested it on a repo that uses `coderabbitai` — the skill still writes correct artifacts, they just need a different consumer).
 
 ## Install
 
@@ -86,10 +88,11 @@ A few things I expect will come up:
 
 ## What I'd emphasize in a tweet/x-post sibling
 
-*"I built an AI code reviewer, then ran it on my own repos (759 merged PRs) and found:*
-*– 442 of 1067 review comments landed in 1 unscoped module*
-*– 308 Copilot comments leaking through my own bot-filter*
-*– one file had 42 author-dismissals; half were the same recurring false-positive*
-*Shipped all three findings back into the skill. → link"*
+*"I built an AI code reviewer, then ran it on 3 repos (1,514 merged PRs across JS/Python/Scala) and found:*
+*– 442 of 1067 review comments landed in 1 unscoped React module*
+*– 308 Copilot comments would have leaked through my own bot-filter*
+*– on a Scala OSS repo I harvested cold, 52% of rules came from author-dismissals*
+*– full setup + harvest on 755 PRs: 175k tokens, 77min, ~$0.50. Action is free.*
+*All findings + cost table back in the skill. → link"*
 
 Thread format works better than the single post for this kind of "findings" content.

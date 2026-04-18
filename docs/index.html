@@ -1790,6 +1790,122 @@ detection."</div>
   </div>
 </section>
 
+<!-- SECOND CASE STUDY — ReadonlyREST -->
+<section class="casestudy-section">
+  <div class="container">
+    <span class="section-label">Second case study &middot; independent OSS, different stack</span>
+    <h2 class="section-title">Running on ReadonlyREST &mdash;<br>Scala Elasticsearch plugin (958&starf;)</h2>
+    <p class="section-desc">Public OSS. Slow-moving, 12-year-old project. JVM stack &mdash; completely different from Octostar. Full history mined from PR #6 to PR #1235.</p>
+
+    <div class="stats-bar">
+      <div class="stat-tile">
+        <div class="big" style="color:var(--red-light)">755</div>
+        <div class="desc">Merged PRs mined<br>PR #6 &rarr; #1235</div>
+      </div>
+      <div class="stat-tile">
+        <div class="big" style="color:var(--blue)">7</div>
+        <div class="desc">Scoped BUGBOT.md<br>across 1 repo</div>
+      </div>
+      <div class="stat-tile">
+        <div class="big" style="color:var(--green)">7</div>
+        <div class="desc">Lessons in<br>LESSONS.md</div>
+      </div>
+      <div class="stat-tile">
+        <div class="big" style="color:var(--orange)">$0.30&ndash;0.83</div>
+        <div class="desc">Claude tokens<br>one-shot setup + harvest</div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <div class="logo-mark" style="background:linear-gradient(135deg,#e74c3c,#c0392b)">R</div>
+        <div>
+          <h3>ReadonlyREST &mdash; Elasticsearch security plugin</h3>
+          <div class="case-meta">Scala 3.3.3 + Java &bull; Public OSS, MIT &bull; Default branch: <code>develop</code> &bull; 175k Claude tokens &bull; 77 minutes wall time</div>
+        </div>
+      </div>
+
+      <div class="case-body">
+        <div class="case-col">
+          <h4 class="red">Rule placement hierarchy</h4>
+          <div class="case-tree">
+            <div class="case-tree-row">
+              <div class="dot" style="background:var(--red)"></div>
+              <div class="file">.cursor/BUGBOT.md</div>
+              <div class="count red">7 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">core/.cursor/BUGBOT.md</div>
+              <div class="count blue">5 rules</div>
+            </div>
+            <div class="case-tree-row indent-2">
+              <div class="dot" style="background:var(--green)"></div>
+              <div class="file">.../accesscontrol/blocks/.cursor/BUGBOT.md</div>
+              <div class="count green">2 rules</div>
+            </div>
+            <div class="case-tree-row indent-2">
+              <div class="dot" style="background:var(--green)"></div>
+              <div class="file">.../accesscontrol/factory/.cursor/BUGBOT.md</div>
+              <div class="count green">3 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">audit/.cursor/BUGBOT.md</div>
+              <div class="count blue">3 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">integration-tests/.cursor/BUGBOT.md</div>
+              <div class="count blue">3 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">ror-tools-core/.cursor/BUGBOT.md</div>
+              <div class="count blue">4 rules</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-col">
+          <h4 class="green">Lessons the bot can't enforce</h4>
+          <div class="case-lessons">
+            <div class="case-lesson">
+              <span class="icon">&#128272;</span>
+              <span>Never fall back to <code>X-Forwarded-For</code> when TCP remote is missing &mdash; trivially spoofable.</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#9888;&#65039;</span>
+              <span>Use <code>Either[DomainError, _]</code> for expected failures; throw only for invariants.</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128737;&#65039;</span>
+              <span>Use <code>NonFatal(e)</code>, never <code>catch Throwable</code> &mdash; swallows OOM &amp; JVM signals.</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128221;</span>
+              <span>Audit rule names are stable identifiers &mdash; don't let syntax drift rename them.</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#9851;&#65039;</span>
+              <span>When a metadata-file format needs to change, add a second file. Keep the old one writeable.</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128196;</span>
+              <span>Group identity is <code>GroupId</code>, not <code>Group</code> &mdash; names drift, IDs don't.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-footer">
+        <div class="pulse" style="background:var(--blue)"></div>
+        <span>52% of rules traced to author-dismissals of <code>coderabbitai</code>. Same doctrine, different stack. &nbsp;<a href="https://github.com/sscarduzio/pr-war-stories/tree/main/docs/case-studies/readonlyrest" style="color:var(--text-secondary);text-decoration:underline">Full report &rarr;</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- INSTALL -->
 <section class="install-section" id="install">
   <div class="container">

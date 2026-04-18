@@ -25,12 +25,30 @@ Plus one self-learning mechanism:
 
 ## Real results
 
-Ran a one-shot retrospective harvest across 8 months of PR history on two production repos:
+Ran a one-shot retrospective harvest on three production repos:
 
-- `Octostarco/octostar-frontend` (415 merged PRs): mined 1,067 substantive review comments + 227 author-dismissals. Revealed that the `Apps/` module accumulated 442 of those 1,067 comments (41% of all review activity) while having **no scope file** — the initial hierarchy missed it. Proposed fix: [PR #805](https://github.com/Octostarco/octostar-frontend/pull/805).
-- `Octostarco/octostar-api` (344 merged PRs): mined 1,685 comments + 174 dismissals. Surfaced a bug in the skill's default bot filter — GitHub's Copilot Code Review posts as `Copilot` (no `[bot]` suffix), and would have misclassified 308 of its comments as "substantive human review input" if the workflow had been running. Filter fixed in the skill template before it shipped.
+- `Octostarco/octostar-frontend` (415 merged PRs, 8-month window): mined 1,067 substantive review comments + 227 author-dismissals. Revealed that the `Apps/` module accumulated 442 of those 1,067 comments (41% of all review activity) while having **no scope file** — the initial hierarchy missed it. Proposed fix: [PR #805](https://github.com/Octostarco/octostar-frontend/pull/805).
+- `Octostarco/octostar-api` (344 merged PRs, 8-month window): mined 1,685 comments + 174 dismissals. Surfaced a bug in the skill's default bot filter — GitHub's Copilot Code Review posts as `Copilot` (no `[bot]` suffix), and would have misclassified 308 of its comments as "substantive human review input" if the workflow had been running. Filter fixed in the skill template before it shipped.
+- `sscarduzio/elasticsearch-readonlyrest-plugin` (755 merged PRs, full 12-year history): independent public OSS on a completely different stack (Scala 3 / JVM / Elasticsearch plugin). First-time clean-slate run, 7 BUGBOT.md files, 27 rules, 7 lessons, 3 inline comments. **52% of rules traced to author-dismissals of `coderabbitai`** — replicating the Octostar finding on a stack that has nothing in common with React/Python. [Full report & generated artifacts](docs/case-studies/readonlyrest/REPORT.md).
 
-Both findings became new skill doctrine. The new `/rebalance` command catches the first pattern; the updated filter prevents the second.
+Findings from runs 1 and 2 became new skill doctrine. Run 3 replicates them on a third-party stack.
+
+## What it costs
+
+Measured on the ReadonlyREST case study above — a fresh Claude Code session running `/pr-war-stories setup --limit 1000` + `/pr-war-stories harvest` on a 12-year-old 755-PR repo:
+
+| What | Measurement |
+|---|---|
+| Total Claude Code tokens (one-shot setup + harvest) | **175,023** |
+| Wall-clock time | **~77 minutes** |
+| Approximate Sonnet 4.6 cost, no caching | ~$0.83 |
+| Approximate Sonnet 4.6 cost, with Claude Code's prompt caching | **~$0.30 – $0.60** |
+| `gh` API calls | ~195 |
+| Files written | 11 new + 3 source edits |
+
+**The automated GitHub Action is free.** `harvest-lessons.yml` is pure JavaScript running on GitHub Actions — it fires on every merged PR, extracts substantive human review comments, posts a harvest summary as a PR comment, and never invokes Claude. You only spend tokens when *you* run the slash-commands interactively (`/pr-war-stories setup`, `/pr-war-stories harvest`, `/pr-war-stories audit`, `/pr-war-stories rebalance`, `/pr-war-stories recheck`).
+
+A typical steady-state cost on a busy repo: 1–2 harvest invocations per week at ~10k–30k tokens each (~$0.03–$0.15 per run). The expensive one is the initial setup; after that you're buying opinionated classification help for pennies per merged PR.
 
 ## Install
 
