@@ -1,0 +1,18 @@
+Patch applied to /tmp/octostar-frontend-redo/CLAUDE.md by Step 7 of setup.
+The existing CLAUDE.md did not reference LESSONS.md or the BUGBOT hierarchy.
+Two lines were inserted just below the opening "## Development Commands" heading:
+
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -1,6 +1,10 @@
+ # CLAUDE.md
+
+ This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
++**Before writing or reviewing code, read [`LESSONS.md`](LESSONS.md)** — hard-won engineering lessons from real bugs and PR reviews.
++
++**When reviewing code, also read the nearest `.cursor/BUGBOT.md`** in the directory hierarchy of the files being reviewed — these contain scoped review rules for specific areas of the codebase.
++
+ ## Development Commands
+
+The same two lines were also prepended to AGENTS.md (immediately after the "# AGENTS.md" heading).

@@ -162,6 +162,16 @@
 .case-tree-row.indent { margin-left: 20px; }
 .case-tree-row.indent-2 { margin-left: 40px; }
 
+.case-tree-note {
+  margin-top: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+  font-style: italic;
+  border-top: 1px dashed var(--border);
+  padding-top: 10px;
+}
+
 .case-lessons {
   display: flex;
   flex-direction: column;

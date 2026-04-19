@@ -32,21 +32,21 @@ The core doctrine is short:
 
 ## What surprised me
 
-I ran the skill on three production repos: a React TS frontend (415 merged PRs, 1,067 substantive review comments), a FastAPI/Python backend (344 PRs, 1,685 comments), and — for independent validation — a public OSS Elasticsearch plugin in Scala/JVM that I also maintain (755 PRs spanning 12 years, completely different stack from the first two).
+I ran a clean-slate `setup + harvest` on three production repos: a React TS frontend (415 merged PRs, uses Cursor Bugbot), a FastAPI/Python backend (500 PRs, uses Cursor Bugbot + Copilot Code Review), and a public OSS Elasticsearch plugin in Scala/JVM (755 PRs over 12 years, uses CodeRabbit). Uniform methodology, independently run, separately published — full artifacts for each are in [docs/case-studies/](https://github.com/sscarduzio/pr-war-stories/tree/main/docs/case-studies).
 
-Four findings that changed how I think about this problem:
+Four findings:
 
-**Author dismissals of bot findings are the single highest-yield source of rule material.** When a senior engineer replies *"Dismissed — X is intentional because Y"* to a review bot, X is a pre-written invariant with the rationale already attached. No interpretation needed; paste into an inline comment or a BUGBOT.md rule and move on. Compare that to reviewer suggestions, which need you to check whether the suggestion was adopted, whether it was a style nit, whether the team agreed — most don't clear that bar. The skill now harvests dismissals first. In the frontend repo, the single most-dismissed file had 42 author-dismissals, and roughly half of those were the same "`useState` setter is referentially stable, stop flagging it as a missing dep" pattern repeating. One scope-level rule (PR #735) silences all of them. On the Scala repo, **52% of all the rules the skill produced trace directly to author-dismissals** — the pattern replicates on a completely different stack.
+**Author-dismissals of bot findings are the primary harvest yield.** When a senior engineer replies *"Dismissed — X is intentional because Y"* to a review bot, X is a pre-written invariant with the rationale already attached. No interpretation needed; paste into an inline comment or a BUGBOT.md rule and move on. Compare that to reviewer suggestions, which need you to check whether the suggestion was adopted, whether it was a style nit, whether the team agreed — most don't clear that bar. Measured yield from author-dismissals: **36% of rules in the React frontend repo, 30% in the Python backend, 52% in the Scala plugin**. The skill now prioritises dismissals. On the frontend, the single most-dismissed file had 42 of them, about half were the same "`useState` setter is referentially stable, stop flagging it as a missing dep" pattern repeating. One scope-level rule silences them.
 
-**The initial module hierarchy was wrong in both repos.** I'd picked "complex-looking" modules intuitively at setup time. The data showed otherwise: the `Apps/` module accumulated 442 of the 1,067 frontend review comments (41% of all review activity) but had no scope file, while `Composer/` (13 comments) and `linkchart-nt/` (31) did. In the backend repo, `app/api/v1/apps/` (167 comments) had no scope while `relationships/` (29 comments, 1 rule) did. Rule of thumb now baked into the skill: rank modules by review-comment density, not by perceived complexity.
+**The initial module hierarchy was wrong in both of my own repos.** I'd picked "complex-looking" modules intuitively at setup time. The data showed otherwise: the `components/Apps/` module in the frontend carried **442 of 1,067 substantive review comments (41% of all review activity)** but had no scope file, while less-touched modules did. Ranking modules by comment density — not by perceived complexity — is now baked into the skill's setup.
 
-**I discovered a bug in my own harvest workflow — before it shipped.** GitHub's Copilot Code Review bot posts as login `Copilot` — no `[bot]` suffix, unlike every other bot. My filter was missing it. Had anyone installed the workflow with that filter, 308 Copilot comments in my backend repo alone would have been misclassified as "substantive human review input." The retrospective sweep caught this before the skill had shipped to any real user beyond me. Filter fixed in the skill template.
+**I discovered a bug in my own harvest workflow — before it shipped.** GitHub's Copilot Code Review posts as login `Copilot` — no `[bot]` suffix, unlike every other bot. My filter was missing it. On the Python backend repo, **308 Copilot comments** would have been misclassified as human review input if the workflow had been running. Caught during the retrospective sweep, filter shipped in v0.7 before any public install.
 
-**What it costs: ~$0.30 – $0.83 and 77 minutes for a full setup + harvest.** Measured on the Scala repo: 175,023 total Claude Code tokens, 195 `gh` API calls, 11 files written. The automated GitHub Action on every merged PR runs for free (pure JavaScript, zero LLM calls) — you only spend Claude tokens when you manually run the slash-commands. Steady-state on a busy repo is 1–2 harvests per week at ~$0.03–$0.15 each. **The cost table is in the README** because I'd rather answer the question than hide it.
+**What it costs, measured across all three repos: ~$0.25–0.83 per one-shot setup+harvest, 12–77 minutes wall-clock.** Per-repo token counts (150k / 139k / 175k) are published in the README. The automated GitHub Action is free (pure JavaScript, no LLM). Steady-state on a busy repo is 1–2 harvests per week at ~$0.03–$0.15 each. I'd rather answer the cost question up front than hide it.
 
 ## What it isn't
 
-It doesn't monitor production incidents. It doesn't auto-commit rules — every harvest produces a PR for human review. It doesn't edit your code; it only writes BUGBOT.md, LESSONS.md, and inline comments. It works with any GitHub repo in any language, but only Cursor Bugbot reads the BUGBOT.md hierarchy automatically — other review bots need their own wiring (I tested it on a repo that uses `coderabbitai` — the skill still writes correct artifacts, they just need a different consumer).
+It doesn't monitor production incidents. It doesn't auto-commit rules — every harvest produces a PR for human review. It doesn't edit your code; it only writes BUGBOT.md, LESSONS.md, and inline comments. Works with any GitHub repo in any language — but only Cursor Bugbot reads the BUGBOT.md hierarchy automatically. Other review bots (CodeRabbit, Copilot) see LESSONS.md and inline comments, and their BUGBOT.md consumers need per-bot wiring that's out of scope for the skill today.
 
 ## Install
 
@@ -88,11 +88,11 @@ A few things I expect will come up:
 
 ## What I'd emphasize in a tweet/x-post sibling
 
-*"I built an AI code reviewer, then ran it on 3 repos (1,514 merged PRs across JS/Python/Scala) and found:*
-*– 442 of 1067 review comments landed in 1 unscoped React module*
-*– 308 Copilot comments would have leaked through my own bot-filter*
-*– on a Scala OSS repo I harvested cold, 52% of rules came from author-dismissals*
-*– full setup + harvest on 755 PRs: 175k tokens, 77min, ~$0.50. Action is free.*
-*All findings + cost table back in the skill. → link"*
+*"I built an AI code reviewer. Ran it cold on 3 repos — 1,670 merged PRs across JS/Python/Scala — and published every number:*
+*– author-dismissals yielded 30–52% of all rules across repos*
+*– 442 of 1067 review comments landed in 1 unscoped module (intuition was wrong)*
+*– 308 Copilot comments would have leaked through my own bot-filter (Copilot has no [bot] suffix)*
+*– cost per one-shot setup+harvest: $0.25–$0.83, 12–77 min*
+*Every finding + cost table back in the skill. → link"*
 
 Thread format works better than the single post for this kind of "findings" content.

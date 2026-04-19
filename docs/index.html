@@ -307,29 +307,29 @@ detection."</div>
   </div>
 </section>
 
-<!-- CASE STUDY -->
+<!-- CASE STUDY 1 — octostar-frontend -->
 <section class="casestudy-section" id="case-studies">
   <div class="container">
-    <span class="section-label">Production case study</span>
-    <h2 class="section-title">Running on Octostar &mdash;<br>React frontend + Python API</h2>
-    <p class="section-desc">Two production repos. 759 merged PRs mined across 8 months. Here's what the skill extracted and where it placed each rule.</p>
+    <span class="section-label">Case study 1 &middot; React + TypeScript monorepo</span>
+    <h2 class="section-title">Running on octostar-frontend &mdash;<br>heavy Cursor Bugbot traffic</h2>
+    <p class="section-desc">Private Turborepo monorepo. 8 months of PRs, one extremely active hotspot module. This is where the "author-dismissals are the highest-yield source" doctrine was discovered.</p>
 
     <div class="stats-bar">
       <div class="stat-tile">
-        <div class="big" style="color:var(--red-light)">759</div>
-        <div class="desc">Merged PRs mined<br>across 8 months</div>
+        <div class="big" style="color:var(--red-light)">415</div>
+        <div class="desc">Merged PRs mined<br>8-month window</div>
       </div>
       <div class="stat-tile">
-        <div class="big" style="color:var(--blue)">11</div>
-        <div class="desc">Scoped BUGBOT.md<br>across 2 repos</div>
+        <div class="big" style="color:var(--blue)">5</div>
+        <div class="desc">Scoped BUGBOT.md<br>39 rules total</div>
       </div>
       <div class="stat-tile">
-        <div class="big" style="color:var(--green)">19</div>
-        <div class="desc">Lessons in<br>LESSONS.md</div>
+        <div class="big" style="color:var(--green)">36%</div>
+        <div class="desc">of rules sourced<br>from author-dismissals</div>
       </div>
       <div class="stat-tile">
-        <div class="big" style="color:var(--orange)">87</div>
-        <div class="desc">Rules extracted<br>frontend + backend</div>
+        <div class="big" style="color:var(--orange)">~17 min</div>
+        <div class="desc">150k tokens<br>~$0.30&ndash;0.60</div>
       </div>
     </div>
 
@@ -337,8 +337,8 @@ detection."</div>
       <div class="case-header">
         <div class="logo-mark">O</div>
         <div>
-          <h3>Octostar &mdash; knowledge graph platform</h3>
-          <div class="case-meta">React 18 + Vite frontend &bull; Python FastAPI backend &bull; 2,000+ commits</div>
+          <h3>octostar-frontend &mdash; knowledge-graph platform UI</h3>
+          <div class="case-meta">React 18 + Vite + TypeScript &bull; Turborepo &bull; two apps (octostar, search-app) + shared packages &bull; 3,114 inline review comments mined</div>
         </div>
       </div>
 
@@ -349,33 +349,29 @@ detection."</div>
             <div class="case-tree-row">
               <div class="dot" style="background:var(--red)"></div>
               <div class="file">.cursor/BUGBOT.md</div>
-              <div class="count red">25 rules</div>
+              <div class="count red">10 rules</div>
             </div>
             <div class="case-tree-row indent">
               <div class="dot" style="background:var(--blue)"></div>
               <div class="file">apps/octostar/.cursor/BUGBOT.md</div>
-              <div class="count blue">15 rules</div>
+              <div class="count blue">10 rules</div>
             </div>
             <div class="case-tree-row indent-2">
               <div class="dot" style="background:var(--green)"></div>
-              <div class="file">.../Composer/.cursor/BUGBOT.md</div>
-              <div class="count green">8 rules</div>
-            </div>
-            <div class="case-tree-row indent-2">
-              <div class="dot" style="background:var(--green)"></div>
-              <div class="file">.../linkchart-nt/.cursor/BUGBOT.md</div>
-              <div class="count green">9 rules</div>
+              <div class="file">.../components/Apps/.cursor/BUGBOT.md</div>
+              <div class="count green">10 rules</div>
             </div>
             <div class="case-tree-row indent">
               <div class="dot" style="background:var(--blue)"></div>
-              <div class="file">app/api/v1/common/.cursor/BUGBOT.md</div>
-              <div class="count blue">6 rules</div>
+              <div class="file">apps/search-app/.cursor/BUGBOT.md</div>
+              <div class="count blue">5 rules</div>
             </div>
             <div class="case-tree-row indent">
               <div class="dot" style="background:var(--blue)"></div>
-              <div class="file">app/api/v1/entities/.cursor/BUGBOT.md</div>
-              <div class="count blue">7 rules</div>
+              <div class="file">packages/.cursor/BUGBOT.md</div>
+              <div class="count blue">4 rules</div>
             </div>
+            <div class="case-tree-note">Worst-case bot load (root + octostar + Apps): ~1,620 tokens &mdash; 19% under budget.</div>
           </div>
         </div>
 
@@ -388,23 +384,23 @@ detection."</div>
             </div>
             <div class="case-lesson">
               <span class="icon">&#128163;</span>
-              <span><code>Promise.all</code> on unbounded arrays causes OOM &mdash; always limit concurrency to 3&ndash;5</span>
-            </div>
-            <div class="case-lesson">
-              <span class="icon">&#128274;</span>
-              <span>Never share a SQLAlchemy Session across async handlers and background tasks</span>
-            </div>
-            <div class="case-lesson">
-              <span class="icon">&#9888;&#65039;</span>
-              <span><code>[].every(fn)</code> returns <code>true</code> &mdash; vacuous truth. Guard with a length check.</span>
+              <span><code>Promise.all</code> on unbounded arrays causes OOM &mdash; bound concurrency to 3&ndash;5</span>
             </div>
             <div class="case-lesson">
               <span class="icon">&#127912;</span>
               <span>LLM-generated CSS changes that rename shared classes break unrelated components</span>
             </div>
             <div class="case-lesson">
-              <span class="icon">&#128736;</span>
-              <span>Use <code>is None</code>, not truthiness, when zero is a valid value in Python</span>
+              <span class="icon">&#128257;</span>
+              <span>Async effects need a <code>mounted</code> flag or <code>useAsyncCallback</code></span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128204;</span>
+              <span>Use <code>as const</code> enum pattern over raw string unions for stable values</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128274;</span>
+              <span><code>OntologyAPI.subscribe</code> returns an unsub &mdash; you MUST call it</span>
             </div>
           </div>
         </div>
@@ -412,35 +408,147 @@ detection."</div>
 
       <div class="case-footer">
         <div class="pulse"></div>
-        <span>Rules are active on every Cursor Bugbot review &mdash; new PRs add more automatically</span>
+        <span>Every rule traces to a specific PR &mdash; no bootstrapped guesses. &nbsp;<a href="https://github.com/sscarduzio/pr-war-stories/tree/main/docs/case-studies/octostar-frontend" style="color:var(--text-secondary);text-decoration:underline">Full report &rarr;</a></span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SECOND CASE STUDY — ReadonlyREST -->
+<!-- CASE STUDY 2 — octostar-api -->
 <section class="casestudy-section">
   <div class="container">
-    <span class="section-label">Second case study &middot; independent OSS, different stack</span>
+    <span class="section-label">Case study 2 &middot; FastAPI + Python backend</span>
+    <h2 class="section-title">Running on octostar-api &mdash;<br>finding the Copilot-filter bug</h2>
+    <p class="section-desc">Private FastAPI / LangChain / ClickHouse backend. 500 merged PRs mined. Surfaced that <strong>GitHub Copilot Code Review's <code>Copilot</code> login has no <code>[bot]</code> suffix</strong> &mdash; the default filter would have misclassified 308 of its comments as human review input. Filter shipped in v0.7.</p>
+
+    <div class="stats-bar">
+      <div class="stat-tile">
+        <div class="big" style="color:var(--red-light)">500</div>
+        <div class="desc">Merged PRs mined<br>#2 &rarr; #608</div>
+      </div>
+      <div class="stat-tile">
+        <div class="big" style="color:var(--blue)">8</div>
+        <div class="desc">Scoped BUGBOT.md<br>46 rules total</div>
+      </div>
+      <div class="stat-tile">
+        <div class="big" style="color:var(--green)">30%</div>
+        <div class="desc">of rules sourced<br>from author-dismissals</div>
+      </div>
+      <div class="stat-tile">
+        <div class="big" style="color:var(--orange)">~12 min</div>
+        <div class="desc">139k tokens<br>~$0.25&ndash;0.55</div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <div class="logo-mark" style="background:linear-gradient(135deg,#4a9eff,#2ecc71)">&#955;</div>
+        <div>
+          <h3>octostar-api &mdash; knowledge-graph platform API</h3>
+          <div class="case-meta">Python 3.12 + FastAPI &bull; LangChain AI + ClickHouse/OpenSearch/MySQL &bull; Kubernetes via Helm &bull; 5,128 inline review comments mined</div>
+        </div>
+      </div>
+
+      <div class="case-body">
+        <div class="case-col">
+          <h4 class="red">Rule placement hierarchy</h4>
+          <div class="case-tree">
+            <div class="case-tree-row">
+              <div class="dot" style="background:var(--red)"></div>
+              <div class="file">.cursor/BUGBOT.md</div>
+              <div class="count red">7 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">app/api/v1/common/.cursor/BUGBOT.md</div>
+              <div class="count blue">7 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">app/api/v1/ai/.cursor/BUGBOT.md</div>
+              <div class="count blue">6 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">app/api/v1/apps/.cursor/BUGBOT.md</div>
+              <div class="count blue">7 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--blue)"></div>
+              <div class="file">app/api/v1/entities/.cursor/BUGBOT.md</div>
+              <div class="count blue">6 rules</div>
+            </div>
+            <div class="case-tree-row indent">
+              <div class="dot" style="background:var(--green)"></div>
+              <div class="file">+ 3 more scoped files (sets, pipeline, files)</div>
+              <div class="count green">13 rules</div>
+            </div>
+            <div class="case-tree-note">Worst-case bot load: 1,965 tokens. Within 2K budget.</div>
+          </div>
+        </div>
+
+        <div class="case-col">
+          <h4 class="green">Lessons the bot can't enforce</h4>
+          <div class="case-lessons">
+            <div class="case-lesson">
+              <span class="icon">&#128736;</span>
+              <span>Use <code>is None</code>, not truthiness, when zero is a valid value in Python</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128274;</span>
+              <span>Never share a SQLAlchemy Session across async handlers and background tasks</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#9888;&#65039;</span>
+              <span>Narrow-except multi-format parsing is NOT silent exception swallowing</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#9763;&#65039;</span>
+              <span>Always set <code>imagePullPolicy</code> explicitly &mdash; defaults vary by tag strategy</span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128269;</span>
+              <span>Traefik <code>IngressRoute</code> is a CRD, not a vanilla <code>Ingress</code></span>
+            </div>
+            <div class="case-lesson">
+              <span class="icon">&#128273;</span>
+              <span><code>timbr.*</code> queries get row-level security free &mdash; <code>etimbr</code> does not</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-footer">
+        <div class="pulse" style="background:var(--blue)"></div>
+        <span>Caught the Copilot-filter bug: 308 bot comments correctly excluded. Filter shipped in v0.7. &nbsp;<a href="https://github.com/sscarduzio/pr-war-stories/tree/main/docs/case-studies/octostar-api" style="color:var(--text-secondary);text-decoration:underline">Full report &rarr;</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDY 3 — ReadonlyREST -->
+<section class="casestudy-section">
+  <div class="container">
+    <span class="section-label">Case study 3 &middot; public OSS, different language</span>
     <h2 class="section-title">Running on ReadonlyREST &mdash;<br>Scala Elasticsearch plugin (958&starf;)</h2>
     <p class="section-desc">Public OSS. Slow-moving, 12-year-old project. JVM stack &mdash; completely different from Octostar. Full history mined from PR #6 to PR #1235.</p>
 
     <div class="stats-bar">
       <div class="stat-tile">
         <div class="big" style="color:var(--red-light)">755</div>
-        <div class="desc">Merged PRs mined<br>PR #6 &rarr; #1235</div>
+        <div class="desc">Merged PRs mined<br>full 12-year history</div>
       </div>
       <div class="stat-tile">
         <div class="big" style="color:var(--blue)">7</div>
-        <div class="desc">Scoped BUGBOT.md<br>across 1 repo</div>
+        <div class="desc">Scoped BUGBOT.md<br>27 rules total</div>
       </div>
       <div class="stat-tile">
-        <div class="big" style="color:var(--green)">7</div>
-        <div class="desc">Lessons in<br>LESSONS.md</div>
+        <div class="big" style="color:var(--green)">52%</div>
+        <div class="desc">of rules sourced<br>from author-dismissals</div>
       </div>
       <div class="stat-tile">
-        <div class="big" style="color:var(--orange)">$0.30&ndash;0.83</div>
-        <div class="desc">Claude tokens<br>one-shot setup + harvest</div>
+        <div class="big" style="color:var(--orange)">~77 min</div>
+        <div class="desc">175k tokens<br>~$0.30&ndash;0.83</div>
       </div>
     </div>
 

@@ -1675,27 +1675,27 @@
   <h2>What We Shipped</h2>
   <div class="results-grid">
     <div class="stat-card">
-      <div class="number red">759</div>
-      <div class="label">Merged PRs mined<br>across 8 months</div>
+      <div class="number red">1,670</div>
+      <div class="label">Merged PRs mined<br>3 production repos</div>
     </div>
     <div class="stat-card">
-      <div class="number blue">11</div>
-      <div class="label">BUGBOT.md files<br>across 2 repos</div>
+      <div class="number blue">20</div>
+      <div class="label">BUGBOT.md files<br>112 rules total</div>
     </div>
     <div class="stat-card">
-      <div class="number green">19</div>
-      <div class="label">Lessons in LESSONS.md<br>across 2 repos</div>
+      <div class="number green">27</div>
+      <div class="label">Lessons in LESSONS.md<br>across 3 repos</div>
     </div>
     <div class="stat-card">
-      <div class="number orange">87</div>
-      <div class="label">Rules extracted<br>frontend + backend</div>
+      <div class="number orange">30&ndash;52%</div>
+      <div class="label">of rules from<br>author-dismissals</div>
     </div>
   </div>
   <div class="proof-box">
     <div class="icon">&#127919;</div>
     <div class="text">
       <h3>The skill audits itself</h3>
-      <p>Running the v0.7 harvest on our own repos surfaced two mistakes: (1) one module had 442 of 1,067 substantive review comments but <em>no scope file</em> &mdash; the intuition-based hierarchy was wrong; (2) the shipped workflow's bot filter would have misclassified 308 GitHub-Copilot comments as &ldquo;substantive human feedback&rdquo; because Copilot's login lacks a <code>[bot]</code> suffix. Caught and fixed before the skill saw any real-world install. Both findings became new doctrine.</p>
+      <p>Running the v0.7 harvest on 3 repos (TS/React, Python/FastAPI, Scala/JVM) surfaced: (1) one module had 442 of 1,067 substantive review comments but <em>no scope file</em> &mdash; intuition-based hierarchy was wrong; (2) the bot filter would have misclassified 308 GitHub-Copilot comments as &ldquo;human&rdquo; because Copilot's login lacks a <code>[bot]</code> suffix; (3) author-dismissals yielded 30&ndash;52% of all rules across stacks &mdash; pattern replicates. Caught and fixed before the skill saw public install. All findings became new doctrine.</p>
     </div>
   </div>
   <div style="margin-top: 28px; text-align: center; color: var(--text-dim); font-size: 16px;">

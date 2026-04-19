@@ -100,15 +100,15 @@
 
 ## Slide 8: What We Shipped
 
-"759 merged PRs mined across 8 months. 11 BUGBOT files across two production repos. 19 lessons in LESSONS.md. 87 rules total — all under budget."
+"1,670 merged PRs mined across three repos — a React TypeScript monorepo, a Python FastAPI backend, and a public OSS Scala Elasticsearch plugin. 20 BUGBOT files, 112 rules total, 27 lessons. Every rule under budget."
 
 *(beat)*
 
-"Running the v0.7 harvest on our own repos caught two mistakes. First, one module had 442 of 1,067 substantive review comments but no scope file — the intuition-based hierarchy was just wrong. Second, the shipped bot filter would have misclassified 308 GitHub-Copilot comments as 'substantive human feedback' because Copilot's login has no `[bot]` suffix. Caught and fixed before the skill saw any real-world install."
+"Running the v0.7 harvest cold on those three repos surfaced three things. First: on the frontend, one module carried 442 of 1,067 substantive review comments — 41% of all review activity — with no scope file. Intuition-based hierarchy was just wrong. Second: on the backend, the bot filter would have misclassified 308 GitHub-Copilot comments as 'substantive human feedback' because Copilot's login has no `[bot]` suffix. Caught and fixed before the skill went public. Third: across all three stacks, 30 to 52% of rules traced directly to author-dismissals of bot findings. Same pattern, three different review bots, three different languages."
 
 *(pause)*
 
-"Both became new skill doctrine. The skill's own rules made the skill better."
+"All three became skill doctrine. The skill's own rules made the skill better."
 
 ---
 
